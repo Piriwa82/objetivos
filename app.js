@@ -973,8 +973,16 @@ function renderBooksGrid() {
     
     const percent = Math.round((book.readPages / book.totalPages) * 100);
     
-    // Portada del libro o fallback si no está cargada aún
-    const coverImg = book.coverUrl || STATIC_COVERS[book.title] || 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/58/c6/41/58c641d4-64ff-4c39-3976-629eaf781bfe/9786073855488.jpg/300x300bb.jpg';
+    // Portada del libro con forzado directo para Simon Squibb y Dale Carnegie
+    let coverImg = book.coverUrl;
+    if (book.title === "Cuál es tu sueño" || (book.title && book.title.includes("sueño"))) {
+      coverImg = "simon_squibb_yellow_cover.jpg";
+    } else if (book.title && (book.title.includes("amigos") || book.title.includes("Carnegie"))) {
+      coverImg = "como_ganar_amigos_celeste.jpg";
+    }
+    if (!coverImg) {
+      coverImg = STATIC_COVERS[book.title] || 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/58/c6/41/58c641d4-64ff-4c39-3976-629eaf781bfe/9786073855488.jpg/300x300bb.jpg';
+    }
 
     itemEl.innerHTML = `
       <img class="book-cover" src="${coverImg}" alt="Portada de ${book.title}" onerror="this.src='https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/58/c6/41/58c641d4-64ff-4c39-3976-629eaf781bfe/9786073855488.jpg/300x300bb.jpg'">
