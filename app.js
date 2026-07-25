@@ -122,9 +122,11 @@ function ensureStateIntegrity() {
 
   if (!Array.isArray(state.subjects) || state.subjects.length === 0) state.subjects = [...DEFAULT_SUBJECTS];
 
-  if (!state.sara || typeof state.sara !== 'object') state.sara = { tripCompleted: false, moments: [] };
+  if (!state.sara || typeof state.sara !== 'object') state.sara = { tripCompleted: false, destination: "", videoLink: "", notes: "" };
   if (state.sara.tripCompleted === undefined) state.sara.tripCompleted = false;
-  if (!Array.isArray(state.sara.moments)) state.sara.moments = [];
+  if (!state.sara.destination) state.sara.destination = "";
+  if (!state.sara.videoLink) state.sara.videoLink = "";
+  if (!state.sara.notes) state.sara.notes = "";
 
   if (!state.mind || typeof state.mind !== 'object') state.mind = { thoughts: [], sessions: [] };
   if (!Array.isArray(state.mind.thoughts)) state.mind.thoughts = [];
@@ -657,18 +659,8 @@ function updateUI() {
   setValueText('college-badge', `${state.subjects.filter(s => s.passed).length} / ${state.subjects.length}`);
   renderSubjects();
 
-  // --- Render Bienestar Tab ---
-  setValueText('relationship-badge', `${state.sara.moments.length} Momentos`);
-  const saraTripCheck = document.getElementById('check-sara-trip');
-  if (saraTripCheck) {
-    saraTripCheck.checked = state.sara.tripCompleted;
-    const tripItem = document.getElementById('trip-checklist-item');
-    if (tripItem) {
-      if (state.sara.tripCompleted) tripItem.classList.add('checked');
-      else tripItem.classList.remove('checked');
-    }
-  }
-  renderMomentsList();
+  // --- Render Bienestar Tab (Viaje con Sara) ---
+  renderSaraTab();
 
   // --- Render Finanzas Tab ---
   setValueText('finance-badge', `$${totalSavings.toLocaleString('es-AR')} / $2.000.000`);
@@ -1043,30 +1035,116 @@ function renderSubjects() {
   });
 }
 
-function renderMomentsList() {
-  const container = document.getElementById('moments-list');
-  if (!container) return;
+function renderSaraTab() {
+  if (!state.sara) state.sara = {};
 
-  container.innerHTML = "";
-  if (state.sara.moments.length === 0) {
-    container.innerHTML = `<p style="color: var(--color-text-muted); font-size: 0.85rem; text-align: center; padding: 20px 0;">No hay recuerdos registrados todavía. ¡Planifica una salida!</p>`;
+  const badgeEl = document.getElementById('sara-trip-badge');
+  if (badgeEl) {
+    if (state.sara.tripCompleted) {
+      badgeEl.innerText = "¡Viaje Realizado! 🎉";
+      badgeEl.style.color = "var(--color-success)";
+    } else {
+      badgeEl.innerText = "Pendiente ⏳";
+      badgeEl.style.color = "var(--color-gold)";
+    }
+  }
+
+  const checkEl = document.getElementById('check-sara-trip');
+  const tripItem = document.getElementById('trip-checklist-item');
+  if (checkEl) {
+    checkEl.checked = !!state.sara.tripCompleted;
+    if (tripItem) {
+      if (state.sara.tripCompleted) tripItem.classList.add('checked');
+      else tripItem.classList.remove('checked');
+    }
+  }
+
+  const destInput = document.getElementById('input-sara-destination');
+  const videoInput = document.getElementById('input-sara-video-link');
+  const notesInput = document.getElementById('input-sara-notes');
+
+  if (destInput && destInput !== document.activeElement) destInput.value = state.sara.destination || "";
+  if (videoInput && videoInput !== document.activeElement) videoInput.value = state.sara.videoLink || "";
+  if (notesInput && notesInput !== document.activeElement) notesInput.value = state.sara.notes || "";
+
+  // Render Video Player Embed
+  renderSaraVideoPlayer(state.sara.videoLink);
+
+  // Render Notes Display Box
+  const notesBox = document.getElementById('sara-notes-display-box');
+  const destDisplay = document.getElementById('sara-display-dest');
+  const notesDisplay = document.getElementById('sara-display-notes');
+
+  if (notesBox && (state.sara.destination || state.sara.notes)) {
+    notesBox.style.display = "block";
+    if (destDisplay) destDisplay.innerText = state.sara.destination ? `📍 Destino: ${state.sara.destination}` : "";
+    if (notesDisplay) notesDisplay.innerText = state.sara.notes ? `"${state.sara.notes}"` : "";
+  } else if (notesBox) {
+    notesBox.style.display = "none";
+  }
+}
+
+function renderSaraVideoPlayer(url) {
+  const box = document.getElementById('sara-video-player-box');
+  if (!box) return;
+
+  if (!url || !url.trim()) {
+    box.innerHTML = `<p style="color: var(--color-text-muted); font-size: 0.85rem; text-align: center; padding: 30px 16px;">Aún no has guardado un video del viaje. ¡Agrega el link de YouTube o Drive para guardarlo aquí de recuerdo! ✈️🎥</p>`;
     return;
   }
 
-  const sorted = [...state.sara.moments].sort((a, b) => new Date(b.date) - new Date(a.date));
-  sorted.forEach(m => {
-    const el = document.createElement('div');
-    el.className = 'diary-item';
-    el.innerHTML = `
-      <div class="diary-header">
-        <span class="diary-date">${formatDate(m.date)}</span>
-      </div>
-      <div class="diary-content">${m.desc}</div>
-      <button class="diary-delete-btn" onclick="deleteMoment('${m.id}')">${ICON_TRASH}</button>
-    `;
-    container.appendChild(el);
-  });
+  const cleanUrl = url.trim();
+  let embedHtml = "";
+
+  if (cleanUrl.includes('youtube.com') || cleanUrl.includes('youtu.be')) {
+    let videoId = "";
+    if (cleanUrl.includes('youtu.be/')) {
+      videoId = cleanUrl.split('youtu.be/')[1].split('?')[0].split('&')[0];
+    } else if (cleanUrl.includes('v=')) {
+      videoId = cleanUrl.split('v=')[1].split('&')[0];
+    }
+    if (videoId) {
+      embedHtml = `<iframe width="100%" height="220" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 8px;"></iframe>`;
+    } else {
+      embedHtml = `<div style="padding: 20px; text-align: center;"><a href="${cleanUrl}" target="_blank" class="btn btn-pink btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">🎬 Ver Video del Viaje en YouTube</a></div>`;
+    }
+  } else if (cleanUrl.includes('drive.google.com')) {
+    const driveEmbed = cleanUrl.replace('/view', '/preview');
+    embedHtml = `<iframe src="${driveEmbed}" width="100%" height="220" allow="autoplay" style="border-radius: 8px; border: none;"></iframe>`;
+  } else if (cleanUrl.includes('vimeo.com')) {
+    const vimeoId = cleanUrl.split('vimeo.com/')[1].split('?')[0];
+    embedHtml = `<iframe src="https://player.vimeo.com/video/${vimeoId}" width="100%" height="220" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="border-radius: 8px;"></iframe>`;
+  } else {
+    embedHtml = `<div style="padding: 20px; text-align: center;"><a href="${cleanUrl}" target="_blank" class="btn btn-pink btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">🎬 Abrir Video del Viaje</a></div>`;
+  }
+
+  box.innerHTML = embedHtml;
 }
+
+window.saveSaraTripDetails = function() {
+  ensureStateIntegrity();
+  const destInput = document.getElementById('input-sara-destination');
+  const videoInput = document.getElementById('input-sara-video-link');
+  const notesInput = document.getElementById('input-sara-notes');
+  const checkInput = document.getElementById('check-sara-trip');
+
+  if (!state.sara) state.sara = {};
+
+  if (destInput) state.sara.destination = destInput.value.trim();
+  if (videoInput) state.sara.videoLink = videoInput.value.trim();
+  if (notesInput) state.sara.notes = notesInput.value.trim();
+  if (checkInput) state.sara.tripCompleted = checkInput.checked;
+
+  saveState();
+  alert("¡Recuerdo y video del viaje guardados con éxito! ✈️❤️🎥");
+};
+
+window.onSaraTripCheckChange = function() {
+  const checkInput = document.getElementById('check-sara-trip');
+  if (!state.sara) state.sara = {};
+  if (checkInput) state.sara.tripCompleted = checkInput.checked;
+  saveState();
+};
 
 function renderThoughtsList() {
   const container = document.getElementById('thoughts-list');
