@@ -76,14 +76,57 @@ let state = {
   guitar: { hours: 0, log: [] },
   covers: [...DEFAULT_COVERS],
   followers: 0,
-  bar: { completed: false, review: "" },
+  bar: { completed: false, name: "", review: "" },
   books: [...DEFAULT_BOOKS],
   subjects: [],
   sara: { tripCompleted: false, moments: [] },
   mind: { thoughts: [], sessions: [] },
   finance: { log: [] },
-  tiktok: { connected: false, username: "@thoma_guitar", likes: 0 }
+  tiktok: { connected: false, username: "@thoma_guitar", likes: 0 },
+  security: { pinEnabled: false, pin: "" }
 };
+
+function ensureStateIntegrity() {
+  if (!state || typeof state !== 'object') state = {};
+  if (!state.gym || typeof state.gym !== 'object') state.gym = { pb: 0, ht: 0, sq: 0 };
+  if (typeof state.gym.pb !== 'number' || isNaN(state.gym.pb)) state.gym.pb = 0;
+  if (typeof state.gym.ht !== 'number' || isNaN(state.gym.ht)) state.gym.ht = 0;
+  if (typeof state.gym.sq !== 'number' || isNaN(state.gym.sq)) state.gym.sq = 0;
+
+  if (!state.guitar || typeof state.guitar !== 'object') state.guitar = { hours: 0, log: [] };
+  if (typeof state.guitar.hours !== 'number' || isNaN(state.guitar.hours)) state.guitar.hours = 0;
+  if (!Array.isArray(state.guitar.log)) state.guitar.log = [];
+
+  if (!Array.isArray(state.covers)) state.covers = [...DEFAULT_COVERS];
+  if (typeof state.followers !== 'number' || isNaN(state.followers)) state.followers = 0;
+
+  if (!state.bar || typeof state.bar !== 'object') state.bar = { completed: false, name: "", review: "" };
+  if (state.bar.completed === undefined) state.bar.completed = false;
+  if (!state.bar.name) state.bar.name = "";
+  if (!state.bar.review) state.bar.review = "";
+
+  if (!Array.isArray(state.books) || state.books.length === 0) state.books = [...DEFAULT_BOOKS];
+
+  if (!Array.isArray(state.subjects)) state.subjects = [];
+
+  if (!state.sara || typeof state.sara !== 'object') state.sara = { tripCompleted: false, moments: [] };
+  if (state.sara.tripCompleted === undefined) state.sara.tripCompleted = false;
+  if (!Array.isArray(state.sara.moments)) state.sara.moments = [];
+
+  if (!state.mind || typeof state.mind !== 'object') state.mind = { thoughts: [], sessions: [] };
+  if (!Array.isArray(state.mind.thoughts)) state.mind.thoughts = [];
+  if (!Array.isArray(state.mind.sessions)) state.mind.sessions = [];
+
+  if (!state.finance || typeof state.finance !== 'object') state.finance = { log: [] };
+  if (!Array.isArray(state.finance.log)) state.finance.log = [];
+
+  if (!state.screenTime || !Array.isArray(state.screenTime) || state.screenTime.length !== 24) {
+    state.screenTime = Array(24).fill(null);
+  }
+
+  if (!state.tiktok || typeof state.tiktok !== 'object') state.tiktok = { connected: false, username: "@thoma_guitar", likes: 0 };
+  if (!state.security || typeof state.security !== 'object') state.security = { pinEnabled: false, pin: "" };
+}
 
 let selectedScreenWeekIdx = 0;
 let selectedScreenMonthIdx = 0;
@@ -103,8 +146,8 @@ function loadState() {
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
-      // Fusión con valores por defecto por si agregamos campos nuevos
       state = { ...state, ...parsed };
+      ensureStateIntegrity();
       let migrated = false;
       if (!state.covers || state.covers.length === 0) {
         state.covers = [...DEFAULT_COVERS];
