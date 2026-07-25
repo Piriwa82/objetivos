@@ -472,133 +472,120 @@
 
     <!-- TAB: GUITARRA & TIKTOK -->
     <section class="tab-content" id="tab-musica">
-      <div class="musica-grid-container">
-        <!-- Columna 1: Guitarra + Covers -->
-        <div class="musica-column">
-          <!-- 1. Guitar Card -->
-          <div class="card card-pink">
-            <div class="card-header">
-              <div class="card-title-group">
-                <div class="card-icon"><img src="https://emojicdn.elk.sh/🎸" class="apple-emoji" alt="🎸"></div>
-                <div>
-                  <h3>Horas de Guitarra</h3>
-                  <p>Meta: 600 Horas Prácticas</p>
-                </div>
+      <div class="grid-dashboard-2col">
+        <!-- 1. Guitar Card -->
+        <div class="card card-pink">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-icon"><img src="https://emojicdn.elk.sh/🎸" class="apple-emoji" alt="🎸"></div>
+              <div>
+                <h3>Horas de Guitarra</h3>
+                <p>Meta: 600 Horas Prácticas</p>
               </div>
-              <span class="progress-value" id="guitar-badge">0 / 600h</span>
             </div>
-
-            <div class="progress-container">
-              <div class="progress-track" style="margin-bottom: 8px;"><div class="progress-fill bg-pink" id="guitar-progress-fill"></div></div>
-              <p id="guitar-daily-rate" style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 12px; font-style: italic;"></p>
-            </div>
-
-            <!-- Guitar Practice Registration Box -->
-            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px;">
-              <input type="number" id="input-guitar-manual" placeholder="Horas practicadas (ej: 1.5)" min="0" step="0.1" style="width: 100%; padding: 10px 12px; font-size: 0.9rem; font-weight: 600; text-align: center; border-radius: 8px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); color: #fff;">
-              <button class="btn btn-pink" onclick="addGuitarHoursManual()" style="width: 100%; justify-content: center; padding: 10px; font-size: 0.85rem; font-family: var(--font-title); font-weight: 700; border-radius: 8px; display: flex; align-items: center; gap: 4px;">
-                Registrar Práctica ✨
-              </button>
-            </div>
-
-            <h4 style="font-size: 0.9rem; margin-bottom: 10px; font-family: var(--font-title); letter-spacing: 0.05em;">Historial Reciente</h4>
-            <div class="diary-list" id="guitar-log-list" style="max-height: 160px;">
-              <!-- Rendered via JS -->
-            </div>
+            <span class="progress-value" id="guitar-badge">0 / 600h</span>
           </div>
 
-          <!-- 2. TikTok Covers Card -->
-          <div class="card card-cyan">
-            <div class="card-header">
-              <div class="card-title-group">
-                <div class="card-icon"><img src="https://emojicdn.elk.sh/📱" class="apple-emoji" alt="📱"></div>
-                <div>
-                  <h3>Covers de TikTok</h3>
-                  <p>Meta: 40 Covers Planificados</p>
-                </div>
-              </div>
-              <span class="progress-value" id="covers-badge">0 / 40</span>
-            </div>
+          <div class="progress-container">
+            <div class="progress-track" style="margin-bottom: 8px;"><div class="progress-fill bg-pink" id="guitar-progress-fill"></div></div>
+            <p id="guitar-daily-rate" style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 12px; font-style: italic;"></p>
+          </div>
 
-            <div class="progress-container" style="margin-bottom: 14px;">
-              <div class="progress-track"><div class="progress-fill bg-cyan" id="covers-progress-fill"></div></div>
-            </div>
+          <div class="card-input-row" style="margin-bottom: 14px;">
+            <input type="number" id="input-guitar-manual" placeholder="Horas practicadas (ej: 1.5)" min="0" step="0.1">
+            <button class="btn btn-pink btn-sm" onclick="addGuitarHoursManual()" style="padding: 8px 14px; font-family: var(--font-title); font-weight: 700;">Registrar ✨</button>
+          </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-              <h4 style="font-size: 0.9rem; font-family: var(--font-title); letter-spacing: 0.05em;">Listado de Covers</h4>
-              <button class="btn btn-cyan btn-sm" id="btn-add-cover" style="font-size: 0.8rem; padding: 4px 10px;">
-                + Nuevo Cover
-              </button>
-            </div>
-
-            <div class="diary-list" id="covers-list" style="max-height: 220px;">
-              <!-- Rendered via JS -->
-            </div>
+          <h4 style="font-size: 0.85rem; margin-bottom: 8px; font-family: var(--font-title); letter-spacing: 0.05em; color: var(--color-text-muted);">Historial Reciente</h4>
+          <div class="diary-list" id="guitar-log-list" style="max-height: 180px;">
+            <!-- Rendered via JS -->
           </div>
         </div>
 
-        <!-- Columna 2: Seguidores + Presentación en Bar -->
-        <div class="musica-column">
-          <!-- 3. TikTok Followers Card -->
-          <div class="card card-violet">
-            <div class="card-header">
-              <div class="card-title-group">
-                <div class="card-icon"><img src="https://emojicdn.elk.sh/📱" class="apple-emoji" alt="📱"></div>
-                <div>
-                  <h3>Seguidores de TikTok</h3>
-                  <p>Meta: 1000 Seguidores</p>
-                </div>
+        <!-- 2. TikTok Covers Card -->
+        <div class="card card-cyan">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-icon"><img src="https://emojicdn.elk.sh/📱" class="apple-emoji" alt="📱"></div>
+              <div>
+                <h3>Covers de TikTok</h3>
+                <p>Meta: 40 Covers Planificados</p>
               </div>
-              <span class="progress-value" id="followers-badge">0 / 1000 seg.</span>
             </div>
+            <span class="progress-value" id="covers-badge">0 / 40</span>
+          </div>
 
-            <div class="progress-container" style="margin-bottom: 14px;">
-              <div class="progress-track"><div class="progress-fill bg-violet" id="followers-progress-fill" style="width: 0%;"></div></div>
+          <div class="progress-container" style="margin-bottom: 14px;">
+            <div class="progress-track"><div class="progress-fill bg-cyan" id="covers-progress-fill"></div></div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h4 style="font-size: 0.85rem; font-family: var(--font-title); letter-spacing: 0.05em; color: var(--color-text-muted);">Listado de Covers</h4>
+            <button class="btn btn-cyan btn-sm" id="btn-add-cover" style="font-size: 0.78rem; padding: 4px 10px;">
+              + Nuevo Cover
+            </button>
+          </div>
+
+          <div class="diary-list" id="covers-list" style="max-height: 240px; padding-right: 4px;">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- 3. TikTok Followers Card -->
+        <div class="card card-violet">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-icon"><img src="https://emojicdn.elk.sh/📱" class="apple-emoji" alt="📱"></div>
+              <div>
+                <h3>Seguidores de TikTok</h3>
+                <p>Meta: 1000 Seguidores</p>
+              </div>
             </div>
+            <span class="progress-value" id="followers-badge">0 / 1000 seg.</span>
+          </div>
 
-            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
-              <label for="input-followers" style="font-size: 0.8rem; font-family: var(--font-title); color: var(--color-gold); font-weight: 700; text-align: center;">
-                Seguidores Actuales:
-              </label>
-              <input type="number" id="input-followers" min="0" max="100000" placeholder="ej: 1000" style="width: 100%; padding: 10px 12px; font-size: 0.95rem; font-weight: 700; text-align: center; border-radius: 8px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); color: #fff;">
-              <button class="btn btn-violet" onclick="saveFollowersCount()" style="width: 100%; justify-content: center; padding: 10px; font-size: 0.85rem; font-family: var(--font-title); font-weight: 700; border-radius: 8px; display: flex; align-items: center; gap: 4px;">
-                Guardar Seguidores 💾
-              </button>
+          <div class="progress-container" style="margin-bottom: 14px;">
+            <div class="progress-track"><div class="progress-fill bg-violet" id="followers-progress-fill" style="width: 0%;"></div></div>
+          </div>
+
+          <div class="card-input-row" style="margin-top: 10px;">
+            <label for="input-followers" style="font-size: 0.8rem; color: var(--color-text-muted); font-weight: 600;">Actuales:</label>
+            <input type="number" id="input-followers" min="0" max="100000" placeholder="ej: 1000" style="text-align: center;">
+            <button class="btn btn-violet btn-sm" onclick="saveFollowersCount()" style="padding: 8px 14px; font-family: var(--font-title); font-weight: 700;">Guardar 💾</button>
+          </div>
+        </div>
+
+        <!-- 4. Bar Performance Card -->
+        <div class="card card-violet">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-icon"><img src="https://emojicdn.elk.sh/🍻" class="apple-emoji" alt="🍻"></div>
+              <div>
+                <h3>Presentación en Bar</h3>
+                <p>Meta: Tocar en vivo</p>
+              </div>
             </div>
           </div>
 
-          <!-- 4. Bar Performance Card (DIRECTAMENTE ABAJO DE SEGUIDORES) -->
-          <div class="card card-violet">
-            <div class="card-header">
-              <div class="card-title-group">
-                <div class="card-icon"><img src="https://emojicdn.elk.sh/🍻" class="apple-emoji" alt="🍻"></div>
-                <div>
-                  <h3>Presentación en Bar</h3>
-                  <p>Meta: Tocar en vivo</p>
-                </div>
+          <div class="checklist-group" style="margin-bottom: 0;">
+            <div class="checklist-item" id="bar-performance-item" style="padding: 10px 14px; margin: 0;">
+              <input type="checkbox" id="check-bar-performance" style="width: 16px; height: 16px; margin-right: 10px;">
+              <div class="checklist-item-text">
+                <span style="font-weight: 700; color: #fff; font-size: 0.9rem;">Presentación en Bar</span>
+                <p style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 2px;">Tocar una vez en un bar y sentirme cómodo.</p>
               </div>
             </div>
-
-            <div class="checklist-group" style="margin-bottom: 0;">
-              <div class="checklist-item" id="bar-performance-item" style="padding: 10px 14px; margin: 0;">
-                <input type="checkbox" id="check-bar-performance" style="width: 16px; height: 16px; margin-right: 10px;">
-                <div class="checklist-item-text">
-                  <span style="font-weight: 700; color: #fff; font-size: 0.9rem;">Presentación en Bar</span>
-                  <p style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 2px;">Tocar una vez en un bar y sentirme cómodo.</p>
-                </div>
-              </div>
+          </div>
+          <div id="bar-details-container" style="display: none; flex-direction: column; gap: 6px; margin-top: 12px;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <label for="bar-name-text" style="font-size: 0.75rem; color: var(--color-text-muted);">¿En qué bar tocaste?:</label>
+              <input type="text" id="bar-name-text" placeholder="Nombre del bar..." style="width: 100%; font-size: 0.85rem; padding: 6px 10px;">
             </div>
-            <div id="bar-details-container" style="display: none; flex-direction: column; gap: 6px; margin-top: 12px;">
-              <div style="display: flex; flex-direction: column; gap: 2px;">
-                <label for="bar-name-text" style="font-size: 0.75rem; color: var(--color-text-muted);">¿En qué bar tocaste?:</label>
-                <input type="text" id="bar-name-text" placeholder="Nombre del bar..." style="width: 100%; font-size: 0.85rem; padding: 4px 8px;">
-              </div>
-              <div style="display: flex; flex-direction: column; gap: 2px;">
-                <label for="bar-review-text" style="font-size: 0.75rem; color: var(--color-text-muted);">¿Cómo estuvo el show y cómo te sentiste?:</label>
-                <textarea id="bar-review-text" rows="2" placeholder="Escribe tu reseña aquí..." style="width: 100%; resize: none; font-size: 0.85rem; padding: 4px 8px; height: 50px;"></textarea>
-              </div>
-              <button class="btn btn-sm" onclick="saveBarDetails()" style="align-self: flex-end; font-size: 0.75rem; padding: 4px 12px; font-family: var(--font-title); font-weight: 600; margin-top: 4px;">Guardar Show</button>
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <label for="bar-review-text" style="font-size: 0.75rem; color: var(--color-text-muted);">¿Cómo estuvo el show y cómo te sentiste?:</label>
+              <textarea id="bar-review-text" rows="2" placeholder="Escribe tu reseña aquí..." style="width: 100%; resize: none; font-size: 0.85rem; padding: 6px 10px; height: 50px;"></textarea>
             </div>
+            <button class="btn btn-sm" onclick="saveBarDetails()" style="align-self: flex-end; font-size: 0.75rem; padding: 6px 14px; font-family: var(--font-title); font-weight: 600; margin-top: 4px;">Guardar Show</button>
           </div>
         </div>
       </div>
