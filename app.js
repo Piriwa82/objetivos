@@ -2399,8 +2399,10 @@ let firebaseDb = null;
 let firebaseRef = null;
 let isRemoteUpdating = false;
 
+const DEFAULT_FIREBASE_URL = "https://objetivos2026-393a7-default-rtdb.firebaseio.com/";
+
 function initFirebaseSync() {
-  const configStr = localStorage.getItem('goals_2026_firebase_config');
+  const configStr = localStorage.getItem('goals_2026_firebase_config') || DEFAULT_FIREBASE_URL;
   if (!configStr || !window.firebase) {
     updateCloudStatusBadge('offline', '💾 Modo Local (Click para Sincronizar)');
     return;
@@ -2432,6 +2434,8 @@ function initFirebaseSync() {
           localStorage.setItem('goals_2026_state', JSON.stringify(state));
           updateUI();
           isRemoteUpdating = false;
+        } else {
+          firebaseRef.set(state);
         }
         updateCloudStatusBadge('online', '☁️ Sincronizado en Nube');
       }, (error) => {
