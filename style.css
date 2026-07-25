@@ -1,26 +1,26 @@
 /* Google Fonts Import - Plus Jakarta Sans for premium modern headings, Inter for body text */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* Design Tokens & Variables (Gentleman theme) */
+/* Design Tokens & Variables (Fresh Modern Slate Theme) */
 :root {
   --font-title: 'Plus Jakarta Sans', sans-serif;
   --font-body: 'Inter', sans-serif;
 
-  /* Color Palette (Sleek Slate & Warm Gold Theme - Good Vibes!) */
-  --bg-main: #0f1117;
-  --bg-card: #181a24;
-  --bg-card-hover: #202330;
-  --border-color: rgba(255, 255, 255, 0.09);
-  --border-glow: rgba(229, 184, 105, 0.3);
+  /* Color Palette (Fresh Slate & Lighter Warm Theme) */
+  --bg-main: #181c26;
+  --bg-card: #222736;
+  --bg-card-hover: #2b3144;
+  --border-color: rgba(255, 255, 255, 0.12);
+  --border-glow: rgba(245, 158, 11, 0.35);
 
-  --color-gold: #e5b869;
-  --color-gold-glow: rgba(229, 184, 105, 0.4);
-  --color-burgundy: #e06c75;
-  --color-burgundy-glow: rgba(224, 108, 117, 0.4);
-  --color-sage: #4ade80;
-  --color-sage-glow: rgba(74, 222, 128, 0.4);
-  --color-charcoal: #60a5fa;
-  --color-charcoal-glow: rgba(96, 165, 250, 0.4);
+  --color-gold: #f59e0b;
+  --color-gold-glow: rgba(245, 158, 11, 0.4);
+  --color-burgundy: #f43f5e;
+  --color-burgundy-glow: rgba(244, 63, 94, 0.4);
+  --color-sage: #10b981;
+  --color-sage-glow: rgba(16, 185, 129, 0.4);
+  --color-charcoal: #3b82f6;
+  --color-charcoal-glow: rgba(59, 130, 246, 0.4);
 
   /* Mapping colors to maintain HTML/JS class compatibility */
   --color-violet: var(--color-gold);
@@ -31,11 +31,11 @@
   --color-cyan-glow: var(--color-charcoal-glow);
   --color-success: var(--color-sage);
   --color-success-glow: var(--color-sage-glow);
-  --color-warning: #c58e59;
+  --color-warning: #f59e0b;
 
-  --color-text-main: #f8fafc;
-  --color-text-muted: #94a3b8;
-  --color-text-dark: #0f1117;
+  --color-text-main: #ffffff;
+  --color-text-muted: #cbd5e1;
+  --color-text-dark: #181c26;
 
   /* Transitions */
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -54,11 +54,11 @@
 
 body {
   font-family: var(--font-body);
-  background-color: #0f1117;
+  background-color: #181c26;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(229, 184, 105, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(167, 139, 250, 0.08) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(52, 211, 153, 0.05) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(245, 158, 11, 0.12) 0px, transparent 45%),
+    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.12) 0px, transparent 45%),
+    radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 45%);
   background-attachment: fixed;
   color: var(--color-text-main);
   min-height: 100vh;
