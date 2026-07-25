@@ -2399,24 +2399,35 @@ let firebaseDb = null;
 let firebaseRef = null;
 let isRemoteUpdating = false;
 
-const DEFAULT_FIREBASE_URL = "https://objetivos2026-393a7-default-rtdb.firebaseio.com/";
+const DEFAULT_FIREBASE_CONFIG = {
+  projectId: "objetivos2026-393a7",
+  messagingSenderId: "314540758006",
+  databaseURL: "https://objetivos2026-393a7-default-rtdb.firebaseio.com/"
+};
 
 function initFirebaseSync() {
-  const configStr = localStorage.getItem('goals_2026_firebase_config') || DEFAULT_FIREBASE_URL;
-  if (!configStr || !window.firebase) {
-    updateCloudStatusBadge('offline', '💾 Modo Local (Click para Sincronizar)');
+  const configStr = localStorage.getItem('goals_2026_firebase_config');
+  if (!window.firebase) {
+    updateCloudStatusBadge('offline', '💾 Modo Local');
     return;
   }
 
   try {
-    let configObj = null;
-    if (configStr.trim().startsWith('{')) {
-      configObj = JSON.parse(configStr);
-    } else if (configStr.trim().startsWith('http')) {
-      configObj = { databaseURL: configStr.trim() };
+    let configObj = { ...DEFAULT_FIREBASE_CONFIG };
+    if (configStr) {
+      const trimmed = configStr.trim();
+      if (trimmed.startsWith('{')) {
+        try {
+          configObj = JSON.parse(trimmed);
+        } catch (err) {
+          console.warn("JSON de Firebase inválido, usando default:", err);
+        }
+      } else if (trimmed.startsWith('http')) {
+        configObj.databaseURL = trimmed;
+      }
     }
 
-    if (configObj) {
+    if (configObj && configObj.databaseURL) {
       if (!firebase.apps.length) {
         firebase.initializeApp(configObj);
       }
@@ -2425,7 +2436,6 @@ function initFirebaseSync() {
 
       updateCloudStatusBadge('syncing', '☁️ Conectando a Nube...');
 
-      // Escuchar cambios remotos en tiempo real
       firebaseRef.on('value', (snapshot) => {
         const val = snapshot.val();
         if (val) {
@@ -2440,12 +2450,12 @@ function initFirebaseSync() {
         updateCloudStatusBadge('online', '☁️ Sincronizado en Nube');
       }, (error) => {
         console.error("Firebase Sync Error:", error);
-        updateCloudStatusBadge('error', '⚠️ Error de Conexión Nube');
+        updateCloudStatusBadge('error', '⚠️ Error: Ver Reglas de Firebase');
       });
     }
   } catch (e) {
     console.error("Error al inicializar Firebase:", e);
-    updateCloudStatusBadge('error', '⚠️ Config de Nube Inválida');
+    updateCloudStatusBadge('error', '⚠️ Error Config Nube');
   }
 }
 
@@ -2479,7 +2489,7 @@ function updateCloudStatusBadge(type, text) {
 window.saveFirebaseConfig = function() {
   const input = document.getElementById('input-firebase-config');
   if (!input) return;
-  const val = input.value.trim();
+  let val = input.value.trim().replace(/^["']|["']$/g, '');
   if (!val) {
     alert("Por favor ingresa una URL de Firebase Database o la configuración JSON.");
     return;
@@ -2487,7 +2497,6 @@ window.saveFirebaseConfig = function() {
 
   localStorage.setItem('goals_2026_firebase_config', val);
   initFirebaseSync();
-  // Sincronizar estado actual a la nube
   if (firebaseRef) {
     firebaseRef.set(state);
   }
@@ -2502,7 +2511,7 @@ window.disconnectFirebase = function() {
       firebaseRef.off();
       firebaseRef = null;
     }
-    updateCloudStatusBadge('offline', '💾 Modo Local (Click para Sincronizar)');
+    updateCloudStatusBadge('offline', '💾 Modo Local');
     closeModal('modal-cloud-sync');
   }
 };
