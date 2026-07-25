@@ -415,16 +415,17 @@ function loadState() {
       if (!state.security) {
         state.security = { pinEnabled: false, pin: "" };
       }
-      if (migrated) {
-        const jsonStr = JSON.stringify(state);
-        localStorage.setItem('goals_2026_state', jsonStr);
-        localStorage.setItem('goals_2026_backup_state', jsonStr);
-      }
+      const jsonStr = JSON.stringify(state);
+      localStorage.setItem('goals_2026_state', jsonStr);
+      localStorage.setItem('goals_2026_backup_state', jsonStr);
     } catch (e) {
       console.error("Error cargando state de localStorage", e);
     }
   } else {
-    state.security = { pinEnabled: false, pin: "" };
+    ensureStateIntegrity();
+    const jsonStr = JSON.stringify(state);
+    localStorage.setItem('goals_2026_state', jsonStr);
+    localStorage.setItem('goals_2026_backup_state', jsonStr);
   }
 }
 
