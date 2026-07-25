@@ -99,26 +99,50 @@ let state = {
 
 function ensureStateIntegrity() {
   if (!state || typeof state !== 'object') state = {};
+
   if (!state.gym || typeof state.gym !== 'object') state.gym = { pb: 90, ht: 120, sq: 80 };
-  if (!state.gym.pb) state.gym.pb = 90;
-  if (!state.gym.ht) state.gym.ht = 120;
-  if (!state.gym.sq) state.gym.sq = 80;
+  state.gym.pb = Math.max(Number(state.gym.pb) || 0, 90);
+  state.gym.ht = Math.max(Number(state.gym.ht) || 0, 120);
+  state.gym.sq = Math.max(Number(state.gym.sq) || 0, 80);
 
   if (!state.guitar || typeof state.guitar !== 'object') state.guitar = { hours: 331, log: [{ id: "_o5d1wqrrd", date: "2026-07-25", hours: 331 }] };
-  if (!state.guitar.hours) state.guitar.hours = 331;
-  if (!Array.isArray(state.guitar.log) || state.guitar.log.length === 0) state.guitar.log = [{ id: "_o5d1wqrrd", date: "2026-07-25", hours: 331 }];
+  state.guitar.hours = Math.max(Number(state.guitar.hours) || 0, 331);
+  if (!Array.isArray(state.guitar.log) || state.guitar.log.length === 0) {
+    state.guitar.log = [{ id: "_o5d1wqrrd", date: "2026-07-25", hours: 331 }];
+  }
 
-  if (!Array.isArray(state.covers)) state.covers = [...DEFAULT_COVERS];
-  if (!state.followers) state.followers = 214;
+  state.followers = Math.max(Number(state.followers) || 0, 214);
+
+  if (!Array.isArray(state.covers) || state.covers.length === 0) {
+    state.covers = [...DEFAULT_COVERS];
+  }
+
+  if (!Array.isArray(state.books) || state.books.length === 0) {
+    state.books = [...DEFAULT_BOOKS];
+  } else {
+    DEFAULT_BOOKS.forEach(defBook => {
+      const b = state.books.find(bk => bk && bk.title === defBook.title);
+      if (b) {
+        b.readPages = Math.max(Number(b.readPages) || 0, defBook.readPages || 0);
+      }
+    });
+  }
+
+  if (!Array.isArray(state.subjects) || state.subjects.length === 0) {
+    state.subjects = [...DEFAULT_SUBJECTS];
+  } else {
+    DEFAULT_SUBJECTS.forEach(defSub => {
+      const s = state.subjects.find(sub => sub && sub.name === defSub.name);
+      if (s && defSub.passed) {
+        s.passed = true;
+      }
+    });
+  }
 
   if (!state.bar || typeof state.bar !== 'object') state.bar = { completed: false, name: "", review: "" };
   if (state.bar.completed === undefined) state.bar.completed = false;
   if (!state.bar.name) state.bar.name = "";
   if (!state.bar.review) state.bar.review = "";
-
-  if (!Array.isArray(state.books) || state.books.length === 0) state.books = [...DEFAULT_BOOKS];
-
-  if (!Array.isArray(state.subjects) || state.subjects.length === 0) state.subjects = [...DEFAULT_SUBJECTS];
 
   if (!state.sara || typeof state.sara !== 'object') state.sara = { tripCompleted: false, destination: "", videoLink: "", notes: "" };
   if (state.sara.tripCompleted === undefined) state.sara.tripCompleted = false;
@@ -151,6 +175,28 @@ function ensureStateIntegrity() {
     });
   }
 }
+
+window.resetAllDataToFullDefault = function() {
+  if (confirm("¿Deseas cargar tus datos completos (Gym, Guitarra, Libros, Finanzas, Materias y Covers)?")) {
+    state = {
+      gym: { pb: 90, ht: 120, sq: 80 },
+      screenTime: Array(24).fill(null),
+      guitar: { hours: 331, log: [{ id: "_o5d1wqrrd", date: "2026-07-25", hours: 331 }] },
+      covers: [...DEFAULT_COVERS],
+      followers: 214,
+      bar: { completed: false, name: "", review: "" },
+      books: [...DEFAULT_BOOKS],
+      subjects: [...DEFAULT_SUBJECTS],
+      sara: { tripCompleted: false, destination: "", videoLink: "", notes: "" },
+      mind: { thoughts: [], sessions: [] },
+      finance: { log: [...DEFAULT_FINANCE] },
+      tiktok: { connected: false, username: "@thoma_guitar", likes: 0 },
+      security: { pinEnabled: false, pin: "" }
+    };
+    saveState();
+    alert("¡Datos completos restaurados con éxito! 🚀✨");
+  }
+};
 
 let selectedScreenWeekIdx = 0;
 let selectedScreenMonthIdx = 0;
