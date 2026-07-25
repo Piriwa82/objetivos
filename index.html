@@ -492,13 +492,13 @@
           </div>
 
           <!-- Guitar Practice Registration Box -->
-          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 16px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px;">
-            <label for="input-guitar-manual" style="font-size: 0.8rem; font-family: var(--font-title); color: var(--color-gold); font-weight: 600; display: flex; align-items: center; gap: 6px;">
+          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 12px;">
+            <label for="input-guitar-manual" style="font-size: 0.85rem; font-family: var(--font-title); color: var(--color-gold); font-weight: 700; display: flex; align-items: center; gap: 6px;">
               <span>🎸 Registrar Horas de Práctica</span>
             </label>
-            <div style="display: flex; gap: 10px; align-items: center;">
-              <input type="number" id="input-guitar-manual" placeholder="ej: 1.5" min="0" step="0.1" style="flex-grow: 1; padding: 10px 14px; font-size: 1rem; font-weight: 600; border-radius: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.12); color: #fff;">
-              <button class="btn btn-pink btn-sm" onclick="addGuitarHoursManual()" style="padding: 10px 18px; font-size: 0.9rem; font-family: var(--font-title); font-weight: 700; border-radius: 10px; display: flex; align-items: center; gap: 6px; white-space: nowrap;">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <input type="number" id="input-guitar-manual" placeholder="Horas practicadas (ej: 1.5)" min="0" step="0.1" style="width: 100%; padding: 10px 14px; font-size: 0.95rem; font-weight: 600; text-align: center; border-radius: 10px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+              <button class="btn btn-pink" onclick="addGuitarHoursManual()" style="width: 100%; justify-content: center; padding: 10px 14px; font-size: 0.9rem; font-family: var(--font-title); font-weight: 700; border-radius: 10px; display: flex; align-items: center; gap: 6px;">
                 Registrar Práctica ✨
               </button>
             </div>
@@ -561,11 +561,14 @@
             <div class="progress-track" style="margin-bottom: 8px;"><div class="progress-fill bg-violet" id="followers-progress-fill" style="width: 0%;"></div></div>
           </div>
 
-          <div style="display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap;">
-            <label for="input-followers" style="font-size: 0.85rem; color: var(--color-text-muted);">Seguidores Actuales:</label>
-            <input type="number" id="input-followers" min="0" max="100000" style="width: 95px; padding: 6px 10px; text-align: center; font-size: 0.9rem;" placeholder="1000">
-            <button class="btn btn-violet btn-sm" onclick="saveFollowersCount()" style="font-size: 0.8rem; font-family: var(--font-title); font-weight: 600; padding: 6px 14px; display: flex; align-items: center; gap: 6px;">
-              Guardar 💾
+          <!-- TikTok Followers Input Container -->
+          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; margin-top: 14px; display: flex; flex-direction: column; gap: 12px; align-items: center; text-align: center;">
+            <label for="input-followers" style="font-size: 0.85rem; font-family: var(--font-title); color: var(--color-gold); font-weight: 700;">
+              Seguidores Actuales de TikTok:
+            </label>
+            <input type="number" id="input-followers" min="0" max="100000" placeholder="ej: 1000" style="width: 100%; padding: 10px 14px; font-size: 1rem; font-weight: 700; text-align: center; border-radius: 10px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+            <button class="btn btn-violet" onclick="saveFollowersCount()" style="width: 100%; justify-content: center; padding: 10px 14px; font-size: 0.9rem; font-family: var(--font-title); font-weight: 700; border-radius: 10px; display: flex; align-items: center; gap: 6px;">
+              Guardar Seguidores 💾
             </button>
           </div>
         </div>
