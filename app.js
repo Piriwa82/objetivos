@@ -2968,8 +2968,15 @@ function updatePinUI() {
 
 // Inicialización de Nube y PIN al cargar el script
 document.addEventListener('DOMContentLoaded', () => {
+  loadState();
+  updateUI();
   initFirebaseSync();
   checkPinLockOnStart();
   updatePinUI();
 });
+
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  loadState();
+  updateUI();
+}
 
