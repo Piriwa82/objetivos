@@ -70,6 +70,19 @@ const AFFIRMATIONS = [
   "El sueño reparador de +80 me da la energía necesaria para conquistar mis días. 😴"
 ];
 
+const DEFAULT_SUBJECTS = [
+  { id: "_5qtgkn409", name: "Analisis de Sistemas de Informacion", passed: false },
+  { id: "_0899dh13a", name: "Comunicacion de Datos", passed: false },
+  { id: "_gssvkucqv", name: "Economia", passed: false },
+  { id: "_ytvhws9h1", name: "Legislacion", passed: false },
+  { id: "_qr0v14alt", name: "Analisis Numerico", passed: false },
+  { id: "_plrcvhop7", name: "Backend de Aplicaciones", passed: false }
+];
+
+const DEFAULT_FINANCE = [
+  { id: "_il0d6t9mj", date: "2026-07-25", amount: 800000, type: "ahorro", desc: "Ahorro NaranjaX", link: "" }
+];
+
 let state = {
   gym: { pb: 0, ht: 0, sq: 0 },
   screenTime: Array(24).fill(null),
@@ -78,10 +91,10 @@ let state = {
   followers: 0,
   bar: { completed: false, name: "", review: "" },
   books: [...DEFAULT_BOOKS],
-  subjects: [],
+  subjects: [...DEFAULT_SUBJECTS],
   sara: { tripCompleted: false, moments: [] },
   mind: { thoughts: [], sessions: [] },
-  finance: { log: [] },
+  finance: { log: [...DEFAULT_FINANCE] },
   tiktok: { connected: false, username: "@thoma_guitar", likes: 0 },
   security: { pinEnabled: false, pin: "" }
 };
@@ -107,7 +120,7 @@ function ensureStateIntegrity() {
 
   if (!Array.isArray(state.books) || state.books.length === 0) state.books = [...DEFAULT_BOOKS];
 
-  if (!Array.isArray(state.subjects)) state.subjects = [];
+  if (!Array.isArray(state.subjects) || state.subjects.length === 0) state.subjects = [...DEFAULT_SUBJECTS];
 
   if (!state.sara || typeof state.sara !== 'object') state.sara = { tripCompleted: false, moments: [] };
   if (state.sara.tripCompleted === undefined) state.sara.tripCompleted = false;
@@ -117,8 +130,8 @@ function ensureStateIntegrity() {
   if (!Array.isArray(state.mind.thoughts)) state.mind.thoughts = [];
   if (!Array.isArray(state.mind.sessions)) state.mind.sessions = [];
 
-  if (!state.finance || typeof state.finance !== 'object') state.finance = { log: [] };
-  if (!Array.isArray(state.finance.log)) state.finance.log = [];
+  if (!state.finance || typeof state.finance !== 'object') state.finance = { log: [...DEFAULT_FINANCE] };
+  if (!Array.isArray(state.finance.log) || state.finance.log.length === 0) state.finance.log = [...DEFAULT_FINANCE];
 
   if (!state.screenTime || !Array.isArray(state.screenTime) || state.screenTime.length !== 24) {
     state.screenTime = Array(24).fill(null);
