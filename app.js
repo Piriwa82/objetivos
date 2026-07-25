@@ -1280,22 +1280,21 @@ window.saveCoverEditChanges = function() {
 };
 
 // Followers
-window.updateFollowersDirectly = function() {
+window.saveFollowersCount = function() {
+  ensureStateIntegrity();
   const el = document.getElementById('input-followers');
   if (!el) return;
-  const val = parseInt(el.value) || 0;
+  const val = parseInt(el.value, 10);
+  if (isNaN(val) || val < 0) {
+    alert("Por favor ingresa un número de seguidores válido.");
+    return;
+  }
   state.followers = val;
-  
-  localStorage.setItem('goals_2026_state', JSON.stringify(state));
-  
-  const badge = document.getElementById('followers-badge');
-  if (badge) badge.innerText = `${val} / 1000 seg.`;
-  
-  const fill = document.getElementById('followers-progress-fill');
-  if (fill) fill.style.width = `${Math.min((val / 1000) * 100, 100)}%`;
-  
-  updateGlobalProgressDOM();
+  saveState();
+  alert(`¡Seguidores de TikTok (${val.toLocaleString()}) guardados con éxito! 📱🎉`);
 };
+window.updateFollowersDirectly = window.saveFollowersCount;
+window.updateFollowers = window.saveFollowersCount;
 
 // Bar Performance Check
 const checkBar = document.getElementById('check-bar-performance');
