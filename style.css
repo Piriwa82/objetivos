@@ -1,26 +1,26 @@
 /* Google Fonts Import - Plus Jakarta Sans for premium modern headings, Inter for body text */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* Design Tokens & Variables (Fresh Modern Slate Theme) */
+/* Design Tokens & Variables (Lighter Slate Dimmed Theme - Super Clean & Good Vibes!) */
 :root {
   --font-title: 'Plus Jakarta Sans', sans-serif;
   --font-body: 'Inter', sans-serif;
 
-  /* Color Palette (Fresh Slate & Lighter Warm Theme) */
-  --bg-main: #181c26;
-  --bg-card: #222736;
-  --bg-card-hover: #2b3144;
-  --border-color: rgba(255, 255, 255, 0.12);
-  --border-glow: rgba(245, 158, 11, 0.35);
+  /* Color Palette (Lighter Slate Blue Theme) */
+  --bg-main: #212634;
+  --bg-card: #2a3042;
+  --bg-card-hover: #32394e;
+  --border-color: rgba(255, 255, 255, 0.14);
+  --border-glow: rgba(245, 158, 11, 0.4);
 
-  --color-gold: #f59e0b;
-  --color-gold-glow: rgba(245, 158, 11, 0.4);
+  --color-gold: #fbbf24;
+  --color-gold-glow: rgba(251, 191, 36, 0.4);
   --color-burgundy: #f43f5e;
   --color-burgundy-glow: rgba(244, 63, 94, 0.4);
-  --color-sage: #10b981;
-  --color-sage-glow: rgba(16, 185, 129, 0.4);
-  --color-charcoal: #3b82f6;
-  --color-charcoal-glow: rgba(59, 130, 246, 0.4);
+  --color-sage: #34d399;
+  --color-sage-glow: rgba(52, 211, 153, 0.4);
+  --color-charcoal: #60a5fa;
+  --color-charcoal-glow: rgba(96, 165, 250, 0.4);
 
   /* Mapping colors to maintain HTML/JS class compatibility */
   --color-violet: var(--color-gold);
@@ -31,11 +31,11 @@
   --color-cyan-glow: var(--color-charcoal-glow);
   --color-success: var(--color-sage);
   --color-success-glow: var(--color-sage-glow);
-  --color-warning: #f59e0b;
+  --color-warning: #fbbf24;
 
   --color-text-main: #ffffff;
   --color-text-muted: #cbd5e1;
-  --color-text-dark: #181c26;
+  --color-text-dark: #212634;
 
   /* Transitions */
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -54,11 +54,11 @@
 
 body {
   font-family: var(--font-body);
-  background-color: #181c26;
+  background-color: #212634;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(245, 158, 11, 0.12) 0px, transparent 45%),
-    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.12) 0px, transparent 45%),
-    radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 45%);
+    radial-gradient(at 0% 0%, rgba(251, 191, 36, 0.14) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.14) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(52, 211, 153, 0.1) 0px, transparent 50%);
   background-attachment: fixed;
   color: var(--color-text-main);
   min-height: 100vh;
@@ -1234,13 +1234,26 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
   }
   .card {
     padding: 14px 12px;
-    border-radius: 12px;
+    border-radius: 14px;
   }
   .card-header h3 {
     font-size: 1.05rem;
   }
   .card-header p {
-    font-size: 0.72rem;
+    font-size: 0.75rem;
+  }
+  .card-input-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .card-input-row input {
+    text-align: center;
+    padding: 10px;
+  }
+  .card-input-row button {
+    justify-content: center;
+    padding: 10px;
   }
   .book-item {
     padding: 10px;
