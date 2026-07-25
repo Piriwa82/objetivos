@@ -6,10 +6,10 @@ const ICON_CHECK = `<svg viewBox="0 0 24 24" width="13" height="13" stroke="curr
 const ICON_PLUS = `<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
 
 const STATIC_COVERS = {
-  "Cuál es tu sueño": "simon_squibb_cover.jpg",
+  "Cuál es tu sueño": "simon_squibb_yellow_cover.jpg",
   "Cerati biografía": "https://is1-ssl.mzstatic.com/image/thumb/Publication211/v4/24/4a/5d/244a5d8c-ee7e-1b3b-10c4-c7c926e642f3/9789500752978.jpg/400x600bb.jpg",
   "Releo Si lo crees lo creas": "https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/01/9e/8b/019e8ba2-2819-4e3e-ee84-352a92842e30/9786073171175.jpg/400x600bb.jpg",
-  "Cómo hacer amigos e influir en las personas": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/05/92/f1/0592f14d-b258-8c21-0902-51f9c90a33dd/9789500763721.jpg/600x900bb.jpg",
+  "Cómo hacer amigos e influir en las personas": "como_ganar_amigos_celeste.jpg",
   "Oasis: vivir para siempre": "https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/3e/67/dc/3e67dc9b-fb5b-8df3-fa92-9e810a118bfc/9789500773263.jpg/400x600bb.jpg",
   "El camino del artista": "https://is1-ssl.mzstatic.com/image/thumb/Publication116/v4/50/2e/30/502e3077-1476-3e4a-f32b-6844a3539947/9788403052970.jpg/400x600bb.jpg",
   "Generación dopamina": "https://is1-ssl.mzstatic.com/image/thumb/Podcasts211/v4/b3/6a/6c/b36a6c46-7276-d846-a10a-6bf4f6b438ae/mza_2802746189753098939.jpg/300x300bb.jpg"
@@ -139,6 +139,17 @@ function ensureStateIntegrity() {
 
   if (!state.tiktok || typeof state.tiktok !== 'object') state.tiktok = { connected: false, username: "@thoma_guitar", likes: 0 };
   if (!state.security || typeof state.security !== 'object') state.security = { pinEnabled: false, pin: "" };
+
+  if (Array.isArray(state.books)) {
+    state.books.forEach(b => {
+      if (!b) return;
+      if (b.title === "Cuál es tu sueño") {
+        b.coverUrl = STATIC_COVERS["Cuál es tu sueño"];
+      } else if (b.title && b.title.includes("amigos")) {
+        b.coverUrl = STATIC_COVERS["Cómo hacer amigos e influir en las personas"];
+      }
+    });
+  }
 }
 
 let selectedScreenWeekIdx = 0;
