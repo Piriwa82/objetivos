@@ -10,8 +10,6 @@
   <!-- Firebase Compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-  <!-- Chart.js for Interactive Visual Analytics -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -420,16 +418,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Gráfico Interactivo de Marcas de Fuerza -->
-          <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-color);">
-            <h4 style="font-size: 0.82rem; font-family: var(--font-title); color: var(--color-text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-              📊 <span>Marcas Actuales vs Metas 2026 (1RM)</span>
-            </h4>
-            <div style="position: relative; width: 100%; height: 160px;">
-              <canvas id="chart-gym"></canvas>
-            </div>
-          </div>
         </div>
 
         <!-- Screen Time Card -->
@@ -476,16 +464,6 @@
           <div class="sleep-grid" id="screen-time-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
             <!-- Rendered via JS -->
           </div>
-
-          <!-- Gráfico Interactivo de Tendencia Semanal de Pantalla -->
-          <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-color);">
-            <h4 style="font-size: 0.82rem; font-family: var(--font-title); color: var(--color-text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-              📊 <span>Tendencia Semanal de Pantalla (hs/día)</span>
-            </h4>
-            <div style="position: relative; width: 100%; height: 160px;">
-              <canvas id="chart-screen-time"></canvas>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -520,18 +498,8 @@
             </div>
 
             <h4 style="font-size: 0.85rem; margin-bottom: 8px; font-family: var(--font-title); letter-spacing: 0.05em; color: var(--color-text-muted);">Historial Reciente</h4>
-            <div class="diary-list" id="guitar-log-list" style="max-height: 160px;">
+            <div class="diary-list" id="guitar-log-list" style="max-height: 180px;">
               <!-- Rendered via JS -->
-            </div>
-
-            <!-- Gráfico Interactivo de Progreso Acumulado de Práctica -->
-            <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-color);">
-              <h4 style="font-size: 0.82rem; font-family: var(--font-title); color: var(--color-text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-                📊 <span>Progreso Acumulado de Práctica (hs)</span>
-              </h4>
-              <div style="position: relative; width: 100%; height: 150px;">
-                <canvas id="chart-guitar"></canvas>
-              </div>
             </div>
           </div>
 
@@ -665,16 +633,6 @@
 
           <div class="book-grid" id="books-container">
             <!-- Rendered via JS -->
-          </div>
-
-          <!-- Gráfico Interactivo de Avance por Libro -->
-          <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-color);">
-            <h4 style="font-size: 0.82rem; font-family: var(--font-title); color: var(--color-text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-              📊 <span>Comparativa de Páginas por Libro</span>
-            </h4>
-            <div style="position: relative; width: 100%; height: 160px;">
-              <canvas id="chart-reading"></canvas>
-            </div>
           </div>
         </div>
 
