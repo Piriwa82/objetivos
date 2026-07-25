@@ -279,6 +279,8 @@ header {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
   align-items: start;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .grid-dashboard-2col {
@@ -286,6 +288,8 @@ header {
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   align-items: start;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .grid-double {
@@ -412,36 +416,23 @@ header {
 
 /* Linear Progress Bar Component */
 .progress-container {
+  width: 100%;
   margin-bottom: 16px;
 }
 
-.progress-header {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.85rem;
-  margin-bottom: 6px;
-}
-
-.progress-label {
-  color: var(--color-text-muted);
-}
-
-.progress-value {
-  color: var(--color-text-main);
-  font-weight: 600;
-}
-
 .progress-track {
+  width: 100%;
   height: 6px;
-  background: #1a1a1a;
-  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
   overflow: hidden;
   position: relative;
+  box-sizing: border-box;
 }
 
 .progress-fill {
   height: 100%;
-  border-radius: 3px;
+  border-radius: 4px;
   width: 0%;
   transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
