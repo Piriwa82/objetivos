@@ -1060,6 +1060,11 @@ window.onScreenTimeInputChange = function() {
 };
 
 function renderGuitarLog() {
+  const dateInput = document.getElementById('input-guitar-date');
+  if (dateInput && !dateInput.value) {
+    dateInput.value = new Date().toISOString().split('T')[0];
+  }
+
   const container = document.getElementById('guitar-log-list');
   if (!container) return;
 
@@ -1395,15 +1400,24 @@ window.addGuitarHours = function(amount) {
 
 window.addGuitarHoursManual = function() {
   const input = document.getElementById('input-guitar-manual');
+  const dateInput = document.getElementById('input-guitar-date');
+
   const val = parseFloat(input.value);
-  if (isNaN(val) || val <= 0) return;
+  if (isNaN(val) || val <= 0) {
+    alert("Por favor ingresa un número de horas válido.");
+    return;
+  }
+  
+  const todayStr = new Date().toISOString().split('T')[0];
+  const selectedDate = dateInput && dateInput.value ? dateInput.value : todayStr;
   
   state.guitar.hours += val;
   state.guitar.log.push({
     id: generateId(),
-    date: new Date().toISOString().split('T')[0],
+    date: selectedDate,
     hours: val
   });
+  
   input.value = "";
   saveState();
 };
