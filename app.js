@@ -1114,12 +1114,29 @@ function renderSaraVideoPlayer(url) {
   } else if (cleanUrl.includes('vimeo.com')) {
     const vimeoId = cleanUrl.split('vimeo.com/')[1].split('?')[0];
     embedHtml = `<iframe src="https://player.vimeo.com/video/${vimeoId}" width="100%" height="220" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="border-radius: 8px;"></iframe>`;
+  } else if (cleanUrl.startsWith('blob:') || cleanUrl.endsWith('.mp4') || cleanUrl.endsWith('.webm') || cleanUrl.endsWith('.mov')) {
+    embedHtml = `<video controls src="${cleanUrl}" style="width: 100%; max-height: 240px; border-radius: 8px; background: #000;"></video>`;
   } else {
     embedHtml = `<div style="padding: 20px; text-align: center;"><a href="${cleanUrl}" target="_blank" class="btn btn-pink btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">🎬 Abrir Video del Viaje</a></div>`;
   }
 
   box.innerHTML = embedHtml;
 }
+
+window.onSaraVideoFileSelected = function(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const fileUrl = URL.createObjectURL(file);
+  if (!state.sara) state.sara = {};
+  state.sara.videoLink = fileUrl;
+  
+  const linkInput = document.getElementById('input-sara-video-link');
+  if (linkInput) linkInput.value = file.name;
+
+  saveState();
+  renderSaraVideoPlayer(fileUrl);
+};
 
 window.saveSaraTripDetails = function() {
   ensureStateIntegrity();
