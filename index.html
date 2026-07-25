@@ -557,9 +557,12 @@
             <div class="progress-track" style="margin-bottom: 8px;"><div class="progress-fill bg-violet" id="followers-progress-fill" style="width: 0%;"></div></div>
           </div>
 
-          <div style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap;">
             <label for="input-followers" style="font-size: 0.85rem; color: var(--color-text-muted);">Seguidores Actuales:</label>
-            <input type="number" id="input-followers" min="0" max="100000" style="width: 80px; padding: 6px 10px; text-align: center; font-size: 0.9rem;" oninput="updateFollowersDirectly()">
+            <input type="number" id="input-followers" min="0" max="100000" style="width: 95px; padding: 6px 10px; text-align: center; font-size: 0.9rem;" placeholder="1000">
+            <button class="btn btn-violet btn-sm" onclick="saveFollowersCount()" style="font-size: 0.8rem; font-family: var(--font-title); font-weight: 600; padding: 6px 14px; display: flex; align-items: center; gap: 6px;">
+              Guardar 💾
+            </button>
           </div>
         </div>
 
