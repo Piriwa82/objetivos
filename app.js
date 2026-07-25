@@ -16,11 +16,11 @@ const STATIC_COVERS = {
 };
 
 const DEFAULT_BOOKS = [
-  { title: "Cuál es tu sueño", totalPages: 247, readPages: 0, coverUrl: STATIC_COVERS["Cuál es tu sueño"] },
-  { title: "Cerati biografía", totalPages: 309, readPages: 0, coverUrl: STATIC_COVERS["Cerati biografía"] },
-  { title: "Releo Si lo crees lo creas", totalPages: 230, readPages: 0, coverUrl: STATIC_COVERS["Releo Si lo crees lo creas"] },
-  { title: "Cómo hacer amigos e influir en las personas", totalPages: 303, readPages: 0, coverUrl: STATIC_COVERS["Cómo hacer amigos e influir en las personas"] },
-  { title: "Oasis: vivir para siempre", totalPages: 320, readPages: 0, coverUrl: STATIC_COVERS["Oasis: vivir para siempre"] },
+  { title: "Cuál es tu sueño", totalPages: 247, readPages: 247, coverUrl: STATIC_COVERS["Cuál es tu sueño"] },
+  { title: "Cerati biografía", totalPages: 309, readPages: 309, coverUrl: STATIC_COVERS["Cerati biografía"] },
+  { title: "Releo Si lo crees lo creas", totalPages: 230, readPages: 230, coverUrl: STATIC_COVERS["Releo Si lo crees lo creas"] },
+  { title: "Cómo hacer amigos e influir en las personas", totalPages: 303, readPages: 303, coverUrl: STATIC_COVERS["Cómo hacer amigos e influir en las personas"] },
+  { title: "Oasis: vivir para siempre", totalPages: 320, readPages: 136, coverUrl: STATIC_COVERS["Oasis: vivir para siempre"] },
   { title: "El camino del artista", totalPages: 250, readPages: 0, coverUrl: STATIC_COVERS["El camino del artista"] },
 ];
 
@@ -55,8 +55,6 @@ const DEFAULT_COVERS = [
   { id: "_cov28", title: "Paloma - Andrés Calamaro", date: "2026-07-20", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/9d/97/a2/9d97a228-eaec-2997-4191-a6c3377ecb18/mzi.mrfogssv.jpg/300x300bb.jpg" }
 ];
 
-
-
 const AFFIRMATIONS = [
   "Mejorar notablemente mi autoestima, sentirme sumamente contento con mi relación conmigo mismo y amarme mucho. 🧠",
   "El amor propio es la base de mi felicidad y de todas mis relaciones. ❤️",
@@ -73,9 +71,9 @@ const AFFIRMATIONS = [
 const DEFAULT_SUBJECTS = [
   { id: "_5qtgkn409", name: "Analisis de Sistemas de Informacion", passed: false },
   { id: "_0899dh13a", name: "Comunicacion de Datos", passed: false },
-  { id: "_gssvkucqv", name: "Economia", passed: false },
+  { id: "_gssvkucqv", name: "Economia", passed: true },
   { id: "_ytvhws9h1", name: "Legislacion", passed: false },
-  { id: "_qr0v14alt", name: "Analisis Numerico", passed: false },
+  { id: "_qr0v14alt", name: "Analisis Numerico", passed: true },
   { id: "_plrcvhop7", name: "Backend de Aplicaciones", passed: false }
 ];
 
@@ -84,11 +82,11 @@ const DEFAULT_FINANCE = [
 ];
 
 let state = {
-  gym: { pb: 0, ht: 0, sq: 0 },
+  gym: { pb: 90, ht: 120, sq: 80 },
   screenTime: Array(24).fill(null),
-  guitar: { hours: 0, log: [] },
+  guitar: { hours: 331, log: [{ id: "_o5d1wqrrd", date: "2026-07-25", hours: 331 }] },
   covers: [...DEFAULT_COVERS],
-  followers: 0,
+  followers: 214,
   bar: { completed: false, name: "", review: "" },
   books: [...DEFAULT_BOOKS],
   subjects: [...DEFAULT_SUBJECTS],
@@ -101,17 +99,17 @@ let state = {
 
 function ensureStateIntegrity() {
   if (!state || typeof state !== 'object') state = {};
-  if (!state.gym || typeof state.gym !== 'object') state.gym = { pb: 0, ht: 0, sq: 0 };
-  if (typeof state.gym.pb !== 'number' || isNaN(state.gym.pb)) state.gym.pb = 0;
-  if (typeof state.gym.ht !== 'number' || isNaN(state.gym.ht)) state.gym.ht = 0;
-  if (typeof state.gym.sq !== 'number' || isNaN(state.gym.sq)) state.gym.sq = 0;
+  if (!state.gym || typeof state.gym !== 'object') state.gym = { pb: 90, ht: 120, sq: 80 };
+  if (!state.gym.pb) state.gym.pb = 90;
+  if (!state.gym.ht) state.gym.ht = 120;
+  if (!state.gym.sq) state.gym.sq = 80;
 
-  if (!state.guitar || typeof state.guitar !== 'object') state.guitar = { hours: 0, log: [] };
-  if (typeof state.guitar.hours !== 'number' || isNaN(state.guitar.hours)) state.guitar.hours = 0;
-  if (!Array.isArray(state.guitar.log)) state.guitar.log = [];
+  if (!state.guitar || typeof state.guitar !== 'object') state.guitar = { hours: 331, log: [{ id: "_o5d1wqrrd", date: "2026-07-25", hours: 331 }] };
+  if (!state.guitar.hours) state.guitar.hours = 331;
+  if (!Array.isArray(state.guitar.log) || state.guitar.log.length === 0) state.guitar.log = [{ id: "_o5d1wqrrd", date: "2026-07-25", hours: 331 }];
 
   if (!Array.isArray(state.covers)) state.covers = [...DEFAULT_COVERS];
-  if (typeof state.followers !== 'number' || isNaN(state.followers)) state.followers = 0;
+  if (!state.followers) state.followers = 214;
 
   if (!state.bar || typeof state.bar !== 'object') state.bar = { completed: false, name: "", review: "" };
   if (state.bar.completed === undefined) state.bar.completed = false;
