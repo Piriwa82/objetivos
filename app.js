@@ -568,6 +568,23 @@ function calculateTotalSavings() {
   }, 0);
 }
 
+function updateGlobalProgressDOM() {
+  const stats = calculateGoalsProgress();
+
+  const percentEl = document.getElementById('global-progress-percent');
+  if (percentEl) percentEl.innerText = `${stats.overallPercent}%`;
+
+  const summaryEl = document.getElementById('global-progress-summary');
+  if (summaryEl) summaryEl.innerText = `${stats.completedCount} / ${stats.totalGoals} Objetivos`;
+
+  const circleEl = document.getElementById('global-progress-circle');
+  if (circleEl) {
+    const strokeDasharray = 188.4;
+    const dashoffset = strokeDasharray - (strokeDasharray * stats.overallPercent) / 100;
+    circleEl.style.strokeDashoffset = dashoffset;
+  }
+}
+
 function updateUI() {
   // 1. Header & Overall Stats
   updateGlobalProgressDOM();
