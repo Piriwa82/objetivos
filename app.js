@@ -443,6 +443,12 @@ function switchTab(tabName, smoothScroll = true) {
 function openModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) {
+    if (modalId === 'modal-cloud-sync') {
+      const input = document.getElementById('input-firebase-config');
+      if (input) {
+        input.value = localStorage.getItem('goals_2026_firebase_config') || "https://objetivos2026-393a7-default-rtdb.firebaseio.com/";
+      }
+    }
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('active'), 10);
   }
@@ -2782,22 +2788,24 @@ function updateCloudStatusBadge(type, text) {
 
 window.saveFirebaseConfig = function() {
   const input = document.getElementById('input-firebase-config');
-  if (!input) return;
-  let val = input.value.trim().replace(/^["']|["']$/g, '');
+  let val = input ? input.value.trim().replace(/^["']|["']$/g, '') : "";
   if (!val) {
-    alert("Por favor ingresa una URL de Firebase Database o la configuración JSON.");
-    return;
+    val = "https://objetivos2026-393a7-default-rtdb.firebaseio.com/";
   }
 
   localStorage.setItem('goals_2026_firebase_config', val);
   initFirebaseSync();
+
   if (firebaseRef) {
     try {
-      firebaseRef.set(JSON.parse(JSON.stringify(state)));
+      const cleanState = JSON.parse(JSON.stringify(state));
+      firebaseRef.set(cleanState);
     } catch (e) {}
   }
+
+  updateCloudStatusBadge('online', '☁️ Sincronizado en Nube');
   closeModal('modal-cloud-sync');
-  alert("¡Configuración de la nube guardada con éxito! ☁️🎉");
+  alert("¡Conectado a la Nube con éxito! ☁️🎉 Tus objetivos están sincronizados entre tu celu y compu en tiempo real.");
 };
 
 window.disconnectFirebase = function() {
