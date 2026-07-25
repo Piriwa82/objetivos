@@ -10,6 +10,8 @@
   <!-- Firebase Compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+  <!-- Chart.js for Interactive Visual Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -409,15 +411,23 @@
                 </button>
               </div>
               <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-                <label for="input-sq-1rm" style="font-size: 0.75rem; color: var(--color-text-muted);">Estimar 1RM (ej: 80x8):</label>
-                <input type="text" id="input-sq-1rm" placeholder="80x8" style="padding: 4px 8px; width: 75px; text-align: center;" oninput="calculateGym1RM('sq')">
-                <div style="display: flex; align-items: center; gap: 6px;">
+                <label for="input-sq-1rm" style="font-size: 0.75rem; color: var(--color-text-muted);">Estimar 1RM (ej:                 <div style="display: flex; align-items: center; gap: 6px;">
                   <span id="sq-1rm-result" style="font-size: 0.85rem; font-weight: 600; color: var(--color-gold);">-- kg (1RM: -- kg)</span>
                   <button class="btn btn-sm btn-icon-only" onclick="applyGym1RM('sq')" title="Usar como Peso Actual" style="width: 22px; height: 22px; border-radius: 4px; padding: 0;">
                     <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <!-- Gráfico Interactivo de Marcas de Fuerza -->
+          <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-color);">
+            <h4 style="font-size: 0.82rem; font-family: var(--font-title); color: var(--color-text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+              📊 <span>Marcas Actuales vs Metas 2026 (1RM)</span>
+            </h4>
+            <div style="position: relative; width: 100%; height: 160px;">
+              <canvas id="chart-gym"></canvas>
             </div>
           </div>
         </div>
@@ -448,10 +458,10 @@
             <div style="display: flex; gap: 8px; align-items: center;">
               <div style="display: flex; align-items: center; gap: 6px;">
                 <label for="input-screen-hours" style="font-size: 0.75rem; color: var(--color-text-muted);">Hrs:</label>
-                <input type="number" id="input-screen-hours" min="0" max="23" placeholder="0" style="padding: 6px 8px; font-size: 0.8rem; background: #121213; text-align: center; width: 55px;" oninput="onScreenTimeInputChange()">
+                <input type="number" id="input-screen-hours" min="0" max="24" placeholder="0" style="padding: 6px 8px; font-size: 0.8rem; background: #121213; text-align: center; width: 55px;" oninput="onScreenTimeInputChange()">
               </div>
               <div style="display: flex; align-items: center; gap: 6px;">
-                <label for="input-screen-mins" style="font-size: 0.75rem; color: var(--color-text-muted);">Min:</label>
+                <label for="input-screen-mins" style="font-size: 0.75rem; color: var(--color-text-muted);">Mins:</label>
                 <input type="number" id="input-screen-mins" min="0" max="59" placeholder="0" style="padding: 6px 8px; font-size: 0.8rem; background: #121213; text-align: center; width: 55px;" oninput="onScreenTimeInputChange()">
               </div>
             </div>
@@ -465,6 +475,16 @@
           <!-- 4-Week Grid -->
           <div class="sleep-grid" id="screen-time-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
             <!-- Rendered via JS -->
+          </div>
+
+          <!-- Gráfico Interactivo de Tendencia Semanal de Pantalla -->
+          <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-color);">
+            <h4 style="font-size: 0.82rem; font-family: var(--font-title); color: var(--color-text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+              📊 <span>Tendencia Semanal de Pantalla (hs/día)</span>
+            </h4>
+            <div style="position: relative; width: 100%; height: 160px;">
+              <canvas id="chart-screen-time"></canvas>
+            </div>
           </div>
         </div>
       </div>
@@ -499,8 +519,18 @@
             </div>
 
             <h4 style="font-size: 0.85rem; margin-bottom: 8px; font-family: var(--font-title); letter-spacing: 0.05em; color: var(--color-text-muted);">Historial Reciente</h4>
-            <div class="diary-list" id="guitar-log-list" style="max-height: 180px;">
+            <div class="diary-list" id="guitar-log-list" style="max-height: 160px;">
               <!-- Rendered via JS -->
+            </div>
+
+            <!-- Gráfico Interactivo de Progreso Acumulado de Práctica -->
+            <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-color);">
+              <h4 style="font-size: 0.82rem; font-family: var(--font-title); color: var(--color-text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                📊 <span>Progreso Acumulado de Práctica (hs)</span>
+              </h4>
+              <div style="position: relative; width: 100%; height: 150px;">
+                <canvas id="chart-guitar"></canvas>
+              </div>
             </div>
           </div>
 
@@ -634,6 +664,16 @@
 
           <div class="book-grid" id="books-container">
             <!-- Rendered via JS -->
+          </div>
+
+          <!-- Gráfico Interactivo de Avance por Libro -->
+          <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-color);">
+            <h4 style="font-size: 0.82rem; font-family: var(--font-title); color: var(--color-text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+              📊 <span>Comparativa de Páginas por Libro</span>
+            </h4>
+            <div style="position: relative; width: 100%; height: 160px;">
+              <canvas id="chart-reading"></canvas>
+            </div>
           </div>
         </div>
 
