@@ -6,7 +6,7 @@ const ICON_CHECK = `<svg viewBox="0 0 24 24" width="13" height="13" stroke="curr
 const ICON_PLUS = `<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
 
 const STATIC_COVERS = {
-  "Cuál es tu sueño": "https://images.cdn3.buscalibre.com/fit-in/660x660/63/e1/63e1efee60fb3a0d4097acdd5021e408.jpg",
+  "Cuál es tu sueño": "simon_squibb_cover.jpg",
   "Cerati biografía": "https://is1-ssl.mzstatic.com/image/thumb/Publication211/v4/24/4a/5d/244a5d8c-ee7e-1b3b-10c4-c7c926e642f3/9789500752978.jpg/400x600bb.jpg",
   "Releo Si lo crees lo creas": "https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/01/9e/8b/019e8ba2-2819-4e3e-ee84-352a92842e30/9786073171175.jpg/400x600bb.jpg",
   "Cómo hacer amigos e influir en las personas": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/05/92/f1/0592f14d-b258-8c21-0902-51f9c90a33dd/9789500763721.jpg/600x900bb.jpg",
