@@ -674,6 +674,9 @@ function updateUI() {
   setValueText('finance-badge', `$${totalSavings.toLocaleString('es-AR')} / $2.000.000`);
   setProgressBarWidth('finance-progress-fill', Math.min((Math.max(totalSavings, 0) / 2000000) * 100, 100));
   renderFinanceLog();
+
+  // --- Render Gráficos Interactivos (Chart.js) ---
+  renderInteractiveCharts();
 }
 
 // Helpers de ayuda para actualizar el DOM
@@ -693,6 +696,220 @@ function setInputValue(id, val) {
 }
 
 // --- Component-specific Renderers ---
+
+// --- Interactive Chart.js Visualizations ---
+let chartScreenTimeInstance = null;
+let chartReadingInstance = null;
+let chartGuitarInstance = null;
+let chartGymInstance = null;
+
+function renderInteractiveCharts() {
+  if (typeof Chart === 'undefined') return;
+
+  // 1. Gym Chart (1RM progression comparison)
+  try {
+    const gymCanvas = document.getElementById('chart-gym');
+    if (gymCanvas) {
+      const pb1RM = calculate1RM(state.gym.pb, 1);
+      const ht1RM = calculate1RM(state.gym.ht, 8);
+      const sq1RM = calculate1RM(state.gym.sq, 8);
+
+      if (chartGymInstance) chartGymInstance.destroy();
+      chartGymInstance = new Chart(gymCanvas.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: ['Banca (PB)', 'Hip Thrust', 'Sentadilla'],
+          datasets: [
+            {
+              label: '1RM Actual (kg)',
+              data: [pb1RM, ht1RM, sq1RM],
+              backgroundColor: '#34d399',
+              borderRadius: 6
+            },
+            {
+              label: 'Meta 2026 (kg)',
+              data: [100, 174, 124],
+              backgroundColor: 'rgba(251, 191, 36, 0.25)',
+              borderColor: '#fbbf24',
+              borderWidth: 1,
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#cbd5e1', font: { family: 'Plus Jakarta Sans', size: 10 } } }
+          },
+          scales: {
+            x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } },
+            y: { ticks: { color: '#94a3b8', font: { size: 9 } }, grid: { color: 'rgba(255,255,255,0.05)' } }
+          }
+        }
+      });
+    }
+  } catch(e) { console.error("Chart Gym err:", e); }
+
+  // 2. Screen Time Chart (Weekly Trend vs Target)
+  try {
+    const screenCanvas = document.getElementById('chart-screen-time');
+    if (screenCanvas) {
+      const labels = [];
+      const dataHours = [];
+      const ptColors = [];
+
+      state.screenTime.forEach((mins, i) => {
+        if (mins !== null) {
+          labels.push(`Sem ${i + 1}`);
+          const hrs = Math.round((mins / 60) * 10) / 10;
+          dataHours.push(hrs);
+          ptColors.push(mins <= 210 ? '#34d399' : '#f43f5e');
+        }
+      });
+
+      if (labels.length === 0) {
+        labels.push("Sem 1");
+        dataHours.push(0);
+        ptColors.push('#34d399');
+      }
+
+      if (chartScreenTimeInstance) chartScreenTimeInstance.destroy();
+      chartScreenTimeInstance = new Chart(screenCanvas.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Promedio Semanal (hs/día)',
+              data: dataHours,
+              borderColor: '#60a5fa',
+              backgroundColor: 'rgba(96, 165, 250, 0.15)',
+              fill: true,
+              tension: 0.3,
+              pointBackgroundColor: ptColors,
+              pointRadius: 5,
+              pointHoverRadius: 7
+            },
+            {
+              label: 'Meta Máx (3.5h)',
+              data: labels.map(() => 3.5),
+              borderColor: 'rgba(251, 191, 36, 0.6)',
+              borderDash: [4, 4],
+              pointRadius: 0,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#cbd5e1', font: { family: 'Plus Jakarta Sans', size: 10 } } }
+          },
+          scales: {
+            x: { ticks: { color: '#94a3b8', font: { size: 9 } }, grid: { display: false } },
+            y: { ticks: { color: '#94a3b8', font: { size: 9 } }, grid: { color: 'rgba(255,255,255,0.05)' } }
+          }
+        }
+      });
+    }
+  } catch(e) { console.error("Chart Screen Time err:", e); }
+
+  // 3. Guitar Chart (Accumulated Hours Trend)
+  try {
+    const guitarCanvas = document.getElementById('chart-guitar');
+    if (guitarCanvas) {
+      const sortedLog = [...state.guitar.log].sort((a, b) => new Date(a.date) - new Date(b.date));
+      let accum = 0;
+      const labels = [];
+      const values = [];
+
+      sortedLog.forEach(item => {
+        accum += item.hours;
+        labels.push(item.date ? item.date.substring(5) : 'Sesión');
+        values.push(Math.round(accum * 10) / 10);
+      });
+
+      if (labels.length === 0) {
+        labels.push("Inicio");
+        values.push(state.guitar.hours || 0);
+      }
+
+      if (chartGuitarInstance) chartGuitarInstance.destroy();
+      chartGuitarInstance = new Chart(guitarCanvas.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Horas Acumuladas',
+            data: values,
+            borderColor: '#f43f5e',
+            backgroundColor: 'rgba(244, 63, 94, 0.15)',
+            fill: true,
+            tension: 0.3,
+            pointBackgroundColor: '#f43f5e',
+            pointRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#cbd5e1', font: { family: 'Plus Jakarta Sans', size: 10 } } }
+          },
+          scales: {
+            x: { ticks: { color: '#94a3b8', font: { size: 9 } }, grid: { display: false } },
+            y: { ticks: { color: '#94a3b8', font: { size: 9 } }, grid: { color: 'rgba(255,255,255,0.05)' } }
+          }
+        }
+      });
+    }
+  } catch(e) { console.error("Chart Guitar err:", e); }
+
+  // 4. Reading Chart (Pages Per Book Comparison)
+  try {
+    const readingCanvas = document.getElementById('chart-reading');
+    if (readingCanvas) {
+      const labels = state.books.map(b => b.title.length > 14 ? b.title.substring(0, 13) + '...' : b.title);
+      const readPages = state.books.map(b => b.readPages || 0);
+      const totalPages = state.books.map(b => b.totalPages || 0);
+
+      if (chartReadingInstance) chartReadingInstance.destroy();
+      chartReadingInstance = new Chart(readingCanvas.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Leídas',
+              data: readPages,
+              backgroundColor: '#fbbf24',
+              borderRadius: 4
+            },
+            {
+              label: 'Total',
+              data: totalPages,
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: 4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#cbd5e1', font: { family: 'Plus Jakarta Sans', size: 10 } } }
+          },
+          scales: {
+            x: { ticks: { color: '#94a3b8', font: { size: 9 } }, grid: { display: false } },
+            y: { ticks: { color: '#94a3b8', font: { size: 9 } }, grid: { color: 'rgba(255,255,255,0.05)' } }
+          }
+        }
+      });
+    }
+  } catch(e) { console.error("Chart Reading err:", e); }
+}
 
 const GYM_WEEK_RANGES = [
   "20 Jul - 26 Jul", "27 Jul - 2 Ago", "3 Ago - 9 Ago", "10 Ago - 16 Ago", "17 Ago - 23 Ago", "24 Ago - 30 Ago",
