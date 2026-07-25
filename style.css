@@ -1300,3 +1300,97 @@ select:focus {
   border-color: rgba(168, 195, 173, 0.25);
   box-shadow: 0 12px 40px rgba(168, 195, 173, 0.05), 0 10px 30px rgba(0, 0, 0, 0.7);
 }
+
+/* Cloud Status Badge & PIN Lock Styles */
+#cloud-status-badge {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-family: var(--font-title);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  margin-top: 4px;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+#cloud-status-badge:hover {
+  background: rgba(255,255,255,0.1);
+  transform: translateY(-1px);
+}
+#cloud-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #a1a1aa;
+  display: inline-block;
+  box-shadow: 0 0 6px currentColor;
+}
+#cloud-status-dot.status-online {
+  background: #10b981;
+  color: #10b981;
+}
+#cloud-status-dot.status-syncing {
+  background: #f59e0b;
+  color: #f59e0b;
+  animation: pulse 1s infinite alternate;
+}
+#cloud-status-dot.status-offline {
+  background: #6b7280;
+  color: #6b7280;
+}
+#cloud-status-dot.status-error {
+  background: #ef4444;
+  color: #ef4444;
+}
+
+@keyframes pulse {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
+/* PIN Lock Screen Overlay */
+#pin-lock-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(9, 9, 9, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+}
+.pin-input-container {
+  display: flex;
+  gap: 12px;
+  margin: 24px 0;
+}
+.pin-digit-box {
+  width: 48px;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-gold);
+  text-align: center;
+  outline: none;
+  transition: all 0.2s ease;
+}
+.pin-digit-box:focus {
+  border-color: var(--color-gold);
+  background: rgba(197, 160, 89, 0.1);
+  box-shadow: 0 0 12px var(--color-gold-glow);
+}
+

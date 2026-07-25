@@ -7,6 +7,9 @@
   <meta name="description" content="Dashboard premium e interactivo para visualizar y registrar metas de gimnasio, guitarra, lectura, finanzas, bienestar y amor propio para fin de 2026.">
   <link rel="icon" href="brian_tracy.png" type="image/png">
   <link rel="stylesheet" href="style.css?v=1.5">
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
@@ -68,9 +71,23 @@
 
     <!-- TAB: DASHBOARD OVERVIEW -->
     <section class="tab-content active" id="tab-dashboard">
-      <div style="margin-bottom: 28px;">
-        <h2 style="font-size: 1.8rem; margin-bottom: 6px;">Tu Panel de Control</h2>
-        <p style="color: var(--color-text-muted); font-size: 0.9rem;">Un resumen rápido del estado de tus objetivos para el 2026. Selecciona una tarjeta para ir al detalle.</p>
+      <div style="margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <h2 style="font-size: 1.8rem; margin-bottom: 6px;">Tu Panel de Control</h2>
+          <p style="color: var(--color-text-muted); font-size: 0.9rem;">Un resumen rápido del estado de tus objetivos para el 2026. Selecciona una tarjeta para ir al detalle.</p>
+        </div>
+        <div style="display: flex; gap: 10px; margin-bottom: 4px; flex-wrap: wrap;">
+          <button class="btn btn-sm" onclick="openModal('modal-cloud-sync')" style="background: rgba(197, 160, 89, 0.12); border: 1px solid rgba(197, 160, 89, 0.3); color: var(--color-gold); font-size: 0.8rem; font-family: var(--font-title); font-weight: 600; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
+            <img src="https://emojicdn.elk.sh/☁️" class="apple-emoji-sm" style="margin: 0; width: 14px; height: 14px;" alt="☁️"> Nube & PIN
+          </button>
+          <button class="btn btn-sm" onclick="exportDataJSON()" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; font-family: var(--font-title); font-weight: 600; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
+            <img src="https://emojicdn.elk.sh/📤" class="apple-emoji-sm" style="margin: 0; width: 14px; height: 14px;" alt="📤"> Exportar
+          </button>
+          <button class="btn btn-sm" onclick="triggerImportJSON()" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; font-family: var(--font-title); font-weight: 600; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
+            <img src="https://emojicdn.elk.sh/📥" class="apple-emoji-sm" style="margin: 0; width: 14px; height: 14px;" alt="📥"> Importar
+          </button>
+          <input type="file" id="import-json-file" accept=".json" style="display: none;" onchange="importDataJSON(event)">
+        </div>
       </div>
 
       <div class="summary-cards-container">
@@ -271,7 +288,7 @@
               <div class="summary-icon" style="background: rgba(124, 58, 58, 0.08);"><img src="https://emojicdn.elk.sh/💵" class="apple-emoji" alt="💵"></div>
               <div class="summary-info">
                 <h4>Fondo de Ahorro</h4>
-                <p>Meta: $1.300.000</p>
+                <p>Meta: $2.000.000</p>
               </div>
             </div>
             <div class="summary-val" id="sum-val-finance">$0</div>
@@ -578,42 +595,7 @@
             </div>
             <button class="btn btn-sm" onclick="saveBarDetails()" style="align-self: flex-end; font-size: 0.75rem; padding: 4px 12px; font-family: var(--font-title); font-weight: 600; margin-top: 4px;">Guardar Show</button>
           </div>
-        </div>
-
-        <!-- AI Cover Reviewer Card -->
-        <div class="card card-violet grid-double" style="margin-top: 12px;">
-          <div class="card-header">
-            <div class="card-title-group">
-              <div class="card-icon" style="background: linear-gradient(135deg, #8a2be2, #4a0e4e); width: 28px; height: 28px;"><img src="https://emojicdn.elk.sh/🤖" class="apple-emoji" style="width: 18px; height: 18px;" alt="🤖"></div>
-              <div>
-                <h3 style="font-size: 1rem; line-height: 1.2;">Reseñador Profesional de Covers</h3>
-                <p style="font-size: 0.75rem;">IA de análisis de viralidad y hooks optimizado para TikTok</p>
-              </div>
-            </div>
-          </div>
-
-          <div style="background: rgba(255, 255, 255, 0.01); border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s;" id="ai-dropzone">
-            <svg viewBox="0 0 24 24" width="30" height="30" stroke="var(--color-gold)" stroke-width="1.5" fill="none" style="margin-bottom: 8px; opacity: 0.8;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-            <p style="font-size: 0.85rem; font-weight: 600; color: #fff; margin: 0;">Sube tu video editado para TikTok</p>
-            <p style="font-size: 0.7rem; color: var(--color-text-muted); margin-top: 3px;">Arrastra un archivo de video o haz clic para buscar</p>
-          </div>
-          <input type="file" id="ai-file-input" accept="video/*" style="display: none;" onchange="handleAiVideoUpload(event)">
-
-          <!-- Thinking Box -->
-          <div id="ai-thinking-box" style="display: none; background: rgba(0,0,0,0.4); border: 1px solid rgba(138, 43, 226, 0.2); border-radius: 12px; padding: 16px; margin-top: 12px;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
-              <span class="spinner" style="width: 14px; height: 14px; border: 2px solid var(--color-gold); border-top-color: transparent; border-radius: 50%; display: inline-block; animation: spin 1s linear infinite;"></span>
-              <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-gold); font-family: var(--font-title); letter-spacing: 0.05em;">PENSANDO PROFUNDAMENTE...</span>
-            </div>
-            <div id="ai-thinking-steps" style="font-family: monospace; font-size: 0.72rem; color: #a5a5a8; line-height: 1.5; white-space: pre-line;"></div>
-          </div>
-
-          <!-- Result Box -->
-          <div id="ai-result-box" style="display: none; margin-top: 16px; animation: fadeIn 0.4s ease;">
-            <!-- Rendered via JS -->
-          </div>
-        </div>
-      </div>
+        </div>      </div>
     </section>
 
     <!-- TAB: LECTURA & ESTUDIOS -->
@@ -739,10 +721,10 @@
               <div class="card-icon"><img src="https://emojicdn.elk.sh/💵" class="apple-emoji" alt="💵"></div>
               <div>
                 <h3>Fondo de Ahorro 2026</h3>
-                <p>Meta: Juntar $1.300.000 para el 31 de Diciembre</p>
+                <p>Meta: Juntar $2.000.000 para el 31 de Diciembre</p>
               </div>
             </div>
-            <span class="progress-value" id="finance-badge">$0 / $1.300.000</span>
+            <span class="progress-value" id="finance-badge">$0 / $2.000.000</span>
           </div>
 
           <div class="progress-container">
@@ -1064,6 +1046,106 @@
           <button class="btn btn-cyan btn-sm" onclick="authorizeTikTokConnection()" style="flex-grow: 1; justify-content: center;">Autorizar</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL: NUBE & PIN CONFIGURATION -->
+  <div class="modal-overlay" id="modal-cloud-sync">
+    <div class="modal-card" style="max-width: 540px;">
+      <button class="modal-close" onclick="closeModal('modal-cloud-sync')">&times;</button>
+      
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 14px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(197, 160, 89, 0.15); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(197, 160, 89, 0.3);">
+            <img src="https://emojicdn.elk.sh/☁️" class="apple-emoji" alt="☁️">
+          </div>
+          <div>
+            <h3 style="font-family: var(--font-title); font-size: 1.3rem; color: #fff; margin-bottom: 2px;">Sincronización & Seguridad</h3>
+            <p style="font-size: 0.8rem; color: var(--color-text-muted);">Sincroniza tus objetivos entre tu celular y distintas PCs en tiempo real.</p>
+          </div>
+        </div>
+
+        <!-- Section 1: Firebase Config -->
+        <div>
+          <h4 style="font-family: var(--font-title); font-size: 0.95rem; color: var(--color-gold); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+            <span>🔥 Base de Datos en la Nube (Firebase)</span>
+          </h4>
+          <p style="font-size: 0.78rem; color: var(--color-text-muted); line-height: 1.4; margin-bottom: 12px;">
+            Para sincronizar entre tu celu y tu PC gratis, pega la URL de tu base de datos Firebase o tu configuración JSON.
+          </p>
+
+          <div class="form-group" style="margin-bottom: 10px;">
+            <label style="font-size: 0.75rem; color: var(--color-text-muted);">Database URL o Configuración JSON:</label>
+            <textarea id="input-firebase-config" rows="3" placeholder='https://tu-proyecto-default-rtdb.firebaseio.com/ o {"apiKey": "...", "databaseURL": "..."}' style="background: rgba(255,255,255,0.03); border: 1px solid #282828; color: #fff; font-family: monospace; font-size: 0.8rem; padding: 8px; border-radius: 8px; width: 100%; resize: vertical;"></textarea>
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-violet btn-sm" onclick="saveFirebaseConfig()" style="flex: 1; justify-content: center;">
+              Conectar / Guardar Nube
+            </button>
+            <button class="btn btn-sm" onclick="disconnectFirebase()" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444;">
+              Desconectar
+            </button>
+          </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.08); margin: 4px 0;">
+
+        <!-- Section 2: PIN Protection -->
+        <div>
+          <h4 style="font-family: var(--font-title); font-size: 0.95rem; color: var(--color-gold); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+            🔒 Proteccion por PIN
+          </h4>
+          <p style="font-size: 0.78rem; color: var(--color-text-muted); margin-bottom: 12px;">
+            Protege el acceso a tu dashboard con un PIN de 4 dígitos al ingresar desde cualquier dispositivo.
+          </p>
+          
+          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 12px;">
+            <div class="form-group" style="margin: 0; flex: 1;">
+              <label style="font-size: 0.75rem; color: var(--color-text-muted);">PIN Actual / Nuevo (4 dígitos):</label>
+              <input type="password" id="input-security-pin" maxlength="4" placeholder="Ej: 1234" style="background: rgba(255,255,255,0.03); border: 1px solid #282828; color: #fff; font-size: 1rem; text-align: center; letter-spacing: 4px; padding: 6px 12px; border-radius: 8px; width: 100%;">
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <label style="font-size: 0.75rem; color: var(--color-text-muted);">Estado:</label>
+              <button id="btn-toggle-pin" class="btn btn-sm" onclick="togglePinSecurity()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);">
+                Desactivado 🔓
+              </button>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-sm" onclick="savePinSettings()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #fff; flex: 1; justify-content: center;">
+              Guardar Cambios de PIN
+            </button>
+            <button class="btn btn-sm" onclick="lockAppNow()" style="background: rgba(197, 160, 89, 0.15); border: 1px solid rgba(197, 160, 89, 0.3); color: var(--color-gold);">
+              Bloquear Ahora 🔒
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FULLSCREEN OVERLAY: PIN LOCK SCREEN -->
+  <div id="pin-lock-overlay" style="display: none;">
+    <div style="max-width: 360px; width: 100%; display: flex; flex-direction: column; align-items: center;">
+      <img src="brian_tracy_nobg.png" alt="Brian Tracy" style="width: 72px; height: 72px; object-fit: contain; margin-bottom: 16px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6));">
+      <h2 style="font-family: var(--font-title); font-size: 1.5rem; color: #fff; margin-bottom: 6px;">Objetivos 2026</h2>
+      <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 24px;">Ingresa tu PIN de 4 dígitos para desbloquear</p>
+      
+      <div class="pin-input-container">
+        <input type="password" maxlength="1" class="pin-digit-box" id="pin-digit-1" onkeyup="handlePinDigitInput(event, 1)">
+        <input type="password" maxlength="1" class="pin-digit-box" id="pin-digit-2" onkeyup="handlePinDigitInput(event, 2)">
+        <input type="password" maxlength="1" class="pin-digit-box" id="pin-digit-3" onkeyup="handlePinDigitInput(event, 3)">
+        <input type="password" maxlength="1" class="pin-digit-box" id="pin-digit-4" onkeyup="handlePinDigitInput(event, 4)">
+      </div>
+
+      <p id="pin-error-msg" style="color: #ef4444; font-size: 0.8rem; height: 20px; opacity: 0; transition: opacity 0.2s ease;">PIN incorrecto. Intenta de nuevo.</p>
+
+      <button class="btn btn-violet btn-sm" onclick="submitPinUnlock()" style="width: 100%; justify-content: center; margin-top: 12px; padding: 10px;">
+        Desbloquear 🔓
+      </button>
     </div>
   </div>
 

@@ -5,53 +5,54 @@ const ICON_SAVE = `<svg viewBox="0 0 24 24" width="13" height="13" stroke="curre
 const ICON_CHECK = `<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
 const ICON_PLUS = `<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
 
-const DEFAULT_BOOKS = [
-  { title: "Cuál es tu sueño", totalPages: 247, readPages: 0 },
-  { title: "Cerati biografía", totalPages: 309, readPages: 0 },
-  { title: "Releo Si lo crees lo creas", totalPages: 230, readPages: 0 },
-  { title: "Cómo hacer amigos e influir en las personas", totalPages: 303, readPages: 0 },
-  { title: "Oasis: vivir para siempre", totalPages: 320, readPages: 0 },
-  { title: "El camino del artista", totalPages: 250, readPages: 0 },
-];
-
 const STATIC_COVERS = {
-  "Cuál es tu sueño": "https://books.google.com/books/content?id=5lq7DwAAQBAJ&printsec=frontcover&img=1&zoom=1",
-  "Cerati biografía": "https://books.google.com/books/content?id=c_pCCAAAQBAJ&printsec=frontcover&img=1&zoom=1",
-  "Releo Si lo crees lo creas": "https://books.google.com/books/content?id=K641DwAAQBAJ&printsec=frontcover&img=1&zoom=1",
-  "Cómo hacer amigos e influir en las personas": "https://books.google.com/books/content?id=1-yWDwAAQBAJ&printsec=frontcover&img=1&zoom=1",
-  "Oasis: vivir para siempre": "https://books.google.com/books/content?id=V7PBDwAAQBAJ&printsec=frontcover&img=1&zoom=1",
-  "El camino del artista": "https://books.google.com/books/content?id=N9D5DwAAQBAJ&printsec=frontcover&img=1&zoom=1",
-  "Generación dopamina": "https://books.google.com/books/content?id=E1VVEAAAQBAJ&printsec=frontcover&img=1&zoom=1"
+  "Cuál es tu sueño": "https://images.cdn3.buscalibre.com/fit-in/660x660/63/e1/63e1efee60fb3a0d4097acdd5021e408.jpg",
+  "Cerati biografía": "https://is1-ssl.mzstatic.com/image/thumb/Publication211/v4/24/4a/5d/244a5d8c-ee7e-1b3b-10c4-c7c926e642f3/9789500752978.jpg/400x600bb.jpg",
+  "Releo Si lo crees lo creas": "https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/01/9e/8b/019e8ba2-2819-4e3e-ee84-352a92842e30/9786073171175.jpg/400x600bb.jpg",
+  "Cómo hacer amigos e influir en las personas": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/05/92/f1/0592f14d-b258-8c21-0902-51f9c90a33dd/9789500763721.jpg/600x900bb.jpg",
+  "Oasis: vivir para siempre": "https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/3e/67/dc/3e67dc9b-fb5b-8df3-fa92-9e810a118bfc/9789500773263.jpg/400x600bb.jpg",
+  "El camino del artista": "https://is1-ssl.mzstatic.com/image/thumb/Publication116/v4/50/2e/30/502e3077-1476-3e4a-f32b-6844a3539947/9788403052970.jpg/400x600bb.jpg",
+  "Generación dopamina": "https://is1-ssl.mzstatic.com/image/thumb/Podcasts211/v4/b3/6a/6c/b36a6c46-7276-d846-a10a-6bf4f6b438ae/mza_2802746189753098939.jpg/300x300bb.jpg"
 };
 
+const DEFAULT_BOOKS = [
+  { title: "Cuál es tu sueño", totalPages: 247, readPages: 0, coverUrl: STATIC_COVERS["Cuál es tu sueño"] },
+  { title: "Cerati biografía", totalPages: 309, readPages: 0, coverUrl: STATIC_COVERS["Cerati biografía"] },
+  { title: "Releo Si lo crees lo creas", totalPages: 230, readPages: 0, coverUrl: STATIC_COVERS["Releo Si lo crees lo creas"] },
+  { title: "Cómo hacer amigos e influir en las personas", totalPages: 303, readPages: 0, coverUrl: STATIC_COVERS["Cómo hacer amigos e influir en las personas"] },
+  { title: "Oasis: vivir para siempre", totalPages: 320, readPages: 0, coverUrl: STATIC_COVERS["Oasis: vivir para siempre"] },
+  { title: "El camino del artista", totalPages: 250, readPages: 0, coverUrl: STATIC_COVERS["El camino del artista"] },
+];
+
 const DEFAULT_COVERS = [
-  { id: "_cov1", title: "Como eran las cosas - Babasónicos", date: "2026-01-11", link: "", published: true, improvement: "" },
-  { id: "_cov2", title: "Arrancármelo - Wos", date: "2026-01-20", link: "", published: true, improvement: "" },
-  { id: "_cov3", title: "Me Quedo Aquí - Gustavo Cerati", date: "2026-01-25", link: "", published: true, improvement: "" },
-  { id: "_cov4", title: "Nunca lo olvides - Airbag", date: "2026-02-01", link: "", published: true, improvement: "" },
-  { id: "_cov5", title: "Stop Crying Your Heart Out - Oasis", date: "2026-02-08", link: "", published: true, improvement: "" },
-  { id: "_cov6", title: "Blackbird - The Beatles", date: "2026-02-14", link: "", published: true, improvement: "" },
-  { id: "_cov7", title: "Live Forever - Oasis", date: "2026-02-21", link: "", published: true, improvement: "" },
-  { id: "_cov8", title: "Wish You Were Here - Pink Floyd", date: "2026-02-27", link: "", published: true, improvement: "" },
-  { id: "_cov9", title: "Lisa - Gustavo Cerati", date: "2026-03-06", link: "", published: true, improvement: "" },
-  { id: "_cov10", title: "En la ciudad de la furia - Soda Stereo", date: "2026-03-13", link: "", published: true, improvement: "", artUrl: "https://cdn-images.dzcdn.net/images/cover/35d98d067adff09863835209a3e7a9d6/250x250-000000-80-0-0.jpg" },
-  { id: "_cov11", title: "Semen Up - Patricio Rey", date: "2026-03-22", link: "", published: true, improvement: "" },
-  { id: "_cov12", title: "Wonderwall - Oasis", date: "2026-03-27", link: "", published: true, improvement: "" },
-  { id: "_cov13", title: "En Privado - Babasónicos", date: "2026-04-02", link: "", published: true, improvement: "" },
-  { id: "_cov14", title: "Californication - Red Hot Chili Peppers", date: "2026-04-10", link: "", published: true, improvement: "" },
-  { id: "_cov15", title: "The Man Who Sold the World - Nirvana", date: "2026-04-18", link: "", published: true, improvement: "" },
-  { id: "_cov16", title: "Adiós - Gustavo Cerati", date: "2026-04-24", link: "", published: true, improvement: "" },
-  { id: "_cov17", title: "Scar Tissue - Red Hot Chili Peppers", date: "2026-05-01", link: "", published: true, improvement: "" },
-  { id: "_cov18", title: "Congratulations - Mac Miller", date: "2026-05-08", link: "", published: true, improvement: "" },
-  { id: "_cov19", title: "Chau - No Te Va Gustar", date: "2026-05-15", link: "", published: true, improvement: "" },
-  { id: "_cov20", title: "Persiana Americana - Soda Stereo", date: "2026-05-22", link: "", published: true, improvement: "" },
-  { id: "_cov21", title: "Crimen - Gustavo Cerati", date: "2026-05-28", link: "", published: true, improvement: "", artUrl: "https://cdn-images.dzcdn.net/images/cover/cbde419f831a11ce8e84330550ce30fe/250x250-000000-80-0-0.jpg" },
-  { id: "_cov22", title: "Seguir viviendo sin tu amor - Luis Alberto Spinetta", date: "2026-06-06", link: "", published: true, improvement: "" },
-  { id: "_cov23", title: "And I Love Her - The Beatles", date: "2026-06-12", link: "", published: true, improvement: "" },
-  { id: "_cov24", title: "Vivo - Gustavo Cerati", date: "2026-06-19", link: "", published: true, improvement: "" },
-  { id: "_cov25", title: "Flaca - Andrés Calamaro", date: "2026-06-26", link: "", published: true, improvement: "" },
-  { id: "_cov26", title: "Rezo por vos - Charly García & Spinetta", date: "2026-07-04", link: "", published: true, improvement: "", artUrl: "https://cdn-images.dzcdn.net/images/cover/af904edd6d5b4852f6f81f2cec19f79f/250x250-000000-80-0-0.jpg" },
-  { id: "_cov27", title: "Trátame Suavemente - Soda Stereo", date: "2026-07-11", link: "", published: true, improvement: "" }
+  { id: "_cov1", title: "Como eran las cosas - Babasónicos", date: "2026-01-11", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/9d/6e/47/9d6e4712-bc1f-fbe3-4aff-935e6806ca00/00602517690813.rgb.jpg/300x300bb.jpg" },
+  { id: "_cov2", title: "Arrancármelo - Wos", date: "2026-01-20", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/f8/e9/46/f8e94670-f365-9680-afba-be48258958bc/196626626011.jpg/300x300bb.jpg" },
+  { id: "_cov3", title: "Me Quedo Aquí - Gustavo Cerati", date: "2026-01-25", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f3/3d/d5/f33dd5c7-bbb8-c2b3-e5e8-0d2a4dd7f1a7/828768164426.jpg/300x300bb.jpg" },
+  { id: "_cov4", title: "Nunca lo olvides - Airbag", date: "2026-02-01", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/3d/47/5d/3d475de0-c669-bedc-2c21-db24917ed303/197190511628.jpg/300x300bb.jpg" },
+  { id: "_cov5", title: "Stop Crying Your Heart Out - Oasis", date: "2026-02-08", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/cd/78/a2/cd78a2a4-7e3d-ccec-b204-dda064f065a3/5051083000406.jpg/300x300bb.jpg" },
+  { id: "_cov6", title: "Blackbird - The Beatles", date: "2026-02-14", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/fa/5b/89/fa5b898d-bad6-e053-4195-260e5c74f2bb/00602567725466.rgb.jpg/300x300bb.jpg" },
+  { id: "_cov7", title: "Live Forever - Oasis", date: "2026-02-21", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/9f/e7/ea/9fe7eac2-87dc-c1df-3333-dc30b82bdd74/5051961006100.jpg/300x300bb.jpg" },
+  { id: "_cov8", title: "Wish You Were Here - Pink Floyd", date: "2026-02-27", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/aa/e0/ab/aae0ab6a-d906-a189-81bf-70b56aa43f7a/886445635843.jpg/300x300bb.jpg" },
+  { id: "_cov9", title: "Lisa - Gustavo Cerati", date: "2026-03-06", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/de/4b/65/de4b659f-cf95-04c5-6d01-a39a40ff094c/743211739122.jpg/300x300bb.jpg" },
+  { id: "_cov10", title: "En la ciudad de la furia - Soda Stereo", date: "2026-03-13", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/f0/1e/df/f01edf85-25f1-c245-1c18-bb0f1165740d/mzi.qaxmucxr.jpg/300x300bb.jpg" },
+  { id: "_cov11", title: "Semen Up - Patricio Rey", date: "2026-03-22", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/2c/80/06/2c8006cc-cebb-7ec6-bbe5-11dd55a3c37d/191773511289.jpg/300x300bb.jpg" },
+  { id: "_cov12", title: "Wonderwall - Oasis", date: "2026-03-27", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/04/92/e0/0492e08b-cbcc-9969-9ad6-8f5a0888068c/5051961007107.jpg/300x300bb.jpg" },
+  { id: "_cov13", title: "En Privado - Babasónicos", date: "2026-04-02", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/45/65/ba/4565bafb-580d-92f5-0a44-6ac7a944500e/00602527728643.rgb.jpg/300x300bb.jpg" },
+  { id: "_cov14", title: "Californication - Red Hot Chili Peppers", date: "2026-04-10", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/07/87/66/078766a8-41b3-3e62-53ef-c30cf8f03e50/093624932130.jpg/300x300bb.jpg" },
+  { id: "_cov15", title: "The Man Who Sold the World - Nirvana", date: "2026-04-18", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/46/24/33/462433f9-ee74-2d60-4538-859826a7bed7/00720642472729.rgb.jpg/300x300bb.jpg" },
+  { id: "_cov16", title: "Adiós - Gustavo Cerati", date: "2026-04-24", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f3/3d/d5/f33dd5c7-bbb8-c2b3-e5e8-0d2a4dd7f1a7/828768164426.jpg/300x300bb.jpg" },
+  { id: "_cov17", title: "Scar Tissue - Red Hot Chili Peppers", date: "2026-05-01", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/4c/86/1d/4c861dab-5428-f3b7-8068-82bb69db5e89/093624932130.jpg/300x300bb.jpg" },
+  { id: "_cov18", title: "Congratulations - Mac Miller", date: "2026-05-08", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/1e/5c/ad/1e5cadeb-6f0c-86a0-9e85-6487a848d866/093624917168.jpg/300x300bb.jpg" },
+  { id: "_cov19", title: "Chau - No Te Va Gustar", date: "2026-05-15", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/e4/9a/c9/e49ac9c1-5a9b-cb67-a5a0-5594feae15ad/018736893674_cover.jpg/300x300bb.jpg" },
+  { id: "_cov20", title: "Persiana Americana - Soda Stereo", date: "2026-05-22", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/05/e3/65/05e365e6-c318-e16d-0a27-1d896ba231f2/mzi.hvktyhmz.jpg/300x300bb.jpg" },
+  { id: "_cov21", title: "Crimen - Gustavo Cerati", date: "2026-05-28", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f3/3d/d5/f33dd5c7-bbb8-c2b3-e5e8-0d2a4dd7f1a7/828768164426.jpg/300x300bb.jpg" },
+  { id: "_cov22", title: "Seguir viviendo sin tu amor - Luis Alberto Spinetta", date: "2026-06-06", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music6/v4/55/e3/69/55e3697b-4d34-72e0-2111-57facda544a4/00077779824359.jpg/300x300bb.jpg" },
+  { id: "_cov23", title: "And I Love Her - The Beatles", date: "2026-06-12", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/db/a2/7a/dba27a46-3685-508d-d32e-a0e73cc82251/00602567713296.rgb.jpg/300x300bb.jpg" },
+  { id: "_cov24", title: "Vivo - Gustavo Cerati", date: "2026-06-19", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/3a/7a/04/3a7a04c2-8bec-3e0b-89e1-3da93f4afa44/mzi.lfxlmais.jpg/300x300bb.jpg" },
+  { id: "_cov25", title: "Flaca - Andrés Calamaro", date: "2026-06-26", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/cd/52/6d/cd526dc6-daaa-e990-7019-47c828efdd1b/mzi.xpwcramk.jpg/300x300bb.jpg" },
+  { id: "_cov26", title: "Rezo por vos - Charly García & Spinetta", date: "2026-07-04", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/c8/50/23/c85023c0-d7e7-7462-2574-a7efe528f7da/mzi.uuvufkwr.jpg/300x300bb.jpg" },
+  { id: "_cov27", title: "Trátame Suavemente - Soda Stereo", date: "2026-07-11", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/a0/db/6b/a0db6b97-4463-ba87-7046-77c66da5eef5/mzi.mfnjoagm.jpg/300x300bb.jpg" },
+  { id: "_cov28", title: "Paloma - Andrés Calamaro", date: "2026-07-20", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/9d/97/a2/9d97a228-eaec-2997-4191-a6c3377ecb18/mzi.mrfogssv.jpg/300x300bb.jpg" }
 ];
 
 
@@ -128,31 +129,33 @@ function loadState() {
         return c;
       });
 
-      // Forzar actualización de portadas específicas solicitadas por el usuario
+      // Actualización automática de portadas de canciones con arte oficial
       state.covers = state.covers.map(c => {
-        if (c.title.toLowerCase().includes("rezo por vos")) {
-          const charlyArt = "https://cdn-images.dzcdn.net/images/cover/af904edd6d5b4852f6f81f2cec19f79f/250x250-000000-80-0-0.jpg";
-          if (c.artUrl !== charlyArt) {
-            c.artUrl = charlyArt;
-            migrated = true;
-          }
-        }
-        if (c.title.toLowerCase().includes("crimen")) {
-          const ahiVamosArt = "https://cdn-images.dzcdn.net/images/cover/cbde419f831a11ce8e84330550ce30fe/250x250-000000-80-0-0.jpg";
-          if (c.artUrl !== ahiVamosArt) {
-            c.artUrl = ahiVamosArt;
-            migrated = true;
-          }
-        }
-        if (c.title.toLowerCase().includes("en la ciudad de la furia")) {
-          const dobleVidaArt = "https://cdn-images.dzcdn.net/images/cover/35d98d067adff09863835209a3e7a9d6/250x250-000000-80-0-0.jpg";
-          if (c.artUrl !== dobleVidaArt) {
-            c.artUrl = dobleVidaArt;
-            migrated = true;
+        const titleLower = c.title ? c.title.toLowerCase() : "";
+        if (titleLower.includes("rezo por vos")) {
+          const charlyArt = "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/c8/50/23/c85023c0-d7e7-7462-2574-a7efe528f7da/mzi.uuvufkwr.jpg/300x300bb.jpg";
+          if (c.artUrl !== charlyArt) { c.artUrl = charlyArt; migrated = true; }
+        } else if (titleLower.includes("crimen")) {
+          const ahiVamosArt = "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f3/3d/d5/f33dd5c7-bbb8-c2b3-e5e8-0d2a4dd7f1a7/828768164426.jpg/300x300bb.jpg";
+          if (c.artUrl !== ahiVamosArt) { c.artUrl = ahiVamosArt; migrated = true; }
+        } else if (titleLower.includes("en la ciudad de la furia")) {
+          const dobleVidaArt = "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/f0/1e/df/f01edf85-25f1-c245-1c18-bb0f1165740d/mzi.qaxmucxr.jpg/300x300bb.jpg";
+          if (c.artUrl !== dobleVidaArt) { c.artUrl = dobleVidaArt; migrated = true; }
+        } else if (titleLower.includes("paloma")) {
+          const palomaArt = "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/9d/97/a2/9d97a228-eaec-2997-4191-a6c3377ecb18/mzi.mrfogssv.jpg/300x300bb.jpg";
+          if (c.artUrl !== palomaArt) { c.artUrl = palomaArt; migrated = true; }
+        } else {
+          const defaultMatch = DEFAULT_COVERS.find(dc => dc.id === c.id || (dc.title && c.title && dc.title.toLowerCase() === c.title.toLowerCase()));
+          if (defaultMatch && defaultMatch.artUrl) {
+            if (!c.artUrl || c.artUrl !== defaultMatch.artUrl) {
+              c.artUrl = defaultMatch.artUrl;
+              migrated = true;
+            }
           }
         }
         return c;
       });
+
       if (!state.bar) {
         state.bar = { completed: false, name: "", review: "" };
       } else {
@@ -171,26 +174,32 @@ function loadState() {
         state.books = [...DEFAULT_BOOKS];
       }
       
-      // Migración forzosa inmediata de portadas predeterminadas
+      // Actualización automática de portadas de libros con imágenes de alta resolución
       state.books.forEach((book, idx) => {
         if (STATIC_COVERS[book.title]) {
-          if (!book.coverUrl || book.coverUrl.includes('unsplash.com') || book.coverUrl.includes('openlibrary.org')) {
+          if (!book.coverUrl || book.coverUrl !== STATIC_COVERS[book.title]) {
             state.books[idx].coverUrl = STATIC_COVERS[book.title];
             migrated = true;
           }
         }
       });
+      if (!state.security) {
+        state.security = { pinEnabled: false, pin: "" };
+      }
       if (migrated) {
         localStorage.setItem('goals_2026_state', JSON.stringify(state));
       }
     } catch (e) {
       console.error("Error cargando state de localStorage", e);
     }
+  } else {
+    state.security = { pinEnabled: false, pin: "" };
   }
 }
 
 function saveState() {
   localStorage.setItem('goals_2026_state', JSON.stringify(state));
+  syncToFirebase();
   updateUI();
 }
 
@@ -339,9 +348,9 @@ function calculateGoalsProgress() {
   // 12. Tocar en Bar
   progressList.push(state.bar.completed ? 1.0 : 0.0);
 
-  // 13. Ahorro $1.300.000
+  // 13. Ahorro $2.000.000
   const totalSavings = calculateTotalSavings();
-  progressList.push(Math.min(Math.max(totalSavings, 0) / 1300000, 1.0));
+  progressList.push(Math.min(Math.max(totalSavings, 0) / 2000000, 1.0));
 
   // Calcular cantidad de objetivos 100% completados
   const completedCount = progressList.filter(p => p >= 0.999).length;
@@ -473,7 +482,7 @@ function updateUI() {
 
   // 11. Fondo de Ahorro
   setValueText('sum-val-finance', `$${totalSavings.toLocaleString('es-AR')}`);
-  setProgressBarWidth('sum-progress-finance', Math.min((totalSavings / 1300000) * 100, 100));
+  setProgressBarWidth('sum-progress-finance', Math.min((totalSavings / 2000000) * 100, 100));
 
   // 12. Momento con Sara
   setValueText('sum-val-relationship', `${state.sara.moments.length} reg.`);
@@ -572,8 +581,8 @@ function updateUI() {
   renderMomentsList();
 
   // --- Render Finanzas Tab ---
-  setValueText('finance-badge', `$${totalSavings.toLocaleString('es-AR')} / $1.300.000`);
-  setProgressBarWidth('finance-progress-fill', Math.min((Math.max(totalSavings, 0) / 1300000) * 100, 100));
+  setValueText('finance-badge', `$${totalSavings.toLocaleString('es-AR')} / $2.000.000`);
+  setProgressBarWidth('finance-progress-fill', Math.min((Math.max(totalSavings, 0) / 2000000) * 100, 100));
   renderFinanceLog();
 }
 
@@ -790,14 +799,26 @@ function renderCoversList() {
     const hasVideo = !!videoId;
 
     // Obtener imagen del cover
-    let albumArtUrl = cover.artUrl || "";
+    let albumArtUrl = cover.artUrl;
+    if (!albumArtUrl) {
+      const defMatch = DEFAULT_COVERS.find(dc => dc.id === cover.id || (dc.title && cover.title && dc.title.toLowerCase() === cover.title.toLowerCase()));
+      if (defMatch && defMatch.artUrl) {
+        albumArtUrl = defMatch.artUrl;
+        cover.artUrl = albumArtUrl;
+      }
+    }
     const lookupTitle = cover.title.trim();
 
-    // Fallback temporal si no hay URL guardada
+    // Fallback si no hay URL guardada aún
     if (!albumArtUrl) {
-      albumArtUrl = "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=120&auto=format&fit=crop";
+      if (lookupTitle.toLowerCase().includes("paloma")) {
+        albumArtUrl = "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/9d/97/a2/9d97a228-eaec-2997-4191-a6c3377ecb18/mzi.mrfogssv.jpg/300x300bb.jpg";
+        cover.artUrl = albumArtUrl;
+      } else {
+        albumArtUrl = "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/cd/52/6d/cd526dc6-daaa-e990-7019-47c828efdd1b/mzi.xpwcramk.jpg/300x300bb.jpg";
+      }
       
-      // Buscar asincrónicamente en iTunes Search API
+      // Buscar en iTunes Search API
       let query = lookupTitle;
       if (lookupTitle.includes('-')) {
         const parts = lookupTitle.split('-');
@@ -808,13 +829,11 @@ function renderCoversList() {
         .then(res => res.json())
         .then(data => {
           if (data.results && data.results.length > 0) {
-            const highResArt = data.results[0].artworkUrl100.replace('100x100bb', '250x250bb');
+            const highResArt = data.results[0].artworkUrl100.replace('100x100bb', '300x300bb');
             
-            // Actualizar en el DOM
             const imgEl = document.getElementById(`cover-img-${cover.id}`);
             if (imgEl) imgEl.src = highResArt;
             
-            // Guardar en state y localStorage sin re-renderizar para evitar loops infinitos
             cover.artUrl = highResArt;
             localStorage.setItem('goals_2026_state', JSON.stringify(state));
           }
@@ -824,7 +843,7 @@ function renderCoversList() {
 
     el.innerHTML = `
       <div style="display: flex; gap: 12px; align-items: flex-start; width: 100%;">
-        <img id="cover-img-${cover.id}" class="cover-thumbnail" src="${albumArtUrl}" alt="Portada" onerror="this.src='https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=120&auto=format&fit=crop'">
+        <img id="cover-img-${cover.id}" class="cover-thumbnail" src="${albumArtUrl}" alt="Portada" onerror="this.src='https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/cd/52/6d/cd526dc6-daaa-e990-7019-47c828efdd1b/mzi.xpwcramk.jpg/300x300bb.jpg'">
         <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0;">
           <div class="cover-header" style="margin-bottom: 0; align-items: center;">
             <span class="cover-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100%; font-size: 0.9rem;" title="${cover.title}">${cover.title}</span>
@@ -865,10 +884,10 @@ function renderBooksGrid() {
     const percent = Math.round((book.readPages / book.totalPages) * 100);
     
     // Portada del libro o fallback si no está cargada aún
-    const coverImg = book.coverUrl || 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop';
+    const coverImg = book.coverUrl || STATIC_COVERS[book.title] || 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/58/c6/41/58c641d4-64ff-4c39-3976-629eaf781bfe/9786073855488.jpg/300x300bb.jpg';
 
     itemEl.innerHTML = `
-      <img class="book-cover" src="${coverImg}" alt="Portada de ${book.title}" onerror="this.src='https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop'">
+      <img class="book-cover" src="${coverImg}" alt="Portada de ${book.title}" onerror="this.src='https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/58/c6/41/58c641d4-64ff-4c39-3976-629eaf781bfe/9786073855488.jpg/300x300bb.jpg'">
       <div class="book-details">
         <div class="book-title-row">
           <span class="book-title">${book.title}</span>
@@ -2328,3 +2347,284 @@ window.addSuggestedCover = function(title) {
   });
   saveState();
 };
+
+window.exportDataJSON = function() {
+  const dataStr = localStorage.getItem('goals_2026_state');
+  if (!dataStr) {
+    alert("No hay datos para exportar aún.");
+    return;
+  }
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `objetivos_2026_backup_${new Date().toISOString().split('T')[0]}.json`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+
+window.triggerImportJSON = function() {
+  document.getElementById('import-json-file').click();
+};
+
+window.importDataJSON = function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (parsed && typeof parsed === 'object') {
+        localStorage.setItem('goals_2026_state', JSON.stringify(parsed));
+        loadState();
+        updateUI();
+        alert("¡Datos importados con éxito! 🎉");
+      } else {
+        alert("Archivo JSON inválido.");
+      }
+    } catch (err) {
+      alert("Error al leer el archivo de backup.");
+      console.error(err);
+    }
+  };
+  reader.readAsText(file);
+};
+
+// --- Cloud Sync (Firebase) & PIN Security Module ---
+
+let firebaseDb = null;
+let firebaseRef = null;
+let isRemoteUpdating = false;
+
+function initFirebaseSync() {
+  const configStr = localStorage.getItem('goals_2026_firebase_config');
+  if (!configStr || !window.firebase) {
+    updateCloudStatusBadge('offline', '💾 Modo Local (Click para Sincronizar)');
+    return;
+  }
+
+  try {
+    let configObj = null;
+    if (configStr.trim().startsWith('{')) {
+      configObj = JSON.parse(configStr);
+    } else if (configStr.trim().startsWith('http')) {
+      configObj = { databaseURL: configStr.trim() };
+    }
+
+    if (configObj) {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(configObj);
+      }
+      firebaseDb = firebase.database();
+      firebaseRef = firebaseDb.ref('goals_2026_data');
+
+      updateCloudStatusBadge('syncing', '☁️ Conectando a Nube...');
+
+      // Escuchar cambios remotos en tiempo real
+      firebaseRef.on('value', (snapshot) => {
+        const val = snapshot.val();
+        if (val) {
+          isRemoteUpdating = true;
+          state = { ...state, ...val };
+          localStorage.setItem('goals_2026_state', JSON.stringify(state));
+          updateUI();
+          isRemoteUpdating = false;
+        }
+        updateCloudStatusBadge('online', '☁️ Sincronizado en Nube');
+      }, (error) => {
+        console.error("Firebase Sync Error:", error);
+        updateCloudStatusBadge('error', '⚠️ Error de Conexión Nube');
+      });
+    }
+  } catch (e) {
+    console.error("Error al inicializar Firebase:", e);
+    updateCloudStatusBadge('error', '⚠️ Config de Nube Inválida');
+  }
+}
+
+function syncToFirebase() {
+  if (isRemoteUpdating) return;
+  if (firebaseRef) {
+    updateCloudStatusBadge('syncing', '☁️ Guardando en Nube...');
+    firebaseRef.set(state).then(() => {
+      updateCloudStatusBadge('online', '☁️ Sincronizado en Nube');
+    }).catch(err => {
+      console.error("Error guardando en Firebase:", err);
+      updateCloudStatusBadge('error', '⚠️ Error guardando en Nube');
+    });
+  }
+}
+
+function updateCloudStatusBadge(type, text) {
+  const dot = document.getElementById('cloud-status-dot');
+  const txt = document.getElementById('cloud-status-text');
+  if (!dot || !txt) return;
+
+  dot.className = '';
+  if (type === 'online') dot.classList.add('status-online');
+  else if (type === 'syncing') dot.classList.add('status-syncing');
+  else if (type === 'error') dot.classList.add('status-error');
+  else dot.classList.add('status-offline');
+
+  txt.innerText = text;
+}
+
+window.saveFirebaseConfig = function() {
+  const input = document.getElementById('input-firebase-config');
+  if (!input) return;
+  const val = input.value.trim();
+  if (!val) {
+    alert("Por favor ingresa una URL de Firebase Database o la configuración JSON.");
+    return;
+  }
+
+  localStorage.setItem('goals_2026_firebase_config', val);
+  initFirebaseSync();
+  // Sincronizar estado actual a la nube
+  if (firebaseRef) {
+    firebaseRef.set(state);
+  }
+  closeModal('modal-cloud-sync');
+  alert("¡Configuración de la nube guardada con éxito! ☁️🎉");
+};
+
+window.disconnectFirebase = function() {
+  if (confirm("¿Seguro que deseas desconectar la sincronización en la nube? Tu app volverá al modo local.")) {
+    localStorage.removeItem('goals_2026_firebase_config');
+    if (firebaseRef) {
+      firebaseRef.off();
+      firebaseRef = null;
+    }
+    updateCloudStatusBadge('offline', '💾 Modo Local (Click para Sincronizar)');
+    closeModal('modal-cloud-sync');
+  }
+};
+
+// --- PIN Security ---
+
+function checkPinLockOnStart() {
+  if (state.security && state.security.pinEnabled && state.security.pin) {
+    const overlay = document.getElementById('pin-lock-overlay');
+    if (overlay) overlay.style.display = 'flex';
+  }
+}
+
+window.handlePinDigitInput = function(e, index) {
+  const input = e.target;
+  if (input.value.length === 1 && index < 4) {
+    const next = document.getElementById(`pin-digit-${index + 1}`);
+    if (next) next.focus();
+  }
+  if (e.key === 'Backspace' && index > 1 && !input.value) {
+    const prev = document.getElementById(`pin-digit-${index - 1}`);
+    if (prev) prev.focus();
+  }
+  if (index === 4 && input.value.length === 1) {
+    submitPinUnlock();
+  }
+};
+
+window.submitPinUnlock = function() {
+  const d1 = document.getElementById('pin-digit-1')?.value || "";
+  const d2 = document.getElementById('pin-digit-2')?.value || "";
+  const d3 = document.getElementById('pin-digit-3')?.value || "";
+  const d4 = document.getElementById('pin-digit-4')?.value || "";
+  const enteredPin = d1 + d2 + d3 + d4;
+
+  const errorMsg = document.getElementById('pin-error-msg');
+
+  if (state.security && state.security.pin && enteredPin === state.security.pin) {
+    document.getElementById('pin-lock-overlay').style.display = 'none';
+    if (errorMsg) errorMsg.style.opacity = '0';
+    [1, 2, 3, 4].forEach(i => {
+      const el = document.getElementById(`pin-digit-${i}`);
+      if (el) el.value = '';
+    });
+  } else {
+    if (errorMsg) {
+      errorMsg.style.opacity = '1';
+      setTimeout(() => { errorMsg.style.opacity = '0'; }, 3000);
+    }
+    [1, 2, 3, 4].forEach(i => {
+      const el = document.getElementById(`pin-digit-${i}`);
+      if (el) el.value = '';
+    });
+    document.getElementById('pin-digit-1')?.focus();
+  }
+};
+
+window.lockAppNow = function() {
+  if (!state.security || !state.security.pin) {
+    alert("Primero establece un PIN de 4 dígitos para poder bloquear la app.");
+    return;
+  }
+  state.security.pinEnabled = true;
+  saveState();
+  closeModal('modal-cloud-sync');
+  checkPinLockOnStart();
+};
+
+window.togglePinSecurity = function() {
+  state.security = state.security || { pinEnabled: false, pin: "" };
+  state.security.pinEnabled = !state.security.pinEnabled;
+  updatePinUI();
+};
+
+window.savePinSettings = function() {
+  const pinInput = document.getElementById('input-security-pin');
+  if (!pinInput) return;
+  const newPin = pinInput.value.trim();
+
+  state.security = state.security || { pinEnabled: false, pin: "" };
+  if (newPin.length > 0 && newPin.length !== 4) {
+    alert("El PIN debe ser exactamente de 4 dígitos.");
+    return;
+  }
+
+  if (newPin.length === 4) {
+    state.security.pin = newPin;
+    state.security.pinEnabled = true;
+    saveState();
+    updatePinUI();
+    alert("¡PIN de 4 dígitos guardado y activado! 🔒");
+  } else {
+    state.security.pinEnabled = false;
+    saveState();
+    updatePinUI();
+    alert("Protección por PIN desactivada.");
+  }
+};
+
+function updatePinUI() {
+  const btnToggle = document.getElementById('btn-toggle-pin');
+  const pinInput = document.getElementById('input-security-pin');
+  if (!state.security) state.security = { pinEnabled: false, pin: "" };
+
+  if (btnToggle) {
+    if (state.security.pinEnabled) {
+      btnToggle.innerText = 'Activado 🔒';
+      btnToggle.style.background = 'rgba(197, 160, 89, 0.2)';
+      btnToggle.style.borderColor = 'var(--color-gold)';
+      btnToggle.style.color = 'var(--color-gold)';
+    } else {
+      btnToggle.innerText = 'Desactivado 🔓';
+      btnToggle.style.background = 'rgba(255,255,255,0.05)';
+      btnToggle.style.borderColor = 'rgba(255,255,255,0.15)';
+      btnToggle.style.color = '#fff';
+    }
+  }
+  if (pinInput && state.security.pin) {
+    pinInput.value = state.security.pin;
+  }
+}
+
+// Inicialización de Nube y PIN al cargar el script
+document.addEventListener('DOMContentLoaded', () => {
+  initFirebaseSync();
+  checkPinLockOnStart();
+  updatePinUI();
+});
+
