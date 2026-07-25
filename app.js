@@ -198,9 +198,21 @@ function loadState() {
 }
 
 function saveState() {
-  localStorage.setItem('goals_2026_state', JSON.stringify(state));
-  syncToFirebase();
-  updateUI();
+  try {
+    localStorage.setItem('goals_2026_state', JSON.stringify(state));
+  } catch (e) {
+    console.error("Error guardando en localStorage:", e);
+  }
+  try {
+    syncToFirebase();
+  } catch (e) {
+    console.error("Error al sincronizar con Firebase:", e);
+  }
+  try {
+    updateUI();
+  } catch (e) {
+    console.error("Error al actualizar la UI:", e);
+  }
 }
 
 // --- Navigation Tabs ---
@@ -2441,11 +2453,17 @@ function initFirebaseSync() {
         if (val) {
           isRemoteUpdating = true;
           state = { ...state, ...val };
-          localStorage.setItem('goals_2026_state', JSON.stringify(state));
+          try {
+            localStorage.setItem('goals_2026_state', JSON.stringify(state));
+          } catch (e) {}
           updateUI();
           isRemoteUpdating = false;
         } else {
-          firebaseRef.set(state);
+          try {
+            firebaseRef.set(JSON.parse(JSON.stringify(state)));
+          } catch (e) {
+            console.error("Error enviando estado inicial a Firebase:", e);
+          }
         }
         updateCloudStatusBadge('online', '☁️ Sincronizado en Nube');
       }, (error) => {
@@ -2463,12 +2481,17 @@ function syncToFirebase() {
   if (isRemoteUpdating) return;
   if (firebaseRef) {
     updateCloudStatusBadge('syncing', '☁️ Guardando en Nube...');
-    firebaseRef.set(state).then(() => {
-      updateCloudStatusBadge('online', '☁️ Sincronizado en Nube');
-    }).catch(err => {
-      console.error("Error guardando en Firebase:", err);
-      updateCloudStatusBadge('error', '⚠️ Error guardando en Nube');
-    });
+    try {
+      const cleanState = JSON.parse(JSON.stringify(state));
+      firebaseRef.set(cleanState).then(() => {
+        updateCloudStatusBadge('online', '☁️ Sincronizado en Nube');
+      }).catch(err => {
+        console.error("Error guardando en Firebase:", err);
+        updateCloudStatusBadge('error', '⚠️ Error guardando en Nube');
+      });
+    } catch (err) {
+      console.error("Error serializando estado para Firebase:", err);
+    }
   }
 }
 
@@ -2498,7 +2521,9 @@ window.saveFirebaseConfig = function() {
   localStorage.setItem('goals_2026_firebase_config', val);
   initFirebaseSync();
   if (firebaseRef) {
-    firebaseRef.set(state);
+    try {
+      firebaseRef.set(JSON.parse(JSON.stringify(state)));
+    } catch (e) {}
   }
   closeModal('modal-cloud-sync');
   alert("¡Configuración de la nube guardada con éxito! ☁️🎉");
@@ -2514,6 +2539,17 @@ window.disconnectFirebase = function() {
     updateCloudStatusBadge('offline', '💾 Modo Local');
     closeModal('modal-cloud-sync');
   }
+};
+
+window.authorizeTikTokConnection = function() {
+  const input = document.getElementById('input-tiktok-login-user');
+  const user = input ? input.value.trim() : "@thoma_guitar";
+  state.tiktok = state.tiktok || {};
+  state.tiktok.connected = true;
+  state.tiktok.username = user || "@thoma_guitar";
+  saveState();
+  closeModal('modal-tiktok-login');
+  alert(`¡Cuenta ${state.tiktok.username} vinculada con éxito! 📱✨`);
 };
 
 // --- PIN Security ---
