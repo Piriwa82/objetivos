@@ -328,7 +328,7 @@
 
     <!-- TAB: FISICO & SALUD -->
     <section class="tab-content" id="tab-fisico">
-      <div class="grid-dashboard">
+      <div class="grid-dashboard-2col">
         <!-- Gym card -->
         <div class="card card-violet">
           <div class="card-header">
@@ -409,7 +409,9 @@
                 </button>
               </div>
               <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-                <label for="input-sq-1rm" style="font-size: 0.75rem; color: var(--color-text-muted);">Estimar 1RM (ej:                 <div style="display: flex; align-items: center; gap: 6px;">
+                <label for="input-sq-1rm" style="font-size: 0.75rem; color: var(--color-text-muted);">Estimar 1RM (ej: 80x8):</label>
+                <input type="text" id="input-sq-1rm" placeholder="80x8" style="padding: 4px 8px; width: 75px; text-align: center;" oninput="calculateGym1RM('sq')">
+                <div style="display: flex; align-items: center; gap: 6px;">
                   <span id="sq-1rm-result" style="font-size: 0.85rem; font-weight: 600; color: var(--color-gold);">-- kg (1RM: -- kg)</span>
                   <button class="btn btn-sm btn-icon-only" onclick="applyGym1RM('sq')" title="Usar como Peso Actual" style="width: 22px; height: 22px; border-radius: 4px; padding: 0;">
                     <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
