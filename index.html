@@ -6,7 +6,7 @@
   <title>Mis Objetivos 2026 - Control de Progreso</title>
   <meta name="description" content="Dashboard premium e interactivo para visualizar y registrar metas de gimnasio, guitarra, lectura, finanzas, bienestar y amor propio para fin de 2026.">
   <link rel="icon" href="brian_tracy.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=1.5">
+  <link rel="stylesheet" href="style.css?v=2.5">
   <!-- Firebase Compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
@@ -707,8 +707,13 @@
                 </div>
 
                 <div style="display: flex; flex-direction: column; gap: 4px;">
-                  <label for="input-sara-video-link" style="font-size: 0.78rem; color: var(--color-text-muted); font-weight: 600;">Link del Video del Viaje (~10 mins):</label>
-                  <input type="text" id="input-sara-video-link" placeholder="Link de YouTube, Drive, Vimeo..." style="width: 100%;">
+                  <label for="input-sara-video-link" style="font-size: 0.78rem; color: var(--color-text-muted); font-weight: 600;">Link del Video (YouTube, Drive, Vimeo):</label>
+                  <input type="text" id="input-sara-video-link" placeholder="ej: https://youtu.be/... o Google Drive link" style="width: 100%;">
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <label for="input-sara-video-file" style="font-size: 0.78rem; color: var(--color-text-muted); font-weight: 600;">O seleccionar video del Celular / PC:</label>
+                  <input type="file" id="input-sara-video-file" accept="video/*" style="font-size: 0.8rem; padding: 6px; background: #121213; border: 1px dashed var(--border-color); border-radius: 8px; color: var(--color-text-muted); cursor: pointer;" onchange="onSaraVideoFileSelected(event)">
                 </div>
 
                 <div style="display: flex; flex-direction: column; gap: 4px;">
@@ -1184,6 +1189,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=1.5"></script>
+  <script src="app.js?v=2.5"></script>
 </body>
 </html>
