@@ -1347,7 +1347,10 @@ document.getElementById('btn-save-book-modal').addEventListener('click', () => {
 });
 
 window.updateBookPages = function(idx) {
-  const val = parseInt(document.getElementById(`book-${idx}-input`).value);
+  ensureStateIntegrity();
+  const input = document.getElementById(`book-${idx}-input`);
+  if (!input || !state.books[idx]) return;
+  const val = parseInt(input.value, 10);
   if (isNaN(val) || val < 0) return;
   
   const book = state.books[idx];
@@ -1361,14 +1364,20 @@ window.updateBookPages = function(idx) {
 };
 
 window.addBookPages = function(idx, amount) {
-  const book = state.books[idx];
-  book.readPages = Math.min(book.readPages + amount, book.totalPages);
-  saveState();
+  ensureStateIntegrity();
+  if (state.books[idx]) {
+    const curr = state.books[idx].readPages || 0;
+    state.books[idx].readPages = Math.min(curr + amount, state.books[idx].totalPages);
+    saveState();
+  }
 };
 
 window.markBookAsRead = function(idx) {
-  state.books[idx].readPages = state.books[idx].totalPages;
-  saveState();
+  ensureStateIntegrity();
+  if (state.books[idx]) {
+    state.books[idx].readPages = state.books[idx].totalPages;
+    saveState();
+  }
 };
 
 window.deleteBook = function(idx) {
@@ -1921,42 +1930,11 @@ window.saveBookChanges = function() {
   closeModal('modal-edit-book');
 };
 
-function fetchDefaultBookCovers() {
-  let updated = false;
-  const promises = state.books.map((book, idx) => {
-    // Si la portada está vacía o es una vieja portada genérica/de Open Library, la actualizamos
-    if (!book.coverUrl || book.coverUrl.includes('unsplash.com') || book.coverUrl.includes('openlibrary.org')) {
-      const searchQuery = book.title;
-      return fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchQuery)}&maxResults=1`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.items && data.items[0] && data.items[0].volumeInfo.imageLinks) {
-            const thumb = data.items[0].volumeInfo.imageLinks.thumbnail || data.items[0].volumeInfo.imageLinks.smallThumbnail;
-            if (thumb) {
-              state.books[idx].coverUrl = thumb.replace('http://', 'https://');
-              updated = true;
-            }
-          }
-        })
-        .catch(err => console.error("Error buscando portada Google para: " + book.title, err));
-    }
-    return Promise.resolve();
-  });
-
-  Promise.all(promises).then(() => {
-    if (updated) {
-      saveState();
-      renderBooksGrid();
-    }
-  });
-}
-
 // --- Initialize App ---
 
 loadState();
 updateUI();
 syncScreenTimeInputs();
-fetchDefaultBookCovers();
 
 // Cargar la pestaña activa persistida o usar 'dashboard' por defecto
 const activeTab = localStorage.getItem('active_tab') || 'dashboard';
