@@ -167,12 +167,103 @@ const SCREEN_MONTHS = [
 ];
 
 // Carga inicial de datos
+function mergeStateData(local, remote) {
+  if (!remote || typeof remote !== 'object') return local;
+  if (!local || typeof local !== 'object') return remote;
+
+  const merged = { ...local };
+
+  // 1. Gym: max weights
+  merged.gym = merged.gym || { pb: 0, ht: 0, sq: 0 };
+  if (remote.gym) {
+    merged.gym.pb = Math.max(merged.gym.pb || 0, remote.gym.pb || 0);
+    merged.gym.ht = Math.max(merged.gym.ht || 0, remote.gym.ht || 0);
+    merged.gym.sq = Math.max(merged.gym.sq || 0, remote.gym.sq || 0);
+  }
+
+  // 2. Guitar: max total hours & merge log
+  merged.guitar = merged.guitar || { hours: 0, log: [] };
+  if (remote.guitar) {
+    merged.guitar.hours = Math.max(merged.guitar.hours || 0, remote.guitar.hours || 0);
+    const localLog = Array.isArray(merged.guitar.log) ? merged.guitar.log : [];
+    const remoteLog = Array.isArray(remote.guitar.log) ? remote.guitar.log : [];
+    const logMap = new Map();
+    [...remoteLog, ...localLog].forEach(item => {
+      if (item && item.id) logMap.set(item.id, item);
+      else if (item) logMap.set(`${item.date}_${item.hours}`, item);
+    });
+    merged.guitar.log = Array.from(logMap.values());
+  }
+
+  // 3. Followers: max
+  merged.followers = Math.max(merged.followers || 0, remote.followers || 0);
+
+  // 4. Books: max read pages per book
+  if (Array.isArray(merged.books) && Array.isArray(remote.books)) {
+    merged.books = merged.books.map(b => {
+      const remBook = remote.books.find(rb => rb && (rb.id === b.id || rb.title === b.title));
+      if (remBook) {
+        return {
+          ...b,
+          readPages: Math.max(b.readPages || 0, remBook.readPages || 0),
+          read: b.read || remBook.read
+        };
+      }
+      return b;
+    });
+  }
+
+  // 5. Subjects: passed = true if either
+  if (Array.isArray(merged.subjects) && Array.isArray(remote.subjects)) {
+    merged.subjects = merged.subjects.map(s => {
+      const remSub = remote.subjects.find(rs => rs && (rs.id === s.id || rs.name === s.name));
+      if (remSub) {
+        return { ...s, passed: s.passed || remSub.passed };
+      }
+      return s;
+    });
+  }
+
+  // 6. Sara / Viaje
+  if (remote.sara) {
+    merged.sara = merged.sara || {};
+    merged.sara.tripCompleted = merged.sara.tripCompleted || remote.sara.tripCompleted;
+    merged.sara.destination = merged.sara.destination || remote.sara.destination || "";
+    merged.sara.videoLink = merged.sara.videoLink || remote.sara.videoLink || "";
+    merged.sara.notes = merged.sara.notes || remote.sara.notes || "";
+  }
+
+  // 7. Finance: merge log
+  if (remote.finance && Array.isArray(remote.finance.log)) {
+    merged.finance = merged.finance || { log: [] };
+    const localFin = Array.isArray(merged.finance.log) ? merged.finance.log : [];
+    const finMap = new Map();
+    [...remote.finance.log, ...localFin].forEach(item => {
+      if (item && item.id) finMap.set(item.id, item);
+    });
+    merged.finance.log = Array.from(finMap.values());
+  }
+
+  // 8. Screen time: non-null values take priority or latest
+  if (Array.isArray(remote.screenTime) && remote.screenTime.length === 24) {
+    if (!Array.isArray(merged.screenTime)) merged.screenTime = Array(24).fill(null);
+    for (let i = 0; i < 24; i++) {
+      if (merged.screenTime[i] === null && remote.screenTime[i] !== null) {
+        merged.screenTime[i] = remote.screenTime[i];
+      }
+    }
+  }
+
+  return merged;
+}
+
+// Carga inicial de datos
 function loadState() {
-  const saved = localStorage.getItem('goals_2026_state');
+  const saved = localStorage.getItem('goals_2026_state') || localStorage.getItem('goals_2026_backup_state');
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
-      state = { ...state, ...parsed };
+      state = mergeStateData(state, parsed);
       ensureStateIntegrity();
       let migrated = false;
       if (!state.covers || state.covers.length === 0) {
@@ -256,7 +347,9 @@ function loadState() {
         state.security = { pinEnabled: false, pin: "" };
       }
       if (migrated) {
-        localStorage.setItem('goals_2026_state', JSON.stringify(state));
+        const jsonStr = JSON.stringify(state);
+        localStorage.setItem('goals_2026_state', jsonStr);
+        localStorage.setItem('goals_2026_backup_state', jsonStr);
       }
     } catch (e) {
       console.error("Error cargando state de localStorage", e);
@@ -273,7 +366,9 @@ function saveState() {
   isLocalSaving = true;
 
   try {
-    localStorage.setItem('goals_2026_state', JSON.stringify(state));
+    const jsonStr = JSON.stringify(state);
+    localStorage.setItem('goals_2026_state', jsonStr);
+    localStorage.setItem('goals_2026_backup_state', jsonStr);
   } catch (e) {
     console.error("Error guardando en localStorage:", e);
   }
@@ -2625,10 +2720,12 @@ function initFirebaseSync() {
         const val = snapshot.val();
         if (val) {
           isRemoteUpdating = true;
-          state = { ...state, ...val };
+          state = mergeStateData(state, val);
           ensureStateIntegrity();
           try {
-            localStorage.setItem('goals_2026_state', JSON.stringify(state));
+            const jsonStr = JSON.stringify(state);
+            localStorage.setItem('goals_2026_state', jsonStr);
+            localStorage.setItem('goals_2026_backup_state', jsonStr);
           } catch (e) {}
           updateUI();
           isRemoteUpdating = false;
