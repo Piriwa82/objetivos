@@ -164,6 +164,31 @@ const SCREEN_MONTHS = [
   { name: "Dic", start: 20, end: 23 }
 ];
 
+// --- Weekly Suggestions Catalog & Engine ---
+const SUGGESTION_POOL = [
+  // Solos de Guitarra
+  { title: "Under the Bridge - Red Hot Chili Peppers", style: "Solo", desc: "El solo intermedio es excelente para bends expresivos y vibrato." },
+  { title: "Wet Sand - Red Hot Chili Peppers", style: "Solo", desc: "El solo final de Frusciante te ayudará a dominar el uso de distorsiones intensas." },
+  { title: "Rezo por vos (Solo) - Charly & Spinetta", style: "Solo", desc: "El solo de Spinetta es ideal para practicar bends gemelos y fraseo jazz-rock." },
+  { title: "Smells Like Teen Spirit - Nirvana", style: "Solo", desc: "El solo de Cobain es un excelente ejercicio de rítmica y control de acoples." },
+  { title: "Abarajame - Illya Kuryaki", style: "Riff", desc: "Un riff funk bailable y rápido para perfeccionar tu mano derecha y muteos rápidos." },
+  { title: "Ji Ji Ji - Patricio Rey", style: "Solo", desc: "El solo final es ideal para entrenar velocidad y bends agudos repetitivos." },
+
+  // Loops / Capas
+  { title: "Shape of You - Ed Sheeran", style: "Loop", desc: "Perfecto para timming rítmico golpeando la caja y apilando capas rítmicas." },
+  { title: "Yellow - Coldplay", style: "Loop", desc: "Usa arpegios con delay para armar capas envolventes y una atmósfera densa." },
+  { title: "Come Together - The Beatles", style: "Loop", desc: "Graba la base del bajo con la sexta cuerda y monta el riff de slide encima." },
+  { title: "Clint Eastwood - Gorillaz", style: "Loop", desc: "Excelente para armar un beat rítmico percusivo y tocar la melodía de melódica encima." },
+
+  // Acústico / Unplugged
+  { title: "About a Girl - Nirvana (Unplugged)", style: "Acústico", desc: "Excelente para retener público fogonero con acordes abiertos y limpios." },
+  { title: "Zona de promesas - Soda Stereo", style: "Acústico", desc: "Una balada acústica ideal para lucir arpegios lentos y expresivos." },
+  { title: "Canción para mi muerte - Sui Generis", style: "Acústico", desc: "Clásico infaltable del fogón nacional; ideal para enganchar nostálgicos." },
+  { title: "Barro tal vez - Luis Alberto Spinetta", style: "Acústico", desc: "Exige acordes jazzísticos y un tempo folclórico de mucha precisión." },
+  { title: "Spaghetti del Rock - Divididos", style: "Acústico", desc: "Un arpegio hermoso y un solo acústico lleno de sentimiento y expresión." },
+  { title: "De música ligera - Soda Stereo", style: "Acústico", desc: "Versión acústica rítmica ideal para levantar energía en videos cortos de TikTok." },
+];
+
 // Carga inicial de datos
 function mergeStateData(local, remote) {
   if (!remote || typeof remote !== 'object') return local;
@@ -505,10 +530,13 @@ function calculateGoalsProgress() {
   // 6. Seguidores Red Social (Meta: 1000)
   progressList.push(Math.min(state.followers / 1000, 1.0));
 
-  // 7. Sara: Moments + Trip
-  const momentsVal = state.sara.moments.length > 0 ? 0.5 : 0;
-  const tripVal = state.sara.tripCompleted ? 0.5 : 0;
-  progressList.push(momentsVal + tripVal);
+  // 7. Sara: Viaje de Fin de Año
+  let saraVal = 0;
+  if (state.sara) {
+    if (state.sara.tripCompleted) saraVal = 1.0;
+    else if (state.sara.videoLink || state.sara.destination) saraVal = 0.5;
+  }
+  progressList.push(saraVal);
 
   // 8. Materias Promocionadas
   if (state.subjects.length > 0) {
@@ -692,11 +720,21 @@ function updateUI() {
   setValueText('sum-val-finance', `$${totalSavings.toLocaleString('es-AR')}`);
   setProgressBarWidth('sum-progress-finance', Math.min((totalSavings / 2000000) * 100, 100));
 
-  // 12. Momento con Sara
-  setValueText('sum-val-relationship', `${state.sara.moments.length} reg.`);
+  // 12. Viaje con Sara
   let saraProgress = 0;
-  if (state.sara.moments.length > 0) saraProgress += 50;
-  if (state.sara.tripCompleted) saraProgress += 50;
+  if (state.sara) {
+    if (state.sara.tripCompleted) {
+      saraProgress = 100;
+      setValueText('sum-val-relationship', "¡Realizado! ✈️");
+    } else if (state.sara.destination || state.sara.videoLink) {
+      saraProgress = 50;
+      setValueText('sum-val-relationship', "Planeando ✈️");
+    } else {
+      setValueText('sum-val-relationship', "Pendiente ⏳");
+    }
+  } else {
+    setValueText('sum-val-relationship', "Pendiente ⏳");
+  }
   setProgressBarWidth('sum-progress-relationship', saraProgress);
 
   // --- Render Físico & Salud Tab ---
@@ -2485,29 +2523,6 @@ if (aiDropzone) {
 }
 
 // --- Weekly Suggestions Catalog & Engine ---
-const SUGGESTION_POOL = [
-  // Solos de Guitarra
-  { title: "Under the Bridge - Red Hot Chili Peppers", style: "Solo", desc: "El solo intermedio es excelente para bends expresivos y vibrato." },
-  { title: "Wet Sand - Red Hot Chili Peppers", style: "Solo", desc: "El solo final de Frusciante te ayudará a dominar el uso de distorsiones intensas." },
-  { title: "Rezo por vos (Solo) - Charly & Spinetta", style: "Solo", desc: "El solo de Spinetta es ideal para practicar bends gemelos y fraseo jazz-rock." },
-  { title: "Smells Like Teen Spirit - Nirvana", style: "Solo", desc: "El solo de Cobain es un excelente ejercicio de rítmica y control de acoples." },
-  { title: "Abarajame - Illya Kuryaki", style: "Riff", desc: "Un riff funk bailable y rápido para perfeccionar tu mano derecha y muteos rápidos." },
-  { title: "Ji Ji Ji - Patricio Rey", style: "Solo", desc: "El solo final es ideal para entrenar velocidad y bends agudos repetitivos." },
-
-  // Loops / Capas
-  { title: "Shape of You - Ed Sheeran", style: "Loop", desc: "Perfecto para timming rítmico golpeando la caja y apilando capas rítmicas." },
-  { title: "Yellow - Coldplay", style: "Loop", desc: "Usa arpegios con delay para armar capas envolventes y una atmósfera densa." },
-  { title: "Come Together - The Beatles", style: "Loop", desc: "Graba la base del bajo con la sexta cuerda y monta el riff de slide encima." },
-  { title: "Clint Eastwood - Gorillaz", style: "Loop", desc: "Excelente para armar un beat rítmico percusivo y tocar la melodía de melódica encima." },
-
-  // Acústico / Unplugged
-  { title: "About a Girl - Nirvana (Unplugged)", style: "Acústico", desc: "Excelente para retener público fogonero con acordes abiertos y limpios." },
-  { title: "Zona de promesas - Soda Stereo", style: "Acústico", desc: "Una balada acústica ideal para lucir arpegios lentos y expresivos." },
-  { title: "Canción para mi muerte - Sui Generis", style: "Acústico", desc: "Clásico infaltable del fogón nacional; ideal para enganchar nostálgicos." },
-  { title: "Barro tal vez - Luis Alberto Spinetta", style: "Acústico", desc: "Exige acordes jazzísticos y un tempo folclórico de mucha precisión." },
-  { title: "Spaghetti del Rock - Divididos", style: "Acústico", desc: "Un arpegio hermoso y un solo acústico lleno de sentimiento y expresión." },
-  { title: "De música ligera - Soda Stereo", style: "Acústico", desc: "Versión acústica rítmica ideal para levantar energía en videos cortos de TikTok." },
-];
 
 function renderWeeklySuggestions() {
   const container = document.getElementById('weekly-suggestions-box');
