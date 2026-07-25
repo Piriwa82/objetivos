@@ -275,26 +275,56 @@ header {
 /* Grid & Card Layouts */
 .grid-dashboard {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
   align-items: start;
 }
 
-.musica-grid-container {
+.grid-dashboard-2col {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   align-items: start;
 }
 
-.musica-column {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
 .grid-double {
   grid-column: span 2;
+}
+
+/* Card Input Row Components */
+.card-input-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.card-input-row input {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  outline: none;
+}
+
+.card-input-row input:focus {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.15);
 }
 
 /* Opaque Matte Black Card Style */
@@ -1185,17 +1215,11 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
     padding: 10px 14px;
     border-radius: 12px;
   }
-  .grid-dashboard {
+  .grid-dashboard,
+  .grid-dashboard-2col {
     grid-template-columns: 1fr;
     gap: 14px;
     align-items: start;
-  }
-  .musica-grid-container {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-  .musica-column {
-    gap: 14px;
   }
   .sleep-grid {
     grid-template-columns: repeat(3, 1fr);
