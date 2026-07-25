@@ -253,22 +253,33 @@ function loadState() {
   }
 }
 
+let isLocalSaving = false;
+
 function saveState() {
+  ensureStateIntegrity();
+  isLocalSaving = true;
+
   try {
     localStorage.setItem('goals_2026_state', JSON.stringify(state));
   } catch (e) {
     console.error("Error guardando en localStorage:", e);
   }
-  try {
-    syncToFirebase();
-  } catch (e) {
-    console.error("Error al sincronizar con Firebase:", e);
-  }
+
   try {
     updateUI();
   } catch (e) {
     console.error("Error al actualizar la UI:", e);
   }
+
+  try {
+    syncToFirebase();
+  } catch (e) {
+    console.error("Error al sincronizar con Firebase:", e);
+  }
+
+  setTimeout(() => {
+    isLocalSaving = false;
+  }, 1500);
 }
 
 // --- Navigation Tabs ---
@@ -2483,10 +2494,12 @@ function initFirebaseSync() {
       updateCloudStatusBadge('syncing', '☁️ Conectando a Nube...');
 
       firebaseRef.on('value', (snapshot) => {
+        if (isLocalSaving) return;
         const val = snapshot.val();
         if (val) {
           isRemoteUpdating = true;
           state = { ...state, ...val };
+          ensureStateIntegrity();
           try {
             localStorage.setItem('goals_2026_state', JSON.stringify(state));
           } catch (e) {}
