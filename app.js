@@ -118,6 +118,13 @@ function ensureStateIntegrity() {
 
   if (!Array.isArray(state.covers) || state.covers.length === 0) {
     state.covers = [...DEFAULT_COVERS];
+  } else {
+    DEFAULT_COVERS.forEach(defCover => {
+      const exists = state.covers.some(c => c && (c.id === defCover.id || (c.title && defCover.title && c.title.toLowerCase() === defCover.title.toLowerCase())));
+      if (!exists) {
+        state.covers.push(defCover);
+      }
+    });
   }
 
   if (!Array.isArray(state.books) || state.books.length === 0) {
@@ -127,6 +134,8 @@ function ensureStateIntegrity() {
       const b = state.books.find(bk => bk && bk.title === defBook.title);
       if (b) {
         b.readPages = Math.max(Number(b.readPages) || 0, defBook.readPages || 0);
+      } else {
+        state.books.push(defBook);
       }
     });
   }
@@ -136,8 +145,10 @@ function ensureStateIntegrity() {
   } else {
     DEFAULT_SUBJECTS.forEach(defSub => {
       const s = state.subjects.find(sub => sub && sub.name === defSub.name);
-      if (s && defSub.passed) {
-        s.passed = true;
+      if (s) {
+        if (defSub.passed) s.passed = true;
+      } else {
+        state.subjects.push(defSub);
       }
     });
   }
@@ -272,29 +283,47 @@ function mergeStateData(local, remote) {
   // 3. Followers: max
   merged.followers = Math.max(merged.followers || 0, remote.followers || 0);
 
-  // 4. Books: max read pages per book
-  if (Array.isArray(merged.books) && Array.isArray(remote.books)) {
-    merged.books = merged.books.map(b => {
-      const remBook = remote.books.find(rb => rb && (rb.id === b.id || rb.title === b.title));
-      if (remBook) {
-        return {
-          ...b,
-          readPages: Math.max(b.readPages || 0, remBook.readPages || 0),
-          read: b.read || remBook.read
-        };
+  // 4. Books: max read pages per book & union
+  merged.books = Array.isArray(merged.books) ? merged.books : [];
+  if (Array.isArray(remote.books)) {
+    remote.books.forEach(rb => {
+      if (!rb) return;
+      const b = merged.books.find(localBook => localBook && (localBook.id === rb.id || localBook.title === rb.title));
+      if (b) {
+        b.readPages = Math.max(b.readPages || 0, rb.readPages || 0);
+        b.read = b.read || rb.read;
+      } else {
+        merged.books.push(rb);
       }
-      return b;
     });
   }
 
-  // 5. Subjects: passed = true if either
-  if (Array.isArray(merged.subjects) && Array.isArray(remote.subjects)) {
-    merged.subjects = merged.subjects.map(s => {
-      const remSub = remote.subjects.find(rs => rs && (rs.id === s.id || rs.name === s.name));
-      if (remSub) {
-        return { ...s, passed: s.passed || remSub.passed };
+  // 5. Subjects: passed = true if either & union
+  merged.subjects = Array.isArray(merged.subjects) ? merged.subjects : [];
+  if (Array.isArray(remote.subjects)) {
+    remote.subjects.forEach(rs => {
+      if (!rs) return;
+      const s = merged.subjects.find(localSub => localSub && (localSub.id === rs.id || localSub.name === rs.name));
+      if (s) {
+        s.passed = s.passed || rs.passed;
+      } else {
+        merged.subjects.push(rs);
       }
-      return s;
+    });
+  }
+
+  // 5b. Covers: union
+  merged.covers = Array.isArray(merged.covers) ? merged.covers : [];
+  if (Array.isArray(remote.covers)) {
+    remote.covers.forEach(rc => {
+      if (!rc) return;
+      const c = merged.covers.find(localCov => localCov && (localCov.id === rc.id || localCov.title === rc.title));
+      if (c) {
+        c.published = c.published || rc.published;
+        if (rc.artUrl && !c.artUrl) c.artUrl = rc.artUrl;
+      } else {
+        merged.covers.push(rc);
+      }
     });
   }
 
