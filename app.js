@@ -2861,26 +2861,34 @@ function initFirebaseSync() {
         if (isLocalSaving) return;
         const val = snapshot.val();
         if (val) {
-          const localTime = Number(state.lastUpdated) || 0;
-          const remoteTime = Number(val.lastUpdated) || 0;
-
-          if (localTime >= remoteTime) {
-            // Local es más reciente o igual: pushear local a Firebase
+          // EN LA PRIMERA CONEXIÓN: SIEMPRE preservar estado local.
+          // El estado local ya fue cargado por loadState() y es la fuente de verdad.
+          if (isFirstFirebaseSync) {
+            isFirstFirebaseSync = false;
+            // Pushear el estado local a Firebase para sincronizar la nube
             syncToFirebase();
           } else {
-            // Firebase tiene datos más nuevos: adoptar directamente (sin merge)
-            isRemoteUpdating = true;
-            state = val;
-            ensureStateIntegrity();
-            try {
-              const jsonStr = JSON.stringify(state);
-              localStorage.setItem('goals_2026_state', jsonStr);
-              localStorage.setItem('goals_2026_backup_state', jsonStr);
-            } catch (e) {}
-            updateUI();
-            isRemoteUpdating = false;
+            // Conexiones posteriores (updates en tiempo real de otros dispositivos)
+            const localTime = Number(state.lastUpdated) || 0;
+            const remoteTime = Number(val.lastUpdated) || 0;
+            if (remoteTime > localTime) {
+              // Solo aceptar si Firebase es ESTRICTAMENTE más nuevo
+              isRemoteUpdating = true;
+              state = val;
+              ensureStateIntegrity();
+              try {
+                const jsonStr = JSON.stringify(state);
+                localStorage.setItem('goals_2026_state', jsonStr);
+                localStorage.setItem('goals_2026_backup_state', jsonStr);
+              } catch (e) {}
+              updateUI();
+              isRemoteUpdating = false;
+            }
+            // Si local >= remote, no hacer nada (ya está sincronizado)
           }
         } else {
+          // Firebase vacío: enviar estado local
+          isFirstFirebaseSync = false;
           try {
             firebaseRef.set(JSON.parse(JSON.stringify(state)));
           } catch (e) {
@@ -3095,6 +3103,8 @@ function updatePinUI() {
 }
 
 let isAppInitialized = false;
+let isFirstFirebaseSync = true;
+
 function initApp() {
   if (isAppInitialized) return;
   isAppInitialized = true;
@@ -3102,22 +3112,38 @@ function initApp() {
   // PASO 1: Hidratar estado desde localStorage (única vez)
   loadState();
 
+  // Estampar timestamp para garantizar prioridad local sobre Firebase
+  if (!state.lastUpdated || state.lastUpdated === 0) {
+    state.lastUpdated = Date.now();
+    try {
+      const jsonStr = JSON.stringify(state);
+      localStorage.setItem('goals_2026_state', jsonStr);
+    } catch(e) {}
+  }
+
   // PASO 2: Renderizar UI con datos locales (única vez)
   updateUI();
   syncScreenTimeInputs();
 
-  // PASO 3: Activar pestaña correcta (hash > localStorage > dashboard)
-  const hash = location.hash ? location.hash.replace('#', '').replace('tab-', '') : null;
-  const stored = localStorage.getItem('active_tab');
-  const validInitTabs = ['dashboard', 'fisico', 'musica', 'lectura', 'bienestar', 'finanzas'];
-  const targetTab = (hash && validInitTabs.includes(hash)) ? hash : ((stored && validInitTabs.includes(stored)) ? stored : 'dashboard');
+  // PASO 3: Activar pestaña correcta (usar __initialTab del script del head, o recalcular)
+  const targetTab = window.__initialTab || (() => {
+    const hash = location.hash ? location.hash.replace('#', '').replace('tab-', '') : null;
+    const stored = localStorage.getItem('active_tab');
+    const valid = ['dashboard', 'fisico', 'musica', 'lectura', 'bienestar', 'finanzas'];
+    return (hash && valid.includes(hash)) ? hash : ((stored && valid.includes(stored)) ? stored : 'dashboard');
+  })();
   switchTab(targetTab, false);
+
+  // PASO 3b: Limpiar CSS inyectado por el script del head (ya no se necesita)
+  const earlyCSS = document.getElementById('early-tab-css');
+  if (earlyCSS) earlyCSS.remove();
 
   // PASO 4: Afirmación
   const affEl = document.getElementById('affirmation-display');
   if (affEl) affEl.innerText = `"${AFFIRMATIONS[currentAffirmationIdx]}"`;
 
   // PASO 5: Conectar Firebase DESPUÉS de que el estado local sea canónico
+  isFirstFirebaseSync = true;
   initFirebaseSync();
 
   // PASO 6: PIN
