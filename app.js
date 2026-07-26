@@ -105,17 +105,17 @@ function ensureStateIntegrity() {
   if (!state.lastUpdated) state.lastUpdated = Date.now();
 
   if (!state.gym || typeof state.gym !== 'object') state.gym = { pb: 90, ht: 120, sq: 80 };
-  state.gym.pb = Math.max(Number(state.gym.pb) || 0, 90);
-  state.gym.ht = Math.max(Number(state.gym.ht) || 0, 120);
-  state.gym.sq = Math.max(Number(state.gym.sq) || 0, 80);
+  if (state.gym.pb === undefined || state.gym.pb === null) state.gym.pb = 90;
+  if (state.gym.ht === undefined || state.gym.ht === null) state.gym.ht = 120;
+  if (state.gym.sq === undefined || state.gym.sq === null) state.gym.sq = 80;
 
   if (!state.guitar || typeof state.guitar !== 'object') state.guitar = { hours: 331, log: [{ id: "_o5d1wqrrd", date: "2026-07-25", hours: 331 }] };
-  state.guitar.hours = Math.max(Number(state.guitar.hours) || 0, 331);
-  if (!Array.isArray(state.guitar.log) || state.guitar.log.length === 0) {
+  if (state.guitar.hours === undefined || state.guitar.hours === null) state.guitar.hours = 331;
+  if (!Array.isArray(state.guitar.log)) {
     state.guitar.log = [{ id: "_o5d1wqrrd", date: "2026-07-25", hours: 331 }];
   }
 
-  state.followers = Math.max(Number(state.followers) || 0, 214);
+  if (state.followers === undefined || state.followers === null) state.followers = 214;
 
   if (!Array.isArray(state.covers) || state.covers.length === 0) {
     state.covers = [...DEFAULT_COVERS];
@@ -133,9 +133,7 @@ function ensureStateIntegrity() {
   } else {
     DEFAULT_BOOKS.forEach(defBook => {
       const b = state.books.find(bk => bk && bk.title === defBook.title);
-      if (b) {
-        b.readPages = Math.max(Number(b.readPages) || 0, defBook.readPages || 0);
-      } else {
+      if (!b) {
         state.books.push(defBook);
       }
     });
@@ -146,9 +144,7 @@ function ensureStateIntegrity() {
   } else {
     DEFAULT_SUBJECTS.forEach(defSub => {
       const s = state.subjects.find(sub => sub && sub.name === defSub.name);
-      if (s) {
-        if (defSub.passed) s.passed = true;
-      } else {
+      if (!s) {
         state.subjects.push(defSub);
       }
     });
@@ -3096,19 +3092,22 @@ function updatePinUI() {
   }
 }
 
-// Inicialización de Nube y PIN al cargar el script
-document.addEventListener('DOMContentLoaded', () => {
+let isAppInitialized = false;
+function initApp() {
+  if (isAppInitialized) return;
+  isAppInitialized = true;
+
   loadState();
   updateUI();
   restoreActiveTabOnStart();
   initFirebaseSync();
   checkPinLockOnStart();
   updatePinUI();
-});
+}
 
-if (document.readyState === 'interactive' || document.readyState === 'complete') {
-  loadState();
-  updateUI();
-  restoreActiveTabOnStart();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
 }
 
