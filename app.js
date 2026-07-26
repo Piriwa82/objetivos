@@ -1,8 +1,4 @@
 // --- App State & Data Management ---
-let firebaseDb = null;
-let firebaseRef = null;
-let isRemoteUpdating = false;
-let hasValidLocalData = false;
 
 const ICON_TRASH = `<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
 const ICON_SAVE = `<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>`;
@@ -188,7 +184,7 @@ function ensureStateIntegrity() {
   }
 }
 
-function resetAllDataToFullDefault(silent = false, isInitialLoad = false) {
+function resetAllDataToFullDefault(silent = false) {
   state = {
     gym: { pb: 90, ht: 120, sq: 80 },
     screenTime: Array(24).fill(null),
@@ -205,20 +201,10 @@ function resetAllDataToFullDefault(silent = false, isInitialLoad = false) {
     security: { pinEnabled: false, pin: "" }
   };
   
-  if (isInitialLoad) {
-    try {
-      const jsonStr = JSON.stringify(state);
-      localStorage.setItem('goals_2026_state', jsonStr);
-      localStorage.setItem('goals_2026_backup_state', jsonStr);
-    } catch(e) {}
-    updateUI();
-  } else {
-    hasValidLocalData = true;
-    saveState();
-    updateUI();
-    if (!silent) {
-      alert("¡Tu progreso completo (Gym, Guitarra, Libros, Finanzas, Covers) fue cargado con éxito en este dispositivo! 🚀✨");
-    }
+  saveState();
+  updateUI();
+  if (!silent) {
+    alert("¡Tu progreso completo (Gym, Guitarra, Libros, Finanzas, Covers) fue reseteado con éxito en este dispositivo! 🚀✨");
   }
 }
 window.resetAllDataToFullDefault = resetAllDataToFullDefault;
@@ -370,7 +356,6 @@ function mergeStateData(local, remote) {
 function loadState() {
   const saved = localStorage.getItem('goals_2026_state') || localStorage.getItem('goals_2026_backup_state');
   if (saved) {
-    hasValidLocalData = true;
     try {
       const parsed = JSON.parse(saved);
       if (parsed && typeof parsed === 'object') {
@@ -463,17 +448,13 @@ function loadState() {
       console.error("Error cargando state de localStorage", e);
     }
   } else {
-    hasValidLocalData = false;
-    resetAllDataToFullDefault(true, true);
+    resetAllDataToFullDefault(true);
   }
 }
-
-let isLocalSaving = false;
 
 function saveState() {
   state.lastUpdated = Date.now();
   ensureStateIntegrity();
-  isLocalSaving = true;
 
   try {
     const jsonStr = JSON.stringify(state);
@@ -488,16 +469,6 @@ function saveState() {
   } catch (e) {
     console.error("Error al actualizar la UI:", e);
   }
-
-  try {
-    syncToFirebase();
-  } catch (e) {
-    console.error("Error al sincronizar con Firebase:", e);
-  }
-
-  setTimeout(() => {
-    isLocalSaving = false;
-  }, 1500);
 }
 
 // --- Navigation Tabs ---
@@ -2832,171 +2803,7 @@ window.importDataJSON = function(event) {
   reader.readAsText(file);
 };
 
-// --- Cloud Sync (Firebase) & PIN Security Module ---
-
-const DEFAULT_FIREBASE_CONFIG = {
-  projectId: "objetivos2026-393a7",
-  messagingSenderId: "314540758006",
-  databaseURL: "https://objetivos2026-393a7-default-rtdb.firebaseio.com/"
-};
-
-function initFirebaseSync() {
-  const configStr = localStorage.getItem('goals_2026_firebase_config');
-  if (!window.firebase) {
-    updateCloudStatusBadge('offline', '💾 Modo Local');
-    return;
-  }
-
-  try {
-    let configObj = { ...DEFAULT_FIREBASE_CONFIG };
-    if (configStr) {
-      const trimmed = configStr.trim();
-      if (trimmed.startsWith('{')) {
-        try {
-          configObj = JSON.parse(trimmed);
-        } catch (err) {
-          console.warn("JSON de Firebase inválido, usando default:", err);
-        }
-      } else if (trimmed.startsWith('http')) {
-        configObj.databaseURL = trimmed;
-      }
-    }
-
-    if (configObj && configObj.databaseURL) {
-      if (!firebase.apps.length) {
-        firebase.initializeApp(configObj);
-      }
-      firebaseDb = firebase.database();
-      firebaseRef = firebaseDb.ref('goals_2026_data');
-
-      updateCloudStatusBadge('syncing', '☁️ Conectando a Nube...');
-
-      firebaseRef.on('value', (snapshot) => {
-        if (isLocalSaving) return;
-        const val = snapshot.val();
-        if (val) {
-          if (!hasValidLocalData) {
-            // No hay datos locales reales (solo defaults generados). 
-            // ACEPTAR SIEMPRE la nube para no pisar el progreso real del usuario.
-            isRemoteUpdating = true;
-            state = val;
-            hasValidLocalData = true; // Ahora sí tenemos datos reales
-            ensureStateIntegrity();
-            try {
-              const jsonStr = JSON.stringify(state);
-              localStorage.setItem('goals_2026_state', jsonStr);
-              localStorage.setItem('goals_2026_backup_state', jsonStr);
-            } catch (e) {}
-            updateUI();
-            isRemoteUpdating = false;
-          } else {
-            // Ya hay datos locales reales: Comparar timestamps para decidir quién gana
-            const localTime = Number(state.lastUpdated) || 0;
-            const remoteTime = Number(val.lastUpdated) || 0;
-            
-            if (remoteTime > localTime) {
-              // La nube tiene datos más nuevos
-              isRemoteUpdating = true;
-              state = val;
-              ensureStateIntegrity();
-              try {
-                const jsonStr = JSON.stringify(state);
-                localStorage.setItem('goals_2026_state', jsonStr);
-                localStorage.setItem('goals_2026_backup_state', jsonStr);
-              } catch (e) {}
-              updateUI();
-              isRemoteUpdating = false;
-            } else if (localTime > remoteTime) {
-              // Local tiene datos más nuevos: pushear a la nube
-              syncToFirebase();
-            }
-            // Si localTime === remoteTime, ya estamos sincronizados, no hacer nada.
-          }
-        } else {
-          // Firebase está vacío: enviar datos locales (sean defaults o reales)
-          try {
-            firebaseRef.set(JSON.parse(JSON.stringify(state)));
-          } catch (e) {
-            console.error("Error enviando estado inicial a Firebase:", e);
-          }
-        }
-        updateCloudStatusBadge('online', '☁️ Sincronizado en Nube');
-      }, (error) => {
-        console.error("Firebase Sync Error:", error);
-        updateCloudStatusBadge('error', '⚠️ Error: Ver Reglas de Firebase');
-      });
-    }
-  } catch (e) {
-    console.error("Error al inicializar Firebase:", e);
-    updateCloudStatusBadge('error', '⚠️ Error Config Nube');
-  }
-}
-
-function syncToFirebase() {
-  if (isRemoteUpdating) return;
-  if (firebaseRef) {
-    updateCloudStatusBadge('syncing', '☁️ Guardando en Nube...');
-    try {
-      const cleanState = JSON.parse(JSON.stringify(state));
-      firebaseRef.set(cleanState).then(() => {
-        updateCloudStatusBadge('online', '☁️ Sincronizado en Nube');
-      }).catch(err => {
-        console.error("Error guardando en Firebase:", err);
-        updateCloudStatusBadge('error', '⚠️ Error guardando en Nube');
-      });
-    } catch (err) {
-      console.error("Error serializando estado para Firebase:", err);
-    }
-  }
-}
-
-function updateCloudStatusBadge(type, text) {
-  const dot = document.getElementById('cloud-status-dot');
-  const txt = document.getElementById('cloud-status-text');
-  if (!dot || !txt) return;
-
-  dot.className = '';
-  if (type === 'online') dot.classList.add('status-online');
-  else if (type === 'syncing') dot.classList.add('status-syncing');
-  else if (type === 'error') dot.classList.add('status-error');
-  else dot.classList.add('status-offline');
-
-  txt.innerText = text;
-}
-
-window.saveFirebaseConfig = function() {
-  const input = document.getElementById('input-firebase-config');
-  let val = input ? input.value.trim().replace(/^["']|["']$/g, '') : "";
-  if (!val) {
-    val = "https://objetivos2026-393a7-default-rtdb.firebaseio.com/";
-  }
-
-  localStorage.setItem('goals_2026_firebase_config', val);
-  initFirebaseSync();
-
-  if (firebaseRef) {
-    try {
-      const cleanState = JSON.parse(JSON.stringify(state));
-      firebaseRef.set(cleanState);
-    } catch (e) {}
-  }
-
-  updateCloudStatusBadge('online', '☁️ Sincronizado en Nube');
-  closeModal('modal-cloud-sync');
-  alert("¡Conectado a la Nube con éxito! ☁️🎉 Tus objetivos están sincronizados entre tu celu y compu en tiempo real.");
-};
-
-window.disconnectFirebase = function() {
-  if (confirm("¿Seguro que deseas desconectar la sincronización en la nube? Tu app volverá al modo local.")) {
-    localStorage.removeItem('goals_2026_firebase_config');
-    if (firebaseRef) {
-      firebaseRef.off();
-      firebaseRef = null;
-    }
-    updateCloudStatusBadge('offline', '💾 Modo Local');
-    closeModal('modal-cloud-sync');
-  }
-};
+// --- PIN Security Module ---
 
 window.authorizeTikTokConnection = function() {
   const input = document.getElementById('input-tiktok-login-user');
@@ -3069,7 +2876,7 @@ window.lockAppNow = function() {
   }
   state.security.pinEnabled = true;
   saveState();
-  closeModal('modal-cloud-sync');
+  closeModal('modal-security');
   checkPinLockOnStart();
 };
 
@@ -3157,10 +2964,7 @@ function initApp() {
   const affEl = document.getElementById('affirmation-display');
   if (affEl) affEl.innerText = `"${AFFIRMATIONS[currentAffirmationIdx]}"`;
 
-  // PASO 5: Conectar Firebase
-  initFirebaseSync();
-
-  // PASO 6: PIN
+  // PASO 5: PIN
   checkPinLockOnStart();
   updatePinUI();
 }
