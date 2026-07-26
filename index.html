@@ -6,10 +6,7 @@
   <title>Mis Objetivos 2026 - Control de Progreso</title>
   <meta name="description" content="Dashboard premium e interactivo para visualizar y registrar metas de gimnasio, guitarra, lectura, finanzas, bienestar y amor propio para fin de 2026.">
   <link rel="icon" href="brian_tracy.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=30.2">
-  <!-- Firebase Compat SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+  <link rel="stylesheet" href="style.css?v=31.0">
   <script>
     // v30.2: Script síncrono que inyecta CSS para activar la pestaña correcta ANTES del primer paint.
     // No manipula DOM (aún no existe), solo inyecta reglas CSS.
@@ -99,11 +96,11 @@
           <p style="color: var(--color-text-muted); font-size: 0.9rem;">Un resumen rápido del estado de tus objetivos para el 2026. Selecciona una tarjeta para ir al detalle.</p>
         </div>
         <div style="display: flex; gap: 10px; margin-bottom: 4px; flex-wrap: wrap;">
-          <button class="btn btn-sm" onclick="openModal('modal-cloud-sync')" style="background: rgba(197, 160, 89, 0.12); border: 1px solid rgba(197, 160, 89, 0.3); color: var(--color-gold); font-size: 0.8rem; font-family: var(--font-title); font-weight: 600; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
-            <img src="https://emojicdn.elk.sh/☁️" class="apple-emoji-sm" style="margin: 0; width: 14px; height: 14px;" alt="☁️"> Nube & PIN
+          <button class="btn btn-sm" onclick="openModal('modal-security')" style="background: rgba(197, 160, 89, 0.12); border: 1px solid rgba(197, 160, 89, 0.3); color: var(--color-gold); font-size: 0.8rem; font-family: var(--font-title); font-weight: 600; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
+            <img src="https://emojicdn.elk.sh/🔒" class="apple-emoji-sm" style="margin: 0; width: 14px; height: 14px;" alt="🔒"> Seguridad (PIN)
           </button>
           <button class="btn btn-sm" onclick="resetAllDataToFullDefault(false)" style="background: rgba(197, 160, 89, 0.15); border: 1px solid rgba(197, 160, 89, 0.4); color: var(--color-gold); font-size: 0.8rem; font-family: var(--font-title); font-weight: 600; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
-            <img src="https://emojicdn.elk.sh/✨" class="apple-emoji-sm" style="margin: 0; width: 14px; height: 14px;" alt="✨"> Sincronizar Mis Datos
+            <img src="https://emojicdn.elk.sh/✨" class="apple-emoji-sm" style="margin: 0; width: 14px; height: 14px;" alt="✨"> Resetear Datos
           </button>
           <button class="btn btn-sm" onclick="exportDataJSON()" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; font-family: var(--font-title); font-weight: 600; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
             <img src="https://emojicdn.elk.sh/📤" class="apple-emoji-sm" style="margin: 0; width: 14px; height: 14px;" alt="📤"> Exportar
@@ -1114,53 +1111,23 @@
     </div>
   </div>
 
-  <!-- MODAL: NUBE & PIN CONFIGURATION -->
-  <div class="modal-overlay" id="modal-cloud-sync">
-    <div class="modal-card" style="max-width: 540px;">
-      <button class="modal-close" onclick="closeModal('modal-cloud-sync')">&times;</button>
+  <!-- MODAL: SEGURIDAD (PIN) -->
+  <div class="modal-overlay" id="modal-security">
+    <div class="modal-card" style="max-width: 450px;">
+      <button class="modal-close" onclick="closeModal('modal-security')">&times;</button>
       
       <div style="display: flex; flex-direction: column; gap: 20px;">
         <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 14px;">
           <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(197, 160, 89, 0.15); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(197, 160, 89, 0.3);">
-            <img src="https://emojicdn.elk.sh/☁️" class="apple-emoji" alt="☁️">
+            <img src="https://emojicdn.elk.sh/🔒" class="apple-emoji" alt="🔒">
           </div>
           <div>
-            <h3 style="font-family: var(--font-title); font-size: 1.3rem; color: #fff; margin-bottom: 2px;">Sincronización & Seguridad</h3>
-            <p style="font-size: 0.8rem; color: var(--color-text-muted);">Sincroniza tus objetivos entre tu celular y distintas PCs en tiempo real.</p>
+            <h3 style="font-family: var(--font-title); font-size: 1.3rem; color: #fff; margin-bottom: 2px;">Seguridad</h3>
+            <p style="font-size: 0.8rem; color: var(--color-text-muted);">Protege tu panel de control con un PIN.</p>
           </div>
         </div>
 
-        <!-- Section 1: Firebase Config -->
         <div>
-          <h4 style="font-family: var(--font-title); font-size: 0.95rem; color: var(--color-gold); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-            <span>🔥 Base de Datos en la Nube (Firebase)</span>
-          </h4>
-          <p style="font-size: 0.78rem; color: var(--color-text-muted); line-height: 1.4; margin-bottom: 12px;">
-            Para sincronizar entre tu celu y tu PC gratis, pega la URL de tu base de datos Firebase o tu configuración JSON.
-          </p>
-
-          <div class="form-group" style="margin-bottom: 10px;">
-            <label style="font-size: 0.75rem; color: var(--color-text-muted);">Database URL o Configuración JSON:</label>
-            <textarea id="input-firebase-config" rows="3" placeholder='https://tu-proyecto-default-rtdb.firebaseio.com/ o {"apiKey": "...", "databaseURL": "..."}' style="background: rgba(255,255,255,0.03); border: 1px solid #282828; color: #fff; font-family: monospace; font-size: 0.8rem; padding: 8px; border-radius: 8px; width: 100%; resize: vertical;"></textarea>
-          </div>
-
-          <div style="display: flex; gap: 10px;">
-            <button class="btn btn-violet btn-sm" onclick="saveFirebaseConfig()" style="flex: 1; justify-content: center;">
-              Conectar / Guardar Nube
-            </button>
-            <button class="btn btn-sm" onclick="disconnectFirebase()" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444;">
-              Desconectar
-            </button>
-          </div>
-        </div>
-
-        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.08); margin: 4px 0;">
-
-        <!-- Section 2: PIN Protection -->
-        <div>
-          <h4 style="font-family: var(--font-title); font-size: 0.95rem; color: var(--color-gold); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-            🔒 Proteccion por PIN
-          </h4>
           <p style="font-size: 0.78rem; color: var(--color-text-muted); margin-bottom: 12px;">
             Protege el acceso a tu dashboard con un PIN de 4 dígitos al ingresar desde cualquier dispositivo.
           </p>
@@ -1214,6 +1181,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=30.2"></script>
+  <script src="app.js?v=31.0"></script>
 </body>
 </html>
