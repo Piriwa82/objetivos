@@ -6,24 +6,10 @@
   <title>Mis Objetivos 2026 - Control de Progreso</title>
   <meta name="description" content="Dashboard premium e interactivo para visualizar y registrar metas de gimnasio, guitarra, lectura, finanzas, bienestar y amor propio para fin de 2026.">
   <link rel="icon" href="brian_tracy.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=29.0">
+  <link rel="stylesheet" href="style.css?v=30.0">
   <!-- Firebase Compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-  <script>
-    (function() {
-      var tab = location.hash ? location.hash.replace('#', '').replace('tab-', '') : localStorage.getItem('active_tab');
-      var valid = ['dashboard', 'fisico', 'musica', 'lectura', 'bienestar', 'finanzas'];
-      if (!tab || !valid.includes(tab)) tab = 'dashboard';
-      document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('[data-tab]').forEach(function(b) { b.classList.remove('active'); });
-        document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
-        document.querySelectorAll('[data-tab="' + tab + '"]').forEach(function(b) { b.classList.add('active'); });
-        var el = document.getElementById('tab-' + tab);
-        if (el) el.classList.add('active');
-      });
-    })();
-  </script>
 </head>
 <body>
 
@@ -57,7 +43,7 @@
 
     <!-- Desktop Navigation Bar -->
     <nav class="nav-desktop">
-      <button class="nav-btn active" data-tab="dashboard">
+      <button class="nav-btn" data-tab="dashboard">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
         Dashboard
       </button>
@@ -84,7 +70,7 @@
     </nav>
 
     <!-- TAB: DASHBOARD OVERVIEW -->
-    <section class="tab-content active" id="tab-dashboard">
+    <section class="tab-content" id="tab-dashboard">
       <div style="margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
         <div>
           <h2 style="font-size: 1.8rem; margin-bottom: 6px;">Tu Panel de Control</h2>
@@ -836,7 +822,7 @@
 
   <!-- Bottom Navigation (Mobile Only) -->
   <nav class="nav-mobile">
-    <button class="nav-mobile-btn active" data-tab="dashboard">
+    <button class="nav-mobile-btn" data-tab="dashboard">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
       Dashboard
     </button>
@@ -1206,6 +1192,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=29.0"></script>
+  <script src="app.js?v=30.0"></script>
 </body>
 </html>
