@@ -6,7 +6,7 @@
   <title>Mis Objetivos 2026 - Control de Progreso</title>
   <meta name="description" content="Dashboard premium e interactivo para visualizar y registrar metas de gimnasio, guitarra, lectura, finanzas, bienestar y amor propio para fin de 2026.">
   <link rel="icon" href="brian_tracy.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=14.0">
+  <link rel="stylesheet" href="style.css?v=15.0">
   <!-- Firebase Compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
@@ -338,23 +338,16 @@
             <div class="card-title-group">
               <div class="card-icon"><img src="https://emojicdn.elk.sh/🏋️‍♂️" class="apple-emoji" alt="🏋️‍♂️"></div>
               <div>
-                <h3>Marcas de Fuerza</h3>
-                <p>Metas de Levantamiento 2026</p>
-              </div>
-            </div>
-          </div>
-          
-          <div class="gym-stats">
-            <!-- Bench Press -->
+                        <!-- Bench Press -->
             <div class="gym-item">
               <div class="gym-meta">
                 <span class="gym-name">Press de Banca (PB)</span>
-                <span class="progress-value" id="gym-pb-val">0 / 100 kg</span>
+                <span class="progress-value" id="gym-pb-val">90 / 100 kg</span>
               </div>
-              <div class="progress-track"><div class="progress-fill bg-violet" id="gym-pb-progress"></div></div>
+              <div class="progress-track"><div class="progress-fill bg-violet" id="gym-pb-progress" style="width: 90%;"></div></div>
               <div class="gym-input-row">
                 <label for="input-gym-pb" style="font-size: 0.8rem; color: var(--color-text-muted); flex-grow: 1;">Peso de 1RM Actual:</label>
-                <input type="number" id="input-gym-pb" class="input-sm" value="0" min="0" max="200" style="padding: 4px 8px;">
+                <input type="number" id="input-gym-pb" class="input-sm" value="90" min="0" max="200" style="padding: 4px 8px;">
                 <button class="btn btn-sm btn-icon-only" onclick="updateGymWeight('pb')" title="Guardar Peso Actual">
                   <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                 </button>
@@ -363,7 +356,7 @@
                 <label for="input-pb-1rm" style="font-size: 0.75rem; color: var(--color-text-muted);">Estimar 1RM (ej: 80x5):</label>
                 <input type="text" id="input-pb-1rm" placeholder="80x5" style="padding: 4px 8px; width: 75px; text-align: center;" oninput="calculateGym1RM('pb')">
                 <div style="display: flex; align-items: center; gap: 6px;">
-                  <span id="pb-1rm-result" style="font-size: 0.85rem; font-weight: 600; color: var(--color-gold);">1RM: -- kg</span>
+                  <span id="pb-1rm-result" style="font-size: 0.85rem; font-weight: 600; color: var(--color-gold);">1RM: 90 kg</span>
                   <button class="btn btn-sm btn-icon-only" onclick="applyGym1RM('pb')" title="Usar como Peso Actual" style="width: 22px; height: 22px; border-radius: 4px; padding: 0;">
                     <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </button>
@@ -375,21 +368,21 @@
             <div class="gym-item">
               <div class="gym-meta">
                 <span class="gym-name">Hip Thrust</span>
-                <span class="progress-value" id="gym-ht-val">0 / 140 kg (x8)</span>
+                <span class="progress-value" id="gym-ht-val">148 / 174 kg (1RM)</span>
               </div>
-              <div class="progress-track"><div class="progress-fill bg-violet" id="gym-ht-progress"></div></div>
+              <div class="progress-track"><div class="progress-fill bg-violet" id="gym-ht-progress" style="width: 85%;"></div></div>
               <div class="gym-input-row">
                 <label for="input-gym-ht" style="font-size: 0.8rem; color: var(--color-text-muted); flex-grow: 1;">Peso Actual (x8 reps):</label>
-                <input type="number" id="input-gym-ht" class="input-sm" value="0" min="0" max="300" style="padding: 4px 8px;">
+                <input type="number" id="input-gym-ht" class="input-sm" value="120" min="0" max="300" style="padding: 4px 8px;">
                 <button class="btn btn-sm btn-icon-only" onclick="updateGymWeight('ht')" title="Guardar Peso Actual">
                   <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                 </button>
               </div>
               <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; gap: 8px;">
                 <label for="input-ht-1rm" style="font-size: 0.75rem; color: var(--color-text-muted);">Estimar 1RM (ej: 120x8):</label>
-                <input type="text" id="input-ht-1rm" placeholder="120x8" style="padding: 4px 8px; width: 75px; text-align: center;" oninput="calculateGym1RM('ht')">
+                <input type="text" id="input-ht-1rm" placeholder="120x8" value="120x8" style="padding: 4px 8px; width: 75px; text-align: center;" oninput="calculateGym1RM('ht')">
                 <div style="display: flex; align-items: center; gap: 6px;">
-                  <span id="ht-1rm-result" style="font-size: 0.85rem; font-weight: 600; color: var(--color-gold);">-- kg (1RM: -- kg)</span>
+                  <span id="ht-1rm-result" style="font-size: 0.85rem; font-weight: 600; color: var(--color-gold);">120 kg (1RM: 148 kg)</span>
                   <button class="btn btn-sm btn-icon-only" onclick="applyGym1RM('ht')" title="Usar como Peso Actual" style="width: 22px; height: 22px; border-radius: 4px; padding: 0;">
                     <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </button>
@@ -401,21 +394,21 @@
             <div class="gym-item">
               <div class="gym-meta">
                 <span class="gym-name">Sentadilla</span>
-                <span class="progress-value" id="gym-sq-val">0 / 100 kg (x8)</span>
+                <span class="progress-value" id="gym-sq-val">100 / 124 kg (1RM)</span>
               </div>
-              <div class="progress-track"><div class="progress-fill bg-violet" id="gym-sq-progress"></div></div>
+              <div class="progress-track"><div class="progress-fill bg-violet" id="gym-sq-progress" style="width: 80%;"></div></div>
               <div class="gym-input-row">
                 <label for="input-gym-sq" style="font-size: 0.8rem; color: var(--color-text-muted); flex-grow: 1;">Peso Actual (x8 reps):</label>
-                <input type="number" id="input-gym-sq" class="input-sm" value="0" min="0" max="250" style="padding: 4px 8px;">
+                <input type="number" id="input-gym-sq" class="input-sm" value="80" min="0" max="250" style="padding: 4px 8px;">
                 <button class="btn btn-sm btn-icon-only" onclick="updateGymWeight('sq')" title="Guardar Peso Actual">
                   <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                 </button>
               </div>
               <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; gap: 8px;">
                 <label for="input-sq-1rm" style="font-size: 0.75rem; color: var(--color-text-muted);">Estimar 1RM (ej: 80x8):</label>
-                <input type="text" id="input-sq-1rm" placeholder="80x8" style="padding: 4px 8px; width: 75px; text-align: center;" oninput="calculateGym1RM('sq')">
+                <input type="text" id="input-sq-1rm" placeholder="80x8" value="80x8" style="padding: 4px 8px; width: 75px; text-align: center;" oninput="calculateGym1RM('sq')">
                 <div style="display: flex; align-items: center; gap: 6px;">
-                  <span id="sq-1rm-result" style="font-size: 0.85rem; font-weight: 600; color: var(--color-gold);">-- kg (1RM: -- kg)</span>
+                  <span id="sq-1rm-result" style="font-size: 0.85rem; font-weight: 600; color: var(--color-gold);">80 kg (1RM: 100 kg)</span>
                   <button class="btn btn-sm btn-icon-only" onclick="applyGym1RM('sq')" title="Usar como Peso Actual" style="width: 22px; height: 22px; border-radius: 4px; padding: 0;">
                     <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </button>
@@ -488,11 +481,11 @@
                   <p>Meta: 600 Horas Prácticas</p>
                 </div>
               </div>
-              <span class="progress-value" id="guitar-badge">0 / 600h</span>
+              <span class="progress-value" id="guitar-badge">331 / 600h</span>
             </div>
 
             <div class="progress-container">
-              <div class="progress-track" style="margin-bottom: 8px;"><div class="progress-fill bg-pink" id="guitar-progress-fill"></div></div>
+              <div class="progress-track" style="margin-bottom: 8px;"><div class="progress-fill bg-pink" id="guitar-progress-fill" style="width: 55.1%;"></div></div>
               <p id="guitar-daily-rate" style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 12px; font-style: italic;"></p>
             </div>
 
@@ -518,11 +511,11 @@
                   <p>Meta: 40 Covers Planificados</p>
                 </div>
               </div>
-              <span class="progress-value" id="covers-badge">0 / 40</span>
+              <span class="progress-value" id="covers-badge">28 / 40</span>
             </div>
 
             <div class="progress-container" style="margin-bottom: 14px;">
-              <div class="progress-track"><div class="progress-fill bg-cyan" id="covers-progress-fill"></div></div>
+              <div class="progress-track"><div class="progress-fill bg-cyan" id="covers-progress-fill" style="width: 70%;"></div></div>
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
@@ -550,16 +543,16 @@
                   <p>Meta: 1000 Seguidores</p>
                 </div>
               </div>
-              <span class="progress-value" id="followers-badge">0 / 1000 seg.</span>
+              <span class="progress-value" id="followers-badge">214 / 1000 seg.</span>
             </div>
 
             <div class="progress-container" style="margin-bottom: 14px;">
-              <div class="progress-track"><div class="progress-fill bg-violet" id="followers-progress-fill" style="width: 0%;"></div></div>
+              <div class="progress-track"><div class="progress-fill bg-violet" id="followers-progress-fill" style="width: 21.4%;"></div></div>
             </div>
 
             <div class="card-input-row" style="margin-top: 10px;">
               <label for="input-followers" style="font-size: 0.8rem; color: var(--color-text-muted); font-weight: 600;">Actuales:</label>
-              <input type="number" id="input-followers" min="0" max="100000" placeholder="ej: 1000" style="text-align: center;">
+              <input type="number" id="input-followers" min="0" max="100000" value="214" placeholder="ej: 1000" style="text-align: center;">
               <button class="btn btn-violet btn-sm" onclick="saveFollowersCount()" style="padding: 8px 14px; font-family: var(--font-title); font-weight: 700;">Guardar 💾</button>
             </div>
           </div>
@@ -580,7 +573,7 @@
               <div class="checklist-item" id="bar-performance-item" style="padding: 10px 14px; margin: 0;">
                 <input type="checkbox" id="check-bar-performance" style="width: 16px; height: 16px; margin-right: 10px;">
                 <div class="checklist-item-text">
-                  <span style="font-weight: 700; color: #fff; font-size: 0.9rem;">Presentación en Bar</span>
+                  <span style="font-weight: 700; color: #fff; font-size: 0.95rem;">Presentación en Bar</span>
                   <p style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 2px;">Tocar una vez en un bar y sentirme cómodo.</p>
                 </div>
               </div>
@@ -621,11 +614,11 @@
                 <p>Meta: Leer 2000 Páginas (5 diarias)</p>
               </div>
             </div>
-            <span class="progress-value" id="reading-badge">0 / 2000 págs</span>
+            <span class="progress-value" id="reading-badge">1225 / 2000 págs</span>
           </div>
 
           <div class="progress-container">
-            <div class="progress-track" style="margin-bottom: 8px;"><div class="progress-fill bg-violet" id="reading-progress-fill"></div></div>
+            <div class="progress-track" style="margin-bottom: 8px;"><div class="progress-fill bg-violet" id="reading-progress-fill" style="width: 61.25%;"></div></div>
             <p id="reading-daily-rate" style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 16px; font-style: italic;"></p>
           </div>
 
@@ -651,7 +644,7 @@
                 <p>Meta: Promocionar todas las materias</p>
               </div>
             </div>
-            <span class="progress-value" id="college-badge">0 / 0</span>
+            <span class="progress-value" id="college-badge">2 / 6 Promocionadas</span>
           </div>
 
           <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; font-style: italic;">
@@ -767,11 +760,11 @@
                 <p>Meta: Juntar $2.000.000 para el 31 de Diciembre</p>
               </div>
             </div>
-            <span class="progress-value" id="finance-badge">$0 / $2.000.000</span>
+            <span class="progress-value" id="finance-badge">$800.000 / $2.000.000</span>
           </div>
 
           <div class="progress-container">
-            <div class="progress-track" style="height: 12px; margin-bottom: 24px;"><div class="progress-fill bg-success" id="finance-progress-fill"></div></div>
+            <div class="progress-track" style="height: 12px; margin-bottom: 24px;"><div class="progress-fill bg-success" id="finance-progress-fill" style="width: 40%;"></div></div>
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
@@ -1192,6 +1185,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=14.0"></script>
+  <script src="app.js?v=15.0"></script>
 </body>
 </html>
