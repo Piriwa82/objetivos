@@ -102,6 +102,7 @@ let state = {
 
 function ensureStateIntegrity() {
   if (!state || typeof state !== 'object') state = {};
+  if (!state.lastUpdated) state.lastUpdated = Date.now();
 
   if (!state.gym || typeof state.gym !== 'object') state.gym = { pb: 90, ht: 120, sq: 80 };
   state.gym.pb = Math.max(Number(state.gym.pb) || 0, 90);
@@ -256,107 +257,104 @@ function mergeStateData(local, remote) {
   if (!remote || typeof remote !== 'object') return local;
   if (!local || typeof local !== 'object') return remote;
 
-  const merged = { ...local };
+  const localTime = Number(local.lastUpdated) || 0;
+  const remoteTime = Number(remote.lastUpdated) || 0;
 
-  // 1. Gym: max weights
-  merged.gym = merged.gym || { pb: 0, ht: 0, sq: 0 };
-  if (remote.gym) {
-    merged.gym.pb = Math.max(merged.gym.pb || 0, remote.gym.pb || 0);
-    merged.gym.ht = Math.max(merged.gym.ht || 0, remote.gym.ht || 0);
-    merged.gym.sq = Math.max(merged.gym.sq || 0, remote.gym.sq || 0);
-  }
+  const primary = localTime >= remoteTime ? { ...local } : { ...remote };
+  const secondary = localTime >= remoteTime ? { ...remote } : { ...local };
 
-  // 2. Guitar: max total hours & merge log
-  merged.guitar = merged.guitar || { hours: 0, log: [] };
-  if (remote.guitar) {
-    merged.guitar.hours = Math.max(merged.guitar.hours || 0, remote.guitar.hours || 0);
-    const localLog = Array.isArray(merged.guitar.log) ? merged.guitar.log : [];
-    const remoteLog = Array.isArray(remote.guitar.log) ? remote.guitar.log : [];
+  const merged = { ...primary };
+
+  // 1. Gym
+  merged.gym = merged.gym || primary.gym || secondary.gym || { pb: 90, ht: 120, sq: 80 };
+
+  // 2. Guitar
+  merged.guitar = merged.guitar || { hours: 331, log: [] };
+  if (secondary.guitar && Array.isArray(secondary.guitar.log)) {
+    const primaryLog = Array.isArray(primary.guitar && primary.guitar.log) ? primary.guitar.log : [];
     const logMap = new Map();
-    [...remoteLog, ...localLog].forEach(item => {
+    [...secondary.guitar.log, ...primaryLog].forEach(item => {
       if (item && item.id) logMap.set(item.id, item);
-      else if (item) logMap.set(`${item.date}_${item.hours}`, item);
     });
     merged.guitar.log = Array.from(logMap.values());
   }
 
-  // 3. Followers: max
-  merged.followers = Math.max(merged.followers || 0, remote.followers || 0);
+  // 3. Followers: Priorizar el valor más reciente del objeto primario
+  if (primary.followers !== undefined) {
+    merged.followers = Number(primary.followers);
+  } else if (secondary.followers !== undefined) {
+    merged.followers = Number(secondary.followers);
+  } else {
+    merged.followers = 214;
+  }
 
-  // 4. Books: max read pages per book & union
-  merged.books = Array.isArray(merged.books) ? merged.books : [];
-  if (Array.isArray(remote.books)) {
-    remote.books.forEach(rb => {
-      if (!rb) return;
-      const b = merged.books.find(localBook => localBook && (localBook.id === rb.id || localBook.title === rb.title));
-      if (b) {
-        b.readPages = Math.max(b.readPages || 0, rb.readPages || 0);
-        b.read = b.read || rb.read;
-      } else {
-        merged.books.push(rb);
+  // 4. Books
+  merged.books = Array.isArray(primary.books) ? [...primary.books] : [];
+  if (Array.isArray(secondary.books)) {
+    secondary.books.forEach(sb => {
+      if (!sb) return;
+      const pb = merged.books.find(b => b && (b.id === sb.id || b.title === sb.title));
+      if (!pb) {
+        merged.books.push(sb);
       }
     });
   }
 
-  // 5. Subjects: passed = true if either & union
-  merged.subjects = Array.isArray(merged.subjects) ? merged.subjects : [];
-  if (Array.isArray(remote.subjects)) {
-    remote.subjects.forEach(rs => {
-      if (!rs) return;
-      const s = merged.subjects.find(localSub => localSub && (localSub.id === rs.id || localSub.name === rs.name));
-      if (s) {
-        s.passed = s.passed || rs.passed;
-      } else {
-        merged.subjects.push(rs);
+  // 5. Subjects
+  merged.subjects = Array.isArray(primary.subjects) ? [...primary.subjects] : [];
+  if (Array.isArray(secondary.subjects)) {
+    secondary.subjects.forEach(ss => {
+      if (!ss) return;
+      const ps = merged.subjects.find(s => s && (s.id === ss.id || s.name === ss.name));
+      if (!ps) {
+        merged.subjects.push(ss);
       }
     });
   }
 
-  // 5b. Covers: union
-  merged.covers = Array.isArray(merged.covers) ? merged.covers : [];
-  if (Array.isArray(remote.covers)) {
-    remote.covers.forEach(rc => {
-      if (!rc) return;
-      const c = merged.covers.find(localCov => localCov && (localCov.id === rc.id || localCov.title === rc.title));
-      if (c) {
-        c.published = c.published || rc.published;
-        if (rc.artUrl && !c.artUrl) c.artUrl = rc.artUrl;
-      } else {
-        merged.covers.push(rc);
+  // 5b. Covers
+  merged.covers = Array.isArray(primary.covers) ? [...primary.covers] : [];
+  if (Array.isArray(secondary.covers)) {
+    secondary.covers.forEach(sc => {
+      if (!sc) return;
+      const pc = merged.covers.find(c => c && (c.id === sc.id || c.title === sc.title));
+      if (!pc) {
+        merged.covers.push(sc);
       }
     });
   }
 
   // 6. Sara / Viaje
-  if (remote.sara) {
+  if (secondary.sara) {
     merged.sara = merged.sara || {};
-    merged.sara.tripCompleted = merged.sara.tripCompleted || remote.sara.tripCompleted;
-    merged.sara.destination = merged.sara.destination || remote.sara.destination || "";
-    merged.sara.videoLink = merged.sara.videoLink || remote.sara.videoLink || "";
-    merged.sara.notes = merged.sara.notes || remote.sara.notes || "";
+    merged.sara.tripCompleted = primary.sara && primary.sara.tripCompleted !== undefined ? primary.sara.tripCompleted : secondary.sara.tripCompleted;
+    merged.sara.destination = primary.sara && primary.sara.destination ? primary.sara.destination : (secondary.sara.destination || "");
+    merged.sara.videoLink = primary.sara && primary.sara.videoLink ? primary.sara.videoLink : (secondary.sara.videoLink || "");
+    merged.sara.notes = primary.sara && primary.sara.notes ? primary.sara.notes : (secondary.sara.notes || "");
   }
 
   // 7. Finance: merge log
-  if (remote.finance && Array.isArray(remote.finance.log)) {
+  if (secondary.finance && Array.isArray(secondary.finance.log)) {
     merged.finance = merged.finance || { log: [] };
-    const localFin = Array.isArray(merged.finance.log) ? merged.finance.log : [];
+    const primaryFin = Array.isArray(primary.finance && primary.finance.log) ? primary.finance.log : [];
     const finMap = new Map();
-    [...remote.finance.log, ...localFin].forEach(item => {
+    [...secondary.finance.log, ...primaryFin].forEach(item => {
       if (item && item.id) finMap.set(item.id, item);
     });
     merged.finance.log = Array.from(finMap.values());
   }
 
   // 8. Screen time: non-null values take priority or latest
-  if (Array.isArray(remote.screenTime) && remote.screenTime.length === 24) {
+  if (Array.isArray(secondary.screenTime) && secondary.screenTime.length === 24) {
     if (!Array.isArray(merged.screenTime)) merged.screenTime = Array(24).fill(null);
     for (let i = 0; i < 24; i++) {
-      if (merged.screenTime[i] === null && remote.screenTime[i] !== null) {
-        merged.screenTime[i] = remote.screenTime[i];
+      if (merged.screenTime[i] === null && secondary.screenTime[i] !== null) {
+        merged.screenTime[i] = secondary.screenTime[i];
       }
     }
   }
 
+  merged.lastUpdated = Math.max(localTime, remoteTime);
   return merged;
 }
 
@@ -464,6 +462,7 @@ function loadState() {
 let isLocalSaving = false;
 
 function saveState() {
+  state.lastUpdated = Date.now();
   ensureStateIntegrity();
   isLocalSaving = true;
 
