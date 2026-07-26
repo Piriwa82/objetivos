@@ -6,7 +6,7 @@
   <title>Mis Objetivos 2026 - Control de Progreso</title>
   <meta name="description" content="Dashboard premium e interactivo para visualizar y registrar metas de gimnasio, guitarra, lectura, finanzas, bienestar y amor propio para fin de 2026.">
   <link rel="icon" href="brian_tracy.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=13.0">
+  <link rel="stylesheet" href="style.css?v=14.0">
   <!-- Firebase Compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
@@ -29,13 +29,13 @@
         <div class="stats-circle-container">
           <svg class="stats-circle-svg" viewBox="0 0 70 70">
             <circle class="stats-circle-bg" cx="35" cy="35" r="30"></circle>
-            <circle class="stats-circle-bar" id="global-progress-circle" cx="35" cy="35" r="30" stroke-dasharray="188.4" stroke-dashoffset="188.4"></circle>
+            <circle class="stats-circle-bar" id="global-progress-circle" cx="35" cy="35" r="30" stroke-dasharray="188.4" stroke-dashoffset="79"></circle>
           </svg>
-          <div class="stats-circle-text" id="global-progress-percent">0%</div>
+          <div class="stats-circle-text" id="global-progress-percent">58%</div>
         </div>
         <div class="stats-info">
           <span>Progreso General</span>
-          <h2 id="global-progress-summary">0 / 12 Objetivos</h2>
+          <h2 id="global-progress-summary">6 / 12 Objetivos</h2>
           <small style="color: var(--color-text-muted); font-size: 0.75rem; font-style: italic; margin-top: 2px;" id="days-countdown">Quedan -- días en 2026</small>
         </div>
       </div>
@@ -104,11 +104,11 @@
                 <p>Meta: 100 kg</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-pb">0 kg</div>
+            <div class="summary-val" id="sum-val-pb">90 / 100 kg</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-pb" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-pb" style="width: 90%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -123,11 +123,11 @@
                 <p>Meta: 173.8 kg (1RM)</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-ht">0 kg</div>
+            <div class="summary-val" id="sum-val-ht">148 / 174 kg</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-ht" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-ht" style="width: 85%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -142,11 +142,11 @@
                 <p>Meta: 124.2 kg (1RM)</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-sq">0 kg</div>
+            <div class="summary-val" id="sum-val-sq">100 / 124 kg</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-sq" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-sq" style="width: 80%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -180,11 +180,11 @@
                 <p>Meta: 600 hrs</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-guitar">0 hrs</div>
+            <div class="summary-val" id="sum-val-guitar">331 / 600 hrs</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-guitar" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-guitar" style="width: 55%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -199,11 +199,11 @@
                 <p>Meta: 40 Covers</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-covers">0 / 40</div>
+            <div class="summary-val" id="sum-val-covers">28 / 40</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-covers" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-covers" style="width: 70%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -218,11 +218,11 @@
                 <p>Meta: 1000 seg.</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-followers">0 seg.</div>
+            <div class="summary-val" id="sum-val-followers">214 / 1000</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-followers" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-followers" style="width: 21.4%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -256,11 +256,11 @@
                 <p>Meta: 2000 Págs</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-reading">0 págs</div>
+            <div class="summary-val" id="sum-val-reading">1225 / 2000 págs</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-reading" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-reading" style="width: 61.25%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -275,11 +275,11 @@
                 <p>Meta: Promocionar todas</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-college">0%</div>
+            <div class="summary-val" id="sum-val-college">33%</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-college" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-college" style="width: 33%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -294,11 +294,11 @@
                 <p>Meta: $2.000.000</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-finance">$0</div>
+            <div class="summary-val" id="sum-val-finance">$800.000</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-finance" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-finance" style="width: 40%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -1192,6 +1192,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=13.0"></script>
+  <script src="app.js?v=14.0"></script>
 </body>
 </html>
