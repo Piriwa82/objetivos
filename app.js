@@ -182,6 +182,15 @@ function ensureStateIntegrity() {
       }
     });
   }
+
+  // Filtro agresivo de datos corruptos (null o no-objetos) en los arreglos para prevenir errores JS que bloquean el renderizado
+  if (Array.isArray(state.guitar.log)) state.guitar.log = state.guitar.log.filter(x => x && typeof x === 'object' && x.date);
+  if (Array.isArray(state.covers)) state.covers = state.covers.filter(x => x && typeof x === 'object' && x.title);
+  if (Array.isArray(state.books)) state.books = state.books.filter(x => x && typeof x === 'object' && x.title);
+  if (Array.isArray(state.subjects)) state.subjects = state.subjects.filter(x => x && typeof x === 'object' && x.name);
+  if (Array.isArray(state.finance.log)) state.finance.log = state.finance.log.filter(x => x && typeof x === 'object' && x.date);
+  if (state.mind && Array.isArray(state.mind.thoughts)) state.mind.thoughts = state.mind.thoughts.filter(x => x && typeof x === 'object' && x.date);
+  if (state.mind && Array.isArray(state.mind.sessions)) state.mind.sessions = state.mind.sessions.filter(x => x && typeof x === 'object' && x.date);
 }
 
 function resetAllDataToFullDefault(silent = false) {
