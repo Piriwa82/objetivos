@@ -2345,9 +2345,12 @@ loadState();
 updateUI();
 syncScreenTimeInputs();
 
-// Cargar la pestaña activa persistida o usar 'dashboard' por defecto
-const activeTab = localStorage.getItem('active_tab') || 'dashboard';
-switchTab(activeTab, false);
+let savedActiveTab = location.hash ? location.hash.replace('#', '').replace('tab-', '') : localStorage.getItem('active_tab');
+const validTabs = ['dashboard', 'fisico', 'musica', 'lectura', 'bienestar', 'finanzas'];
+if (!savedActiveTab || !validTabs.includes(savedActiveTab)) {
+  savedActiveTab = 'dashboard';
+}
+switchTab(savedActiveTab, false);
 
 // Configurar frase inicial de afirmación
 document.getElementById('affirmation-display').innerText = `"${AFFIRMATIONS[currentAffirmationIdx]}"`;
@@ -2868,16 +2871,23 @@ function initFirebaseSync() {
         if (isLocalSaving) return;
         const val = snapshot.val();
         if (val) {
-          isRemoteUpdating = true;
-          state = mergeStateData(state, val);
-          ensureStateIntegrity();
-          try {
-            const jsonStr = JSON.stringify(state);
-            localStorage.setItem('goals_2026_state', jsonStr);
-            localStorage.setItem('goals_2026_backup_state', jsonStr);
-          } catch (e) {}
-          updateUI();
-          isRemoteUpdating = false;
+          const localTime = Number(state.lastUpdated) || 0;
+          const remoteTime = Number(val.lastUpdated) || 0;
+
+          if (localTime > remoteTime) {
+            syncToFirebase();
+          } else {
+            isRemoteUpdating = true;
+            state = mergeStateData(state, val);
+            ensureStateIntegrity();
+            try {
+              const jsonStr = JSON.stringify(state);
+              localStorage.setItem('goals_2026_state', jsonStr);
+              localStorage.setItem('goals_2026_backup_state', jsonStr);
+            } catch (e) {}
+            updateUI();
+            isRemoteUpdating = false;
+          }
         } else {
           try {
             firebaseRef.set(JSON.parse(JSON.stringify(state)));
