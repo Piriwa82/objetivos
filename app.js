@@ -929,6 +929,11 @@ function updateUI() {
   setValueText('finance-badge', `$${totalSavings.toLocaleString('es-AR')} / $2.000.000`);
   setProgressBarWidth('finance-progress-fill', Math.min((Math.max(totalSavings, 0) / 2000000) * 100, 100));
   renderFinanceLog();
+
+  // Asegurar que la pestaña activa guardada persista siempre tras cada actualización de UI (F5 / Nube)
+  if (typeof restoreActiveTabOnStart === 'function') {
+    restoreActiveTabOnStart();
+  }
 }
 
 // Helpers de ayuda para actualizar el DOM
