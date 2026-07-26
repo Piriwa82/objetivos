@@ -2,6 +2,7 @@
 let firebaseDb = null;
 let firebaseRef = null;
 let isRemoteUpdating = false;
+let hasValidLocalData = false;
 
 const ICON_TRASH = `<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
 const ICON_SAVE = `<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>`;
@@ -187,7 +188,7 @@ function ensureStateIntegrity() {
   }
 }
 
-function resetAllDataToFullDefault(silent = false) {
+function resetAllDataToFullDefault(silent = false, isInitialLoad = false) {
   state = {
     gym: { pb: 90, ht: 120, sq: 80 },
     screenTime: Array(24).fill(null),
@@ -203,10 +204,21 @@ function resetAllDataToFullDefault(silent = false) {
     tiktok: { connected: false, username: "@thoma_guitar", likes: 0 },
     security: { pinEnabled: false, pin: "" }
   };
-  saveState();
-  updateUI();
-  if (!silent) {
-    alert("¡Tu progreso completo (Gym, Guitarra, Libros, Finanzas, Covers) fue cargado con éxito en este dispositivo! 🚀✨");
+  
+  if (isInitialLoad) {
+    try {
+      const jsonStr = JSON.stringify(state);
+      localStorage.setItem('goals_2026_state', jsonStr);
+      localStorage.setItem('goals_2026_backup_state', jsonStr);
+    } catch(e) {}
+    updateUI();
+  } else {
+    hasValidLocalData = true;
+    saveState();
+    updateUI();
+    if (!silent) {
+      alert("¡Tu progreso completo (Gym, Guitarra, Libros, Finanzas, Covers) fue cargado con éxito en este dispositivo! 🚀✨");
+    }
   }
 }
 window.resetAllDataToFullDefault = resetAllDataToFullDefault;
@@ -358,6 +370,7 @@ function mergeStateData(local, remote) {
 function loadState() {
   const saved = localStorage.getItem('goals_2026_state') || localStorage.getItem('goals_2026_backup_state');
   if (saved) {
+    hasValidLocalData = true;
     try {
       const parsed = JSON.parse(saved);
       if (parsed && typeof parsed === 'object') {
@@ -450,7 +463,8 @@ function loadState() {
       console.error("Error cargando state de localStorage", e);
     }
   } else {
-    resetAllDataToFullDefault(true);
+    hasValidLocalData = false;
+    resetAllDataToFullDefault(true, true);
   }
 }
 
@@ -2861,18 +2875,27 @@ function initFirebaseSync() {
         if (isLocalSaving) return;
         const val = snapshot.val();
         if (val) {
-          // EN LA PRIMERA CONEXIÓN: SIEMPRE preservar estado local.
-          // El estado local ya fue cargado por loadState() y es la fuente de verdad.
-          if (isFirstFirebaseSync) {
-            isFirstFirebaseSync = false;
-            // Pushear el estado local a Firebase para sincronizar la nube
-            syncToFirebase();
+          if (!hasValidLocalData) {
+            // No hay datos locales reales (solo defaults generados). 
+            // ACEPTAR SIEMPRE la nube para no pisar el progreso real del usuario.
+            isRemoteUpdating = true;
+            state = val;
+            hasValidLocalData = true; // Ahora sí tenemos datos reales
+            ensureStateIntegrity();
+            try {
+              const jsonStr = JSON.stringify(state);
+              localStorage.setItem('goals_2026_state', jsonStr);
+              localStorage.setItem('goals_2026_backup_state', jsonStr);
+            } catch (e) {}
+            updateUI();
+            isRemoteUpdating = false;
           } else {
-            // Conexiones posteriores (updates en tiempo real de otros dispositivos)
+            // Ya hay datos locales reales: Comparar timestamps para decidir quién gana
             const localTime = Number(state.lastUpdated) || 0;
             const remoteTime = Number(val.lastUpdated) || 0;
+            
             if (remoteTime > localTime) {
-              // Solo aceptar si Firebase es ESTRICTAMENTE más nuevo
+              // La nube tiene datos más nuevos
               isRemoteUpdating = true;
               state = val;
               ensureStateIntegrity();
@@ -2883,12 +2906,14 @@ function initFirebaseSync() {
               } catch (e) {}
               updateUI();
               isRemoteUpdating = false;
+            } else if (localTime > remoteTime) {
+              // Local tiene datos más nuevos: pushear a la nube
+              syncToFirebase();
             }
-            // Si local >= remote, no hacer nada (ya está sincronizado)
+            // Si localTime === remoteTime, ya estamos sincronizados, no hacer nada.
           }
         } else {
-          // Firebase vacío: enviar estado local
-          isFirstFirebaseSync = false;
+          // Firebase está vacío: enviar datos locales (sean defaults o reales)
           try {
             firebaseRef.set(JSON.parse(JSON.stringify(state)));
           } catch (e) {
@@ -3103,7 +3128,6 @@ function updatePinUI() {
 }
 
 let isAppInitialized = false;
-let isFirstFirebaseSync = true;
 
 function initApp() {
   if (isAppInitialized) return;
@@ -3111,15 +3135,6 @@ function initApp() {
 
   // PASO 1: Hidratar estado desde localStorage (única vez)
   loadState();
-
-  // Estampar timestamp para garantizar prioridad local sobre Firebase
-  if (!state.lastUpdated || state.lastUpdated === 0) {
-    state.lastUpdated = Date.now();
-    try {
-      const jsonStr = JSON.stringify(state);
-      localStorage.setItem('goals_2026_state', jsonStr);
-    } catch(e) {}
-  }
 
   // PASO 2: Renderizar UI con datos locales (única vez)
   updateUI();
@@ -3142,8 +3157,7 @@ function initApp() {
   const affEl = document.getElementById('affirmation-display');
   if (affEl) affEl.innerText = `"${AFFIRMATIONS[currentAffirmationIdx]}"`;
 
-  // PASO 5: Conectar Firebase DESPUÉS de que el estado local sea canónico
-  isFirstFirebaseSync = true;
+  // PASO 5: Conectar Firebase
   initFirebaseSync();
 
   // PASO 6: PIN
