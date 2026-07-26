@@ -512,14 +512,14 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
   background: #1c1c1d;
   border: 1px solid #3a3a3b;
   color: var(--color-text-main);
-  padding: 8px 16px;
+  padding: 6px 14px;
   border-radius: 6px;
   font-family: var(--font-title);
-  font-size: 1.05rem;
+  font-size: 0.85rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   transition: var(--transition-fast);
 }
 
@@ -563,9 +563,9 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
 }
 
 .btn-sm {
-  padding: 5px 10px;
-  font-size: 0.95rem;
-  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  border-radius: 5px;
 }
 
 .btn-icon-only {
@@ -655,26 +655,32 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
   gap: 12px;
 }
 
-.book-item {
+.book-item, .book-card {
   background: #161616;
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 16px;
+  padding: 14px;
   display: flex;
   flex-direction: row;
-  gap: 16px;
+  gap: 14px;
   align-items: center;
   transition: var(--transition-fast);
 }
 
-.book-item:hover {
+.book-item:hover, .book-card:hover {
   border-color: #2b2b2c;
   background: #181819;
 }
 
+.book-cover-container {
+  flex-shrink: 0;
+}
+
 .book-cover {
-  width: 60px;
-  height: 90px;
+  width: 52px;
+  height: 78px;
+  max-width: 52px;
+  max-height: 78px;
   border-radius: 6px;
   object-fit: cover;
   background: #1f1f20;
@@ -683,11 +689,11 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
   flex-shrink: 0;
 }
 
-.book-details {
+.book-info, .book-details {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .book-title-row {
@@ -992,6 +998,9 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
 
 /* TikTok specific list styles */
 .cover-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   background: #161616;
   border: 1px solid var(--border-color);
   border-radius: 10px;
@@ -1007,9 +1016,11 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus, 
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-.cover-thumbnail {
+.cover-thumbnail, .cover-art-thumb {
   width: 44px;
   height: 44px;
+  max-width: 44px;
+  max-height: 44px;
   border-radius: 6px;
   object-fit: cover;
   background: #101010;
