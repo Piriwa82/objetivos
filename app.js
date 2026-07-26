@@ -445,9 +445,6 @@ function loadState() {
         }
       });
       ensureStateIntegrity();
-      if (!state.gym || state.gym.pb < 90 || !state.guitar || state.guitar.hours < 331 || !state.covers || state.covers.length < 28) {
-        resetAllDataToFullDefault(true);
-      }
       const jsonStr = JSON.stringify(state);
       localStorage.setItem('goals_2026_state', jsonStr);
       localStorage.setItem('goals_2026_backup_state', jsonStr);
@@ -717,6 +714,21 @@ function updateGlobalProgressDOM() {
     const dashoffset = strokeDasharray - (strokeDasharray * stats.overallPercent) / 100;
     circleEl.style.strokeDashoffset = dashoffset;
   }
+
+  // Countdown de días restantes en 2026
+  const end = new Date('2026-12-31T23:59:59');
+  const today = new Date();
+  const diff = end - today;
+  const days = Math.max(Math.ceil(diff / (1000 * 60 * 60 * 24)), 1);
+
+  const daysCountdown = document.getElementById('days-countdown');
+  if (daysCountdown) {
+    if (diff > 0) {
+      daysCountdown.innerText = `Quedan ${days} días en 2026`;
+    } else {
+      daysCountdown.innerText = "¡Año 2026 finalizado!";
+    }
+  }
 }
 
 function updateUI() {
@@ -929,10 +941,6 @@ function updateUI() {
   setProgressBarWidth('finance-progress-fill', Math.min((Math.max(totalSavings, 0) / 2000000) * 100, 100));
   renderFinanceLog();
 
-  // Asegurar que la pestaña activa guardada persista siempre tras cada actualización de UI (F5 / Nube)
-  if (typeof restoreActiveTabOnStart === 'function') {
-    restoreActiveTabOnStart();
-  }
 }
 
 // Helpers de ayuda para actualizar el DOM
