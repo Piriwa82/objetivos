@@ -510,6 +510,9 @@ document.querySelectorAll('[data-target-tab]').forEach(card => {
 });
 
 function switchTab(tabName, smoothScroll = true) {
+  const validTabs = ['dashboard', 'fisico', 'musica', 'lectura', 'bienestar', 'finanzas'];
+  if (!validTabs.includes(tabName)) tabName = 'dashboard';
+
   // Desactivar todos los botones y secciones
   document.querySelectorAll('[data-tab]').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -521,23 +524,50 @@ function switchTab(tabName, smoothScroll = true) {
     targetElement.classList.add('active');
   }
 
-  // Guardar pestaña en localStorage para que persista al recargar
-  localStorage.setItem('active_tab', tabName);
+  // Guardar pestaña en localStorage y hash de URL para que F5 vuelva siempre a la misma pestaña
+  try {
+    localStorage.setItem('active_tab', tabName);
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, null, `#${tabName}`);
+    }
+  } catch (e) {}
 
   // Scroll to top si es interacción del usuario
   if (smoothScroll) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Desplazar automáticamente al fondo de los covers para ver los últimos
+  // Forzar el renderizado inmediato de la pestaña activa para asegurar que todos los datos se vean al instante
   if (tabName === 'musica') {
+    if (typeof renderGuitarLog === 'function') renderGuitarLog();
+    if (typeof renderCoversList === 'function') renderCoversList();
+    if (typeof renderWeeklySuggestions === 'function') renderWeeklySuggestions();
     setTimeout(() => {
       const coversList = document.getElementById('covers-list');
-      if (coversList) {
-        coversList.scrollTop = coversList.scrollHeight;
-      }
+      if (coversList) coversList.scrollTop = coversList.scrollHeight;
     }, 150);
+  } else if (tabName === 'lectura') {
+    if (typeof renderBooksGrid === 'function') renderBooksGrid();
+    if (typeof renderSubjects === 'function') renderSubjects();
+  } else if (tabName === 'fisico') {
+    if (typeof renderScreenTimeGrid === 'function') renderScreenTimeGrid();
+  } else if (tabName === 'finanzas') {
+    if (typeof renderFinanceLog === 'function') renderFinanceLog();
+  } else if (tabName === 'bienestar') {
+    if (typeof renderSaraTab === 'function') renderSaraTab();
   }
+}
+
+function restoreActiveTabOnStart() {
+  let savedTab = location.hash ? location.hash.replace('#', '') : localStorage.getItem('active_tab');
+  if (savedTab && savedTab.startsWith('tab-')) {
+    savedTab = savedTab.replace('tab-', '');
+  }
+  const validTabs = ['dashboard', 'fisico', 'musica', 'lectura', 'bienestar', 'finanzas'];
+  if (!savedTab || !validTabs.includes(savedTab)) {
+    savedTab = 'dashboard';
+  }
+  switchTab(savedTab, false);
 }
 
 // --- Modals Management ---
@@ -3058,6 +3088,7 @@ function updatePinUI() {
 document.addEventListener('DOMContentLoaded', () => {
   loadState();
   updateUI();
+  restoreActiveTabOnStart();
   initFirebaseSync();
   checkPinLockOnStart();
   updatePinUI();
@@ -3066,5 +3097,6 @@ document.addEventListener('DOMContentLoaded', () => {
 if (document.readyState === 'interactive' || document.readyState === 'complete') {
   loadState();
   updateUI();
+  restoreActiveTabOnStart();
 }
 
