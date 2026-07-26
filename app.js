@@ -360,7 +360,9 @@ function loadState() {
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
-      state = mergeStateData(state, parsed);
+      if (parsed && typeof parsed === 'object') {
+        state = parsed;
+      }
       ensureStateIntegrity();
       let migrated = false;
       if (!state.covers || state.covers.length === 0) {
