@@ -2876,7 +2876,7 @@ function initFirebaseSync() {
           const localTime = Number(state.lastUpdated) || 0;
           const remoteTime = Number(val.lastUpdated) || 0;
 
-          if (localTime > remoteTime) {
+          if (localTime >= remoteTime) {
             syncToFirebase();
           } else {
             isRemoteUpdating = true;
