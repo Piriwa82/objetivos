@@ -6,10 +6,32 @@
   <title>Mis Objetivos 2026 - Control de Progreso</title>
   <meta name="description" content="Dashboard premium e interactivo para visualizar y registrar metas de gimnasio, guitarra, lectura, finanzas, bienestar y amor propio para fin de 2026.">
   <link rel="icon" href="brian_tracy.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=30.0">
+  <link rel="stylesheet" href="style.css?v=30.1">
   <!-- Firebase Compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+  <script>
+    // v30.1: Script síncrono que inyecta CSS para activar la pestaña correcta ANTES del primer paint.
+    // No manipula DOM (aún no existe), solo inyecta reglas CSS.
+    (function() {
+      var tab = location.hash ? location.hash.replace('#','').replace('tab-','') : null;
+      if (!tab) try { tab = localStorage.getItem('active_tab'); } catch(e) {}
+      var valid = ['dashboard','fisico','musica','lectura','bienestar','finanzas'];
+      if (!tab || valid.indexOf(tab) === -1) tab = 'dashboard';
+      // Guardar para que initApp() lo lea sin recalcular
+      window.__initialTab = tab;
+      if (tab !== 'dashboard') {
+        // Inyectar CSS que oculta dashboard y muestra la pestaña correcta
+        var s = document.createElement('style');
+        s.id = 'early-tab-css';
+        s.textContent = '#tab-dashboard.active{display:none!important}' +
+          '#tab-' + tab + '{display:block!important}' +
+          '[data-tab="dashboard"].active{color:var(--color-text-muted)!important;background:transparent!important;font-weight:400!important;box-shadow:none!important}' +
+          '[data-tab="' + tab + '"]{color:var(--color-text-dark)!important;background:var(--color-gold)!important;font-weight:600!important}';
+        document.head.appendChild(s);
+      }
+    })();
+  </script>
 </head>
 <body>
 
@@ -43,7 +65,7 @@
 
     <!-- Desktop Navigation Bar -->
     <nav class="nav-desktop">
-      <button class="nav-btn" data-tab="dashboard">
+      <button class="nav-btn active" data-tab="dashboard">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
         Dashboard
       </button>
@@ -70,7 +92,7 @@
     </nav>
 
     <!-- TAB: DASHBOARD OVERVIEW -->
-    <section class="tab-content" id="tab-dashboard">
+    <section class="tab-content active" id="tab-dashboard">
       <div style="margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
         <div>
           <h2 style="font-size: 1.8rem; margin-bottom: 6px;">Tu Panel de Control</h2>
@@ -822,7 +844,7 @@
 
   <!-- Bottom Navigation (Mobile Only) -->
   <nav class="nav-mobile">
-    <button class="nav-mobile-btn" data-tab="dashboard">
+    <button class="nav-mobile-btn active" data-tab="dashboard">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
       Dashboard
     </button>
@@ -1192,6 +1214,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=30.0"></script>
+  <script src="app.js?v=30.1"></script>
 </body>
 </html>
