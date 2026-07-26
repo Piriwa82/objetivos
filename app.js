@@ -176,25 +176,26 @@ function ensureStateIntegrity() {
   }
 }
 
-window.resetAllDataToFullDefault = function() {
-  if (confirm("¿Deseas cargar tus datos completos (Gym, Guitarra, Libros, Finanzas, Materias y Covers)?")) {
-    state = {
-      gym: { pb: 90, ht: 120, sq: 80 },
-      screenTime: Array(24).fill(null),
-      guitar: { hours: 331, log: [{ id: "_o5d1wqrrd", date: "2026-07-25", hours: 331 }] },
-      covers: [...DEFAULT_COVERS],
-      followers: 214,
-      bar: { completed: false, name: "", review: "" },
-      books: [...DEFAULT_BOOKS],
-      subjects: [...DEFAULT_SUBJECTS],
-      sara: { tripCompleted: false, destination: "", videoLink: "", notes: "" },
-      mind: { thoughts: [], sessions: [] },
-      finance: { log: [...DEFAULT_FINANCE] },
-      tiktok: { connected: false, username: "@thoma_guitar", likes: 0 },
-      security: { pinEnabled: false, pin: "" }
-    };
-    saveState();
-    alert("¡Datos completos restaurados con éxito! 🚀✨");
+window.resetAllDataToFullDefault = function(silent = false) {
+  state = {
+    gym: { pb: 90, ht: 120, sq: 80 },
+    screenTime: Array(24).fill(null),
+    guitar: { hours: 331, log: [{ id: "_o5d1wqrrd", date: "2026-07-25", hours: 331 }] },
+    covers: [...DEFAULT_COVERS],
+    followers: 214,
+    bar: { completed: false, name: "", review: "" },
+    books: [...DEFAULT_BOOKS],
+    subjects: [...DEFAULT_SUBJECTS],
+    sara: { tripCompleted: false, destination: "", videoLink: "", notes: "" },
+    mind: { thoughts: [], sessions: [] },
+    finance: { log: [...DEFAULT_FINANCE] },
+    tiktok: { connected: false, username: "@thoma_guitar", likes: 0 },
+    security: { pinEnabled: false, pin: "" }
+  };
+  saveState();
+  updateUI();
+  if (!silent) {
+    alert("¡Tu progreso completo (Gym, Guitarra, Libros, Finanzas, Covers) fue cargado con éxito en este dispositivo! 🚀✨");
   }
 };
 
@@ -412,8 +413,9 @@ function loadState() {
           }
         }
       });
-      if (!state.security) {
-        state.security = { pinEnabled: false, pin: "" };
+      ensureStateIntegrity();
+      if (!state.gym || state.gym.pb < 90 || !state.guitar || state.guitar.hours < 331 || !state.covers || state.covers.length < 28) {
+        resetAllDataToFullDefault(true);
       }
       const jsonStr = JSON.stringify(state);
       localStorage.setItem('goals_2026_state', jsonStr);
@@ -422,10 +424,7 @@ function loadState() {
       console.error("Error cargando state de localStorage", e);
     }
   } else {
-    ensureStateIntegrity();
-    const jsonStr = JSON.stringify(state);
-    localStorage.setItem('goals_2026_state', jsonStr);
-    localStorage.setItem('goals_2026_backup_state', jsonStr);
+    resetAllDataToFullDefault(true);
   }
 }
 
