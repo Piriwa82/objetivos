@@ -442,7 +442,7 @@ function loadState() {
           }
         }
       });
-      ensureStateIntegrity();
+      // Guardar estado migrado de vuelta a localStorage
       const jsonStr = JSON.stringify(state);
       localStorage.setItem('goals_2026_state', jsonStr);
       localStorage.setItem('goals_2026_backup_state', jsonStr);
@@ -2342,20 +2342,8 @@ window.saveBookChanges = function() {
 };
 
 // --- Initialize App ---
-
-loadState();
-updateUI();
-syncScreenTimeInputs();
-
-let savedActiveTab = location.hash ? location.hash.replace('#', '').replace('tab-', '') : localStorage.getItem('active_tab');
-const validTabs = ['dashboard', 'fisico', 'musica', 'lectura', 'bienestar', 'finanzas'];
-if (!savedActiveTab || !validTabs.includes(savedActiveTab)) {
-  savedActiveTab = 'dashboard';
-}
-switchTab(savedActiveTab, false);
-
-// Configurar frase inicial de afirmación
-document.getElementById('affirmation-display').innerText = `"${AFFIRMATIONS[currentAffirmationIdx]}"`;
+// NOTA v30.0: Todo el arranque se ejecuta ÚNICAMENTE desde initApp() al final del archivo.
+// No hay llamadas top-level sueltas para evitar doble ejecución.
 
 // --- AI Cover Reviewer Logic ---
 window.handleAiVideoUpload = function(event) {
@@ -2877,10 +2865,12 @@ function initFirebaseSync() {
           const remoteTime = Number(val.lastUpdated) || 0;
 
           if (localTime >= remoteTime) {
+            // Local es más reciente o igual: pushear local a Firebase
             syncToFirebase();
           } else {
+            // Firebase tiene datos más nuevos: adoptar directamente (sin merge)
             isRemoteUpdating = true;
-            state = mergeStateData(state, val);
+            state = val;
             ensureStateIntegrity();
             try {
               const jsonStr = JSON.stringify(state);
@@ -3109,10 +3099,28 @@ function initApp() {
   if (isAppInitialized) return;
   isAppInitialized = true;
 
+  // PASO 1: Hidratar estado desde localStorage (única vez)
   loadState();
+
+  // PASO 2: Renderizar UI con datos locales (única vez)
   updateUI();
-  restoreActiveTabOnStart();
+  syncScreenTimeInputs();
+
+  // PASO 3: Activar pestaña correcta (hash > localStorage > dashboard)
+  const hash = location.hash ? location.hash.replace('#', '').replace('tab-', '') : null;
+  const stored = localStorage.getItem('active_tab');
+  const validInitTabs = ['dashboard', 'fisico', 'musica', 'lectura', 'bienestar', 'finanzas'];
+  const targetTab = (hash && validInitTabs.includes(hash)) ? hash : ((stored && validInitTabs.includes(stored)) ? stored : 'dashboard');
+  switchTab(targetTab, false);
+
+  // PASO 4: Afirmación
+  const affEl = document.getElementById('affirmation-display');
+  if (affEl) affEl.innerText = `"${AFFIRMATIONS[currentAffirmationIdx]}"`;
+
+  // PASO 5: Conectar Firebase DESPUÉS de que el estado local sea canónico
   initFirebaseSync();
+
+  // PASO 6: PIN
   checkPinLockOnStart();
   updatePinUI();
 }
