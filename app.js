@@ -1,4 +1,7 @@
 // --- App State & Data Management ---
+let firebaseDb = null;
+let firebaseRef = null;
+let isRemoteUpdating = false;
 
 const ICON_TRASH = `<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
 const ICON_SAVE = `<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>`;
@@ -176,7 +179,7 @@ function ensureStateIntegrity() {
   }
 }
 
-window.resetAllDataToFullDefault = function(silent = false) {
+function resetAllDataToFullDefault(silent = false) {
   state = {
     gym: { pb: 90, ht: 120, sq: 80 },
     screenTime: Array(24).fill(null),
@@ -197,7 +200,8 @@ window.resetAllDataToFullDefault = function(silent = false) {
   if (!silent) {
     alert("¡Tu progreso completo (Gym, Guitarra, Libros, Finanzas, Covers) fue cargado con éxito en este dispositivo! 🚀✨");
   }
-};
+}
+window.resetAllDataToFullDefault = resetAllDataToFullDefault;
 
 let selectedScreenWeekIdx = 0;
 let selectedScreenMonthIdx = 0;
@@ -2755,10 +2759,6 @@ window.importDataJSON = function(event) {
 };
 
 // --- Cloud Sync (Firebase) & PIN Security Module ---
-
-let firebaseDb = null;
-let firebaseRef = null;
-let isRemoteUpdating = false;
 
 const DEFAULT_FIREBASE_CONFIG = {
   projectId: "objetivos2026-393a7",
