@@ -46,12 +46,12 @@ const DEFAULT_BOOKS = [
 
 const STATIC_COVERS = {
   "Cuál es tu sueño": "images.jfif?v=1",
-  "Cerati biografía": "https://books.google.com/books/content?id=c_pCCAAAQBAJ&printsec=frontcover&img=1&zoom=1",
-  "Releo Si lo crees lo creas": "https://books.google.com/books/content?id=K641DwAAQBAJ&printsec=frontcover&img=1&zoom=1",
+  "Cerati biografía": "https://is1-ssl.mzstatic.com/image/thumb/Publication211/v4/24/4a/5d/244a5d8c-ee7e-1b3b-10c4-c7c926e642f3/9789500752978.jpg/400x600bb.jpg",
+  "Releo Si lo crees lo creas": "https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/01/9e/8b/019e8ba2-2819-4e3e-ee84-352a92842e30/9786073171175.jpg/400x600bb.jpg",
   "Cómo hacer amigos e influir en las personas": "images.jpg?v=1",
-  "Oasis: vivir para siempre": "https://books.google.com/books/content?id=V7PBDwAAQBAJ&printsec=frontcover&img=1&zoom=1",
-  "El camino del artista": "https://books.google.com/books/content?id=N9D5DwAAQBAJ&printsec=frontcover&img=1&zoom=1",
-  "Generación dopamina": "https://books.google.com/books/content?id=E1VVEAAAQBAJ&printsec=frontcover&img=1&zoom=1"
+  "Oasis: vivir para siempre": "https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/3e/67/dc/3e67dc9b-fb5b-8df3-fa92-9e810a118bfc/9789500773263.jpg/400x600bb.jpg",
+  "El camino del artista": "https://is1-ssl.mzstatic.com/image/thumb/Publication116/v4/50/2e/30/502e3077-1476-3e4a-f32b-6844a3539947/9788403052970.jpg/400x600bb.jpg",
+  "Generación dopamina": "https://is1-ssl.mzstatic.com/image/thumb/Publication116/v4/10/58/db/1058dbb2-9d33-14ad-2cfc-1f5e8f1ec6b6/9788419654168.jpg/400x600bb.jpg"
 };
 
 const DEFAULT_COVERS = [
