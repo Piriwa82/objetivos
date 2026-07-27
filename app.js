@@ -1343,13 +1343,30 @@ window.addGuitarHoursManual = function() {
   const val = parseFloat(document.getElementById('input-guitar-manual').value);
   const dateInput = document.getElementById('input-guitar-date').value;
   if (!isNaN(val) && val > 0) {
-    const targetDate = dateInput ? new Date(dateInput + 'T00:00:00').toLocaleDateString('es-ES', {day: 'numeric', month: 'short', year: 'numeric'}) : getTodayString();
+    let targetDateStr;
+    let timestamp;
+    
+    if (dateInput) {
+      const parts = dateInput.split('-');
+      if (parts.length === 3) {
+        const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+        targetDateStr = d.toLocaleDateString('es-ES', {day: 'numeric', month: 'short', year: 'numeric'});
+        timestamp = d.getTime();
+      } else {
+        targetDateStr = getTodayString();
+        timestamp = Date.now();
+      }
+    } else {
+      targetDateStr = getTodayString();
+      timestamp = Date.now();
+    }
+    
     state.guitar.hours += val;
-    const existingEntry = state.guitar.log.find(entry => entry.date === targetDate);
+    const existingEntry = state.guitar.log.find(entry => entry.date === targetDateStr);
     if (existingEntry) {
       existingEntry.hours += val;
     } else {
-      state.guitar.log.unshift({ date: targetDate, hours: val, timestamp: dateInput ? new Date(dateInput).getTime() : Date.now() });
+      state.guitar.log.unshift({ id: generateId(), date: targetDateStr, hours: val, timestamp: timestamp });
     }
     state.guitar.log.sort((a,b) => b.timestamp - a.timestamp);
     saveState();
