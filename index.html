@@ -6,27 +6,28 @@
   <title>Mis Objetivos 2026 - Control de Progreso</title>
   <meta name="description" content="Dashboard premium e interactivo para visualizar y registrar metas de gimnasio, guitarra, lectura, finanzas, bienestar y amor propio para fin de 2026.">
   <link rel="icon" href="brian_tracy.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=31.1">
+  <link rel="stylesheet" href="style.css?v=1.6">
   <script>
     // v30.2: Script síncrono que inyecta CSS para activar la pestaña correcta ANTES del primer paint.
     // No manipula DOM (aún no existe), solo inyecta reglas CSS.
-    (function() {
-      var tab = location.hash ? location.hash.replace('#','').replace('tab-','') : null;
-      if (!tab) try { tab = localStorage.getItem('active_tab'); } catch(e) {}
-      var valid = ['dashboard','fisico','musica','lectura','bienestar','finanzas'];
-      if (!tab || valid.indexOf(tab) === -1) tab = 'dashboard';
-      // Guardar para que initApp() lo lea sin recalcular
-      window.__initialTab = tab;
-      if (tab !== 'dashboard') {
-        // Inyectar CSS que oculta dashboard y muestra la pestaña correcta
-        var s = document.createElement('style');
-        s.id = 'early-tab-css';
-        s.textContent = '#tab-dashboard.active{display:none!important}' +
-          '#tab-' + tab + '{display:block!important}' +
-          '[data-tab="dashboard"].active{color:var(--color-text-muted)!important;background:transparent!important;font-weight:400!important;box-shadow:none!important}' +
-          '[data-tab="' + tab + '"]{color:var(--color-text-dark)!important;background:var(--color-gold)!important;font-weight:600!important}';
-        document.head.appendChild(s);
-      }
+    (function(){
+      const hash = location.hash ? location.hash.replace('#', '').replace('tab-', '') : null;
+      const initialTab = hash || localStorage.getItem('active_tab') || 'dashboard';
+      const style = document.createElement('style');
+      style.id = 'early-tab-css';
+      // Solo el tab activo se muestra, y activamos transitions luego para evitar saltos.
+      style.innerHTML = `
+        .tab-content { display: none !important; opacity: 0; }
+        #tab-${initialTab} { display: block !important; opacity: 1; }
+        body { background-color: #0b0f19; color: #e2e8f0; margin: 0; padding: 0; }
+        .app-container { opacity: 0; transition: opacity 0.3s; }
+      `;
+      document.head.appendChild(style);
+      
+      const savedTheme = localStorage.getItem('goals_2026_theme') || 'dark';
+      if (savedTheme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      const savedColor = localStorage.getItem('goals_2026_primary_color');
+      if (savedColor) document.documentElement.style.setProperty('--color-primary', savedColor);
     })();
   </script>
 </head>
@@ -48,13 +49,13 @@
         <div class="stats-circle-container">
           <svg class="stats-circle-svg" viewBox="0 0 70 70">
             <circle class="stats-circle-bg" cx="35" cy="35" r="30"></circle>
-            <circle class="stats-circle-bar" id="global-progress-circle" cx="35" cy="35" r="30" stroke-dasharray="188.4" stroke-dashoffset="79"></circle>
+            <circle class="stats-circle-bar" id="global-progress-circle" cx="35" cy="35" r="30" stroke-dasharray="188.4" stroke-dashoffset="188.4"></circle>
           </svg>
-          <div class="stats-circle-text" id="global-progress-percent">58%</div>
+          <div class="stats-circle-text" id="global-progress-percent">0%</div>
         </div>
         <div class="stats-info">
           <span>Progreso General</span>
-          <h2 id="global-progress-summary">6 / 12 Objetivos</h2>
+          <h2 id="global-progress-summary">0 / 12 Objetivos</h2>
           <small style="color: var(--color-text-muted); font-size: 0.75rem; font-style: italic; margin-top: 2px;" id="days-countdown">Quedan -- días en 2026</small>
         </div>
       </div>
@@ -95,13 +96,7 @@
           <h2 style="font-size: 1.8rem; margin-bottom: 6px;">Tu Panel de Control</h2>
           <p style="color: var(--color-text-muted); font-size: 0.9rem;">Un resumen rápido del estado de tus objetivos para el 2026. Selecciona una tarjeta para ir al detalle.</p>
         </div>
-        <div style="display: flex; gap: 10px; margin-bottom: 4px; flex-wrap: wrap;">
-          <button class="btn btn-sm" onclick="openModal('modal-security')" style="background: rgba(197, 160, 89, 0.12); border: 1px solid rgba(197, 160, 89, 0.3); color: var(--color-gold); font-size: 0.8rem; font-family: var(--font-title); font-weight: 600; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
-            <img src="https://emojicdn.elk.sh/🔒" class="apple-emoji-sm" style="margin: 0; width: 14px; height: 14px;" alt="🔒"> Seguridad (PIN)
-          </button>
-          <button class="btn btn-sm" onclick="resetAllDataToFullDefault(false)" style="background: rgba(197, 160, 89, 0.15); border: 1px solid rgba(197, 160, 89, 0.4); color: var(--color-gold); font-size: 0.8rem; font-family: var(--font-title); font-weight: 600; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
-            <img src="https://emojicdn.elk.sh/✨" class="apple-emoji-sm" style="margin: 0; width: 14px; height: 14px;" alt="✨"> Resetear Datos
-          </button>
+        <div style="display: flex; gap: 10px; margin-bottom: 4px;">
           <button class="btn btn-sm" onclick="exportDataJSON()" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; font-family: var(--font-title); font-weight: 600; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
             <img src="https://emojicdn.elk.sh/📤" class="apple-emoji-sm" style="margin: 0; width: 14px; height: 14px;" alt="📤"> Exportar
           </button>
@@ -123,11 +118,11 @@
                 <p>Meta: 100 kg</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-pb">90 / 100 kg</div>
+            <div class="summary-val" id="sum-val-pb">0 kg</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-pb" style="width: 90%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-pb" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -142,11 +137,11 @@
                 <p>Meta: 173.8 kg (1RM)</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-ht">148 / 174 kg</div>
+            <div class="summary-val" id="sum-val-ht">0 kg</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-ht" style="width: 85%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-ht" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -161,11 +156,11 @@
                 <p>Meta: 124.2 kg (1RM)</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-sq">100 / 124 kg</div>
+            <div class="summary-val" id="sum-val-sq">0 kg</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-sq" style="width: 80%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-sq" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -199,11 +194,11 @@
                 <p>Meta: 600 hrs</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-guitar">331 / 600 hrs</div>
+            <div class="summary-val" id="sum-val-guitar">0 hrs</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-guitar" style="width: 55%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-guitar" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -218,11 +213,11 @@
                 <p>Meta: 40 Covers</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-covers">28 / 40</div>
+            <div class="summary-val" id="sum-val-covers">0 / 40</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-covers" style="width: 70%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-covers" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -237,11 +232,11 @@
                 <p>Meta: 1000 seg.</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-followers">214 / 1000</div>
+            <div class="summary-val" id="sum-val-followers">0 seg.</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-followers" style="width: 21.4%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-followers" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -275,11 +270,11 @@
                 <p>Meta: 2000 Págs</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-reading">1225 / 2000 págs</div>
+            <div class="summary-val" id="sum-val-reading">0 págs</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-reading" style="width: 61.25%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-reading" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -294,11 +289,11 @@
                 <p>Meta: Promocionar todas</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-college">33%</div>
+            <div class="summary-val" id="sum-val-college">0%</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-college" style="width: 33%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-college" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -310,14 +305,14 @@
               <div class="summary-icon" style="background: rgba(124, 58, 58, 0.08);"><img src="https://emojicdn.elk.sh/💵" class="apple-emoji" alt="💵"></div>
               <div class="summary-info">
                 <h4>Fondo de Ahorro</h4>
-                <p>Meta: $2.000.000</p>
+                <p>Meta: $1.300.000</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-finance">$800.000</div>
+            <div class="summary-val" id="sum-val-finance">$0</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
-              <div class="progress-fill bg-violet" id="sum-progress-finance" style="width: 40%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
+              <div class="progress-fill bg-violet" id="sum-progress-finance" style="width: 0%; height: 100%; border-radius: 3px; transition: width 0.8s ease;"></div>
             </div>
           </div>
         </div>
@@ -342,6 +337,29 @@
         </div>
       </div>
 
+      <div style="margin-top: 24px;" class="card card-violet">
+        <div class="card-header">
+          <div class="card-title-group">
+            <div class="card-icon"><img src="https://emojicdn.elk.sh/💾" class="apple-emoji" alt="💾"></div>
+            <div>
+              <h3>Respaldos (Backup Local)</h3>
+              <p>Guarda tus avances o restáuralos en otro dispositivo</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-input-row" style="margin-top: 10px; gap: 12px; justify-content: flex-start;">
+          <button class="btn btn-pink" onclick="exportDataJSON()" style="font-family: var(--font-title); font-size: 0.95rem; font-weight: 700; gap: 8px;">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Exportar Datos
+          </button>
+          <input type="file" id="import-json-file" accept=".json" style="display: none;" onchange="importDataJSON(event)">
+          <button class="btn btn-outline" onclick="triggerImportJSON()" style="font-family: var(--font-title); font-size: 0.95rem; font-weight: 700; gap: 8px; border-color: rgba(255,255,255,0.2);">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            Importar Datos
+          </button>
+        </div>
+      </div>
+
       <div style="margin-top: 36px;" class="card affirmations-card card-pink">
         <div class="affirmation-text" id="affirmation-display">"La disciplina es el puente entre tus metas y tus logros."</div>
         <button class="btn btn-pink btn-sm" id="btn-next-affirmation" style="font-family: var(--font-title); font-size: 0.95rem;">Siguiente Reflexión ✨</button>
@@ -350,7 +368,7 @@
 
     <!-- TAB: FISICO & SALUD -->
     <section class="tab-content" id="tab-fisico">
-      <div class="grid-dashboard-2col">
+      <div class="grid-dashboard">
         <!-- Gym card -->
         <div class="card card-violet">
           <div class="card-header">
@@ -368,12 +386,12 @@
             <div class="gym-item">
               <div class="gym-meta">
                 <span class="gym-name">Press de Banca (PB)</span>
-                <span class="progress-value" id="gym-pb-val">90 / 100 kg</span>
+                <span class="progress-value" id="gym-pb-val">0 / 100 kg</span>
               </div>
-              <div class="progress-track"><div class="progress-fill bg-violet" id="gym-pb-progress" style="width: 90%;"></div></div>
+              <div class="progress-track"><div class="progress-fill bg-violet" id="gym-pb-progress"></div></div>
               <div class="gym-input-row">
                 <label for="input-gym-pb" style="font-size: 0.8rem; color: var(--color-text-muted); flex-grow: 1;">Peso de 1RM Actual:</label>
-                <input type="number" id="input-gym-pb" class="input-sm" value="90" min="0" max="200" style="padding: 4px 8px;">
+                <input type="number" id="input-gym-pb" class="input-sm" value="0" min="0" max="200" style="padding: 4px 8px;">
                 <button class="btn btn-sm btn-icon-only" onclick="updateGymWeight('pb')" title="Guardar Peso Actual">
                   <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                 </button>
@@ -382,7 +400,7 @@
                 <label for="input-pb-1rm" style="font-size: 0.75rem; color: var(--color-text-muted);">Estimar 1RM (ej: 80x5):</label>
                 <input type="text" id="input-pb-1rm" placeholder="80x5" style="padding: 4px 8px; width: 75px; text-align: center;" oninput="calculateGym1RM('pb')">
                 <div style="display: flex; align-items: center; gap: 6px;">
-                  <span id="pb-1rm-result" style="font-size: 0.85rem; font-weight: 600; color: var(--color-gold);">1RM: 90 kg</span>
+                  <span id="pb-1rm-result" style="font-size: 0.85rem; font-weight: 600; color: var(--color-gold);">1RM: -- kg</span>
                   <button class="btn btn-sm btn-icon-only" onclick="applyGym1RM('pb')" title="Usar como Peso Actual" style="width: 22px; height: 22px; border-radius: 4px; padding: 0;">
                     <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </button>
@@ -394,21 +412,21 @@
             <div class="gym-item">
               <div class="gym-meta">
                 <span class="gym-name">Hip Thrust</span>
-                <span class="progress-value" id="gym-ht-val">148 / 174 kg (1RM)</span>
+                <span class="progress-value" id="gym-ht-val">0 / 140 kg (x8)</span>
               </div>
-              <div class="progress-track"><div class="progress-fill bg-violet" id="gym-ht-progress" style="width: 85%;"></div></div>
+              <div class="progress-track"><div class="progress-fill bg-violet" id="gym-ht-progress"></div></div>
               <div class="gym-input-row">
                 <label for="input-gym-ht" style="font-size: 0.8rem; color: var(--color-text-muted); flex-grow: 1;">Peso Actual (x8 reps):</label>
-                <input type="number" id="input-gym-ht" class="input-sm" value="120" min="0" max="300" style="padding: 4px 8px;">
+                <input type="number" id="input-gym-ht" class="input-sm" value="0" min="0" max="300" style="padding: 4px 8px;">
                 <button class="btn btn-sm btn-icon-only" onclick="updateGymWeight('ht')" title="Guardar Peso Actual">
                   <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                 </button>
               </div>
               <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; gap: 8px;">
                 <label for="input-ht-1rm" style="font-size: 0.75rem; color: var(--color-text-muted);">Estimar 1RM (ej: 120x8):</label>
-                <input type="text" id="input-ht-1rm" placeholder="120x8" value="120x8" style="padding: 4px 8px; width: 75px; text-align: center;" oninput="calculateGym1RM('ht')">
+                <input type="text" id="input-ht-1rm" placeholder="120x8" style="padding: 4px 8px; width: 75px; text-align: center;" oninput="calculateGym1RM('ht')">
                 <div style="display: flex; align-items: center; gap: 6px;">
-                  <span id="ht-1rm-result" style="font-size: 0.85rem; font-weight: 600; color: var(--color-gold);">120 kg (1RM: 148 kg)</span>
+                  <span id="ht-1rm-result" style="font-size: 0.85rem; font-weight: 600; color: var(--color-gold);">-- kg (1RM: -- kg)</span>
                   <button class="btn btn-sm btn-icon-only" onclick="applyGym1RM('ht')" title="Usar como Peso Actual" style="width: 22px; height: 22px; border-radius: 4px; padding: 0;">
                     <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </button>
@@ -420,21 +438,21 @@
             <div class="gym-item">
               <div class="gym-meta">
                 <span class="gym-name">Sentadilla</span>
-                <span class="progress-value" id="gym-sq-val">100 / 124 kg (1RM)</span>
+                <span class="progress-value" id="gym-sq-val">0 / 100 kg (x8)</span>
               </div>
-              <div class="progress-track"><div class="progress-fill bg-violet" id="gym-sq-progress" style="width: 80%;"></div></div>
+              <div class="progress-track"><div class="progress-fill bg-violet" id="gym-sq-progress"></div></div>
               <div class="gym-input-row">
                 <label for="input-gym-sq" style="font-size: 0.8rem; color: var(--color-text-muted); flex-grow: 1;">Peso Actual (x8 reps):</label>
-                <input type="number" id="input-gym-sq" class="input-sm" value="80" min="0" max="250" style="padding: 4px 8px;">
+                <input type="number" id="input-gym-sq" class="input-sm" value="0" min="0" max="250" style="padding: 4px 8px;">
                 <button class="btn btn-sm btn-icon-only" onclick="updateGymWeight('sq')" title="Guardar Peso Actual">
                   <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                 </button>
               </div>
               <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; gap: 8px;">
                 <label for="input-sq-1rm" style="font-size: 0.75rem; color: var(--color-text-muted);">Estimar 1RM (ej: 80x8):</label>
-                <input type="text" id="input-sq-1rm" placeholder="80x8" value="80x8" style="padding: 4px 8px; width: 75px; text-align: center;" oninput="calculateGym1RM('sq')">
+                <input type="text" id="input-sq-1rm" placeholder="80x8" style="padding: 4px 8px; width: 75px; text-align: center;" oninput="calculateGym1RM('sq')">
                 <div style="display: flex; align-items: center; gap: 6px;">
-                  <span id="sq-1rm-result" style="font-size: 0.85rem; font-weight: 600; color: var(--color-gold);">80 kg (1RM: 100 kg)</span>
+                  <span id="sq-1rm-result" style="font-size: 0.85rem; font-weight: 600; color: var(--color-gold);">-- kg (1RM: -- kg)</span>
                   <button class="btn btn-sm btn-icon-only" onclick="applyGym1RM('sq')" title="Usar como Peso Actual" style="width: 22px; height: 22px; border-radius: 4px; padding: 0;">
                     <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </button>
@@ -470,10 +488,10 @@
             <div style="display: flex; gap: 8px; align-items: center;">
               <div style="display: flex; align-items: center; gap: 6px;">
                 <label for="input-screen-hours" style="font-size: 0.75rem; color: var(--color-text-muted);">Hrs:</label>
-                <input type="number" id="input-screen-hours" min="0" max="24" placeholder="0" style="padding: 6px 8px; font-size: 0.8rem; background: #121213; text-align: center; width: 55px;" oninput="onScreenTimeInputChange()">
+                <input type="number" id="input-screen-hours" min="0" max="23" placeholder="0" style="padding: 6px 8px; font-size: 0.8rem; background: #121213; text-align: center; width: 55px;" oninput="onScreenTimeInputChange()">
               </div>
               <div style="display: flex; align-items: center; gap: 6px;">
-                <label for="input-screen-mins" style="font-size: 0.75rem; color: var(--color-text-muted);">Mins:</label>
+                <label for="input-screen-mins" style="font-size: 0.75rem; color: var(--color-text-muted);">Min:</label>
                 <input type="number" id="input-screen-mins" min="0" max="59" placeholder="0" style="padding: 6px 8px; font-size: 0.8rem; background: #121213; text-align: center; width: 55px;" oninput="onScreenTimeInputChange()">
               </div>
             </div>
@@ -494,134 +512,162 @@
 
     <!-- TAB: GUITARRA & TIKTOK -->
     <section class="tab-content" id="tab-musica">
-      <div class="grid-dashboard-2col">
-        <!-- Columna 1 (Izquierda 50%): Guitarra + Covers -->
-        <div style="display: flex; flex-direction: column; gap: 20px;">
-          <!-- 1. Guitar Card -->
-          <div class="card card-pink">
-            <div class="card-header">
-              <div class="card-title-group">
-                <div class="card-icon"><img src="https://emojicdn.elk.sh/🎸" class="apple-emoji" alt="🎸"></div>
-                <div>
-                  <h3>Horas de Guitarra</h3>
-                  <p>Meta: 600 Horas Prácticas</p>
-                </div>
+      <div class="grid-dashboard">
+        <!-- Guitar Card -->
+        <div class="card card-pink">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-icon"><img src="https://emojicdn.elk.sh/🎸" class="apple-emoji" alt="🎸"></div>
+              <div>
+                <h3>Horas de Guitarra</h3>
+                <p>Meta: 600 Horas Prácticas</p>
               </div>
-              <span class="progress-value" id="guitar-badge">331 / 600h</span>
             </div>
+            <span class="progress-value" id="guitar-badge">0 / 600h</span>
+          </div>
 
-            <div class="progress-container">
-              <div class="progress-track" style="margin-bottom: 8px;"><div class="progress-fill bg-pink" id="guitar-progress-fill" style="width: 55.1%;"></div></div>
-              <p id="guitar-daily-rate" style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 12px; font-style: italic;"></p>
-            </div>
+          <div class="progress-container">
+            <div class="progress-track" style="margin-bottom: 8px;"><div class="progress-fill bg-pink" id="guitar-progress-fill"></div></div>
+            <p id="guitar-daily-rate" style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 12px; font-style: italic;"></p>
+          </div>
 
-            <div class="card-input-row" style="margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
-              <input type="date" id="input-guitar-date" style="flex: 1; min-width: 120px;">
-              <input type="number" id="input-guitar-manual" placeholder="Horas (ej: 1.5)" min="0" step="0.1" style="flex: 1; min-width: 100px;">
-              <button class="btn btn-pink btn-sm" onclick="addGuitarHoursManual()" style="padding: 8px 14px; font-family: var(--font-title); font-weight: 700;">Registrar ✨</button>
-            </div>
-
-            <h4 style="font-size: 0.85rem; margin-bottom: 8px; font-family: var(--font-title); letter-spacing: 0.05em; color: var(--color-text-muted);">Historial Reciente</h4>
-            <div class="diary-list" id="guitar-log-list" style="max-height: 180px;">
-              <!-- Rendered via JS -->
+          <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+            <button class="btn btn-pink btn-sm" onclick="addGuitarHours(1)">+1 Hora</button>
+            <button class="btn btn-pink btn-sm" onclick="addGuitarHours(0.5)">+30 Min</button>
+            <div style="display: flex; align-items: center; gap: 6px; margin-left: auto;">
+              <input type="number" id="input-guitar-manual" class="input-sm" placeholder="Valor" min="0" step="0.1" style="padding: 6px 10px;">
+              <button class="btn btn-pink btn-sm" onclick="addGuitarHoursManual()">Registrar</button>
             </div>
           </div>
 
-          <!-- 2. TikTok Covers Card -->
-          <div class="card card-cyan">
-            <div class="card-header">
-              <div class="card-title-group">
-                <div class="card-icon"><img src="https://emojicdn.elk.sh/📱" class="apple-emoji" alt="📱"></div>
-                <div>
-                  <h3>Covers de TikTok</h3>
-                  <p>Meta: 40 Covers Planificados</p>
-                </div>
-              </div>
-              <span class="progress-value" id="covers-badge">28 / 40</span>
-            </div>
-
-            <div class="progress-container" style="margin-bottom: 14px;">
-              <div class="progress-track"><div class="progress-fill bg-cyan" id="covers-progress-fill" style="width: 70%;"></div></div>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-              <h4 style="font-size: 0.85rem; font-family: var(--font-title); letter-spacing: 0.05em; color: var(--color-text-muted);">Listado de Covers</h4>
-              <button class="btn btn-cyan btn-sm" id="btn-add-cover" style="font-size: 0.78rem; padding: 4px 10px;">
-                + Nuevo Cover
-              </button>
-            </div>
-
-            <div class="diary-list" id="covers-list" style="max-height: 240px; padding-right: 4px;">
-              <!-- Rendered via JS -->
-            </div>
+          <h4 style="font-size: 0.95rem; margin-bottom: 12px; font-family: var(--font-title); letter-spacing: 0.05em;">Historial de Práctica Reciente</h4>
+          <div class="diary-list" id="guitar-log-list" style="max-height: 200px;">
+            <!-- Rendered via JS -->
           </div>
         </div>
 
-        <!-- Columna 2 (Derecha 50%): Seguidores + Bar + Sugerencias -->
-        <div style="display: flex; flex-direction: column; gap: 20px;">
-          <!-- 3. TikTok Followers Card -->
-          <div class="card card-violet">
-            <div class="card-header">
-              <div class="card-title-group">
-                <div class="card-icon"><img src="https://emojicdn.elk.sh/📱" class="apple-emoji" alt="📱"></div>
-                <div>
-                  <h3>Seguidores de TikTok</h3>
-                  <p>Meta: 1000 Seguidores</p>
-                </div>
+        <!-- TikTok Covers Card -->
+        <div class="card card-cyan">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-icon"><img src="https://emojicdn.elk.sh/📱" class="apple-emoji" alt="📱"></div>
+              <div>
+                <h3>Covers de TikTok</h3>
+                <p>Meta: 40 Covers Planificados</p>
               </div>
-              <span class="progress-value" id="followers-badge">214 / 1000 seg.</span>
             </div>
+            <span class="progress-value" id="covers-badge">0 / 40</span>
+          </div>
 
-            <div class="progress-container" style="margin-bottom: 14px;">
-              <div class="progress-track"><div class="progress-fill bg-violet" id="followers-progress-fill" style="width: 21.4%;"></div></div>
+          <div class="progress-container" style="margin-bottom: 20px;">
+            <div class="progress-track"><div class="progress-fill bg-cyan" id="covers-progress-fill"></div></div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h4 style="font-size: 0.95rem; font-family: var(--font-title); letter-spacing: 0.05em;">Listado de Covers</h4>
+            <button class="btn btn-cyan btn-sm" id="btn-add-cover" style="font-size: 0.85rem;">
+              <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" style="margin-right: 4px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Nuevo Cover
+            </button>
+          </div>
+
+          <div class="diary-list" id="covers-list" style="max-height: 260px;">
+            <!-- Rendered via JS -->
+          </div>
+
+          <!-- Weekly Suggestions Box -->
+          <div id="weekly-suggestions-box" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- TikTok Followers Card -->
+        <div class="card card-violet">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-icon" style="width: 28px; height: 28px;"><img src="https://emojicdn.elk.sh/📱" class="apple-emoji" style="width: 18px; height: 18px;" alt="📱"></div>
+              <div>
+                <h3>Seguidores de TikTok</h3>
+                <p>Meta: 1000 Seguidores</p>
+              </div>
             </div>
+            <span class="progress-value" id="followers-badge">0 / 1000 seg.</span>
+          </div>
 
-            <div class="card-input-row" style="margin-top: 10px;">
-              <label for="input-followers" style="font-size: 0.8rem; color: var(--color-text-muted); font-weight: 600;">Actuales:</label>
-              <input type="number" id="input-followers" min="0" max="100000" value="214" placeholder="ej: 1000" style="text-align: center;">
-              <button class="btn btn-violet btn-sm" onclick="saveFollowersCount()" style="padding: 8px 14px; font-family: var(--font-title); font-weight: 700;">Guardar 💾</button>
+          <div class="progress-container" style="margin-bottom: 18px;">
+            <div class="progress-track" style="margin-bottom: 8px;"><div class="progress-fill bg-violet" id="followers-progress-fill" style="width: 0%;"></div></div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">
+            <label for="input-followers" style="font-size: 0.85rem; color: var(--color-text-muted);">Seguidores Actuales:</label>
+            <input type="number" id="input-followers" min="0" max="100000" style="width: 80px; padding: 6px 10px; text-align: center; font-size: 0.9rem;" oninput="updateFollowersDirectly()">
+          </div>
+        </div>
+
+        <!-- Bar Performance Card -->
+        <div class="card card-violet">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-icon" style="width: 28px; height: 28px;"><img src="https://emojicdn.elk.sh/🍻" class="apple-emoji" style="width: 18px; height: 18px;" alt="🍻"></div>
+              <div>
+                <h3>Presentación en Bar</h3>
+                <p>Meta: Tocar en vivo</p>
+              </div>
             </div>
           </div>
 
-          <!-- 4. Bar Performance Card -->
-          <div class="card card-violet">
-            <div class="card-header">
-              <div class="card-title-group">
-                <div class="card-icon"><img src="https://emojicdn.elk.sh/🍻" class="apple-emoji" alt="🍻"></div>
-                <div>
-                  <h3>Presentación en Bar</h3>
-                  <p>Meta: Tocar en vivo</p>
-                </div>
+          <div class="checklist-group" style="margin-bottom: 0;">
+            <div class="checklist-item" id="bar-performance-item" style="padding: 10px 14px; margin: 0;">
+              <input type="checkbox" id="check-bar-performance" style="width: 16px; height: 16px; margin-right: 10px;">
+              <div class="checklist-item-text">
+                <span style="font-weight: 700; color: #fff; font-size: 0.9rem;">Presentación en Bar</span>
+                <p style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 2px;">Tocar una vez en un bar y sentirme cómodo.</p>
               </div>
             </div>
+          </div>
+          <div id="bar-details-container" style="display: none; flex-direction: column; gap: 6px; margin-top: 12px;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <label for="bar-name-text" style="font-size: 0.75rem; color: var(--color-text-muted);">¿En qué bar tocaste?:</label>
+              <input type="text" id="bar-name-text" placeholder="Nombre del bar..." style="width: 100%; font-size: 0.85rem; padding: 4px 8px;">
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <label for="bar-review-text" style="font-size: 0.75rem; color: var(--color-text-muted);">¿Cómo estuvo el show y cómo te sentiste?:</label>
+              <textarea id="bar-review-text" rows="2" placeholder="Escribe tu reseña aquí..." style="width: 100%; resize: none; font-size: 0.85rem; padding: 4px 8px; height: 50px;"></textarea>
+            </div>
+            <button class="btn btn-sm" onclick="saveBarDetails()" style="align-self: flex-end; font-size: 0.75rem; padding: 4px 12px; font-family: var(--font-title); font-weight: 600; margin-top: 4px;">Guardar Show</button>
+          </div>
+        </div>
 
-            <div class="checklist-group" style="margin-bottom: 0;">
-              <div class="checklist-item" id="bar-performance-item" style="padding: 10px 14px; margin: 0;">
-                <input type="checkbox" id="check-bar-performance" style="width: 16px; height: 16px; margin-right: 10px;">
-                <div class="checklist-item-text">
-                  <span style="font-weight: 700; color: #fff; font-size: 0.95rem;">Presentación en Bar</span>
-                  <p style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 2px;">Tocar una vez en un bar y sentirme cómodo.</p>
-                </div>
+        <!-- AI Cover Reviewer Card -->
+        <div class="card card-violet grid-double" style="margin-top: 12px;">
+          <div class="card-header">
+            <div class="card-title-group">
+              <div class="card-icon" style="background: linear-gradient(135deg, #8a2be2, #4a0e4e); width: 28px; height: 28px;"><img src="https://emojicdn.elk.sh/🤖" class="apple-emoji" style="width: 18px; height: 18px;" alt="🤖"></div>
+              <div>
+                <h3 style="font-size: 1rem; line-height: 1.2;">Reseñador Profesional de Covers</h3>
+                <p style="font-size: 0.75rem;">IA de análisis de viralidad y hooks optimizado para TikTok</p>
               </div>
-            </div>
-            <div id="bar-details-container" style="display: none; flex-direction: column; gap: 6px; margin-top: 12px;">
-              <div style="display: flex; flex-direction: column; gap: 2px;">
-                <label for="bar-name-text" style="font-size: 0.75rem; color: var(--color-text-muted);">¿En qué bar tocaste?:</label>
-                <input type="text" id="bar-name-text" placeholder="Nombre del bar..." style="width: 100%; font-size: 0.85rem; padding: 6px 10px;">
-              </div>
-              <div style="display: flex; flex-direction: column; gap: 2px;">
-                <label for="bar-review-text" style="font-size: 0.75rem; color: var(--color-text-muted);">¿Cómo estuvo el show y cómo te sentiste?:</label>
-                <textarea id="bar-review-text" rows="2" placeholder="Escribe tu reseña aquí..." style="width: 100%; resize: none; font-size: 0.85rem; padding: 6px 10px; height: 50px;"></textarea>
-              </div>
-              <button class="btn btn-sm" onclick="saveBarDetails()" style="align-self: flex-end; font-size: 0.75rem; padding: 6px 14px; font-family: var(--font-title); font-weight: 600; margin-top: 4px;">Guardar Show</button>
             </div>
           </div>
 
-          <!-- 5. Sugerencias Semanales de Covers -->
-          <div class="card card-violet">
-            <div id="weekly-suggestions-box">
-              <!-- Rendered via JS -->
+          <div style="background: rgba(255, 255, 255, 0.01); border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s;" id="ai-dropzone">
+            <svg viewBox="0 0 24 24" width="30" height="30" stroke="var(--color-gold)" stroke-width="1.5" fill="none" style="margin-bottom: 8px; opacity: 0.8;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <p style="font-size: 0.85rem; font-weight: 600; color: #fff; margin: 0;">Sube tu video editado para TikTok</p>
+            <p style="font-size: 0.7rem; color: var(--color-text-muted); margin-top: 3px;">Arrastra un archivo de video o haz clic para buscar</p>
+          </div>
+          <input type="file" id="ai-file-input" accept="video/*" style="display: none;" onchange="handleAiVideoUpload(event)">
+
+          <!-- Thinking Box -->
+          <div id="ai-thinking-box" style="display: none; background: rgba(0,0,0,0.4); border: 1px solid rgba(138, 43, 226, 0.2); border-radius: 12px; padding: 16px; margin-top: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+              <span class="spinner" style="width: 14px; height: 14px; border: 2px solid var(--color-gold); border-top-color: transparent; border-radius: 50%; display: inline-block; animation: spin 1s linear infinite;"></span>
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-gold); font-family: var(--font-title); letter-spacing: 0.05em;">PENSANDO PROFUNDAMENTE...</span>
             </div>
+            <div id="ai-thinking-steps" style="font-family: monospace; font-size: 0.72rem; color: #a5a5a8; line-height: 1.5; white-space: pre-line;"></div>
+          </div>
+
+          <!-- Result Box -->
+          <div id="ai-result-box" style="display: none; margin-top: 16px; animation: fadeIn 0.4s ease;">
+            <!-- Rendered via JS -->
           </div>
         </div>
       </div>
@@ -640,11 +686,11 @@
                 <p>Meta: Leer 2000 Páginas (5 diarias)</p>
               </div>
             </div>
-            <span class="progress-value" id="reading-badge">1225 / 2000 págs</span>
+            <span class="progress-value" id="reading-badge">0 / 2000 págs</span>
           </div>
 
           <div class="progress-container">
-            <div class="progress-track" style="margin-bottom: 8px;"><div class="progress-fill bg-violet" id="reading-progress-fill" style="width: 61.25%;"></div></div>
+            <div class="progress-track" style="margin-bottom: 8px;"><div class="progress-fill bg-violet" id="reading-progress-fill"></div></div>
             <p id="reading-daily-rate" style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 16px; font-style: italic;"></p>
           </div>
 
@@ -670,7 +716,7 @@
                 <p>Meta: Promocionar todas las materias</p>
               </div>
             </div>
-            <span class="progress-value" id="college-badge">2 / 6 Promocionadas</span>
+            <span class="progress-value" id="college-badge">0 / 0</span>
           </div>
 
           <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; font-style: italic;">
@@ -689,83 +735,50 @@
       </div>
     </section>
 
-    <!-- TAB: VIAJE DE FIN DE AÑO CON SARA -->
+    <!-- TAB: BIENESTAR & RELACIONES -->
     <section class="tab-content" id="tab-bienestar">
-      <div class="grid-dashboard" style="max-width: 960px; margin: 0 auto;">
-        <div class="card card-pink grid-double">
-          <div class="card-header">
+      <div class="grid-dashboard" style="max-width: 920px; margin: 0 auto;">
+        <!-- Sara Card -->
+        <div class="card card-pink grid-double" style="padding: 24px;">
+          <div class="card-header" style="margin-bottom: 20px;">
             <div class="card-title-group">
-              <div class="card-icon"><img src="https://emojicdn.elk.sh/✈️" class="apple-emoji" alt="✈️"></div>
+              <div class="card-icon"><img src="https://emojicdn.elk.sh/❤️" class="apple-emoji" alt="❤️"></div>
               <div>
-                <h3>Viaje de Fin de Año con Sara ❤️</h3>
-                <p>Meta 2026: Realizar el viaje juntos y guardar el video de recuerdo (~10 mins)</p>
+                <h3>Año Hermoso con Sara</h3>
+                <p>Nuestros Momentos Especiales 2026</p>
               </div>
             </div>
-            <span class="progress-value" id="sara-trip-badge">Pendiente ⏳</span>
+            <span class="progress-value" id="relationship-badge">0 Momentos</span>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px;">
-            <!-- Left Side: Trip Status & Video Registration Form -->
-            <div class="gym-item" style="padding: 20px; display: flex; flex-direction: column; gap: 14px;">
-              <h4 style="font-size: 0.95rem; font-family: var(--font-title); letter-spacing: 0.05em; color: var(--color-gold);">
-                📍 Estado del Viaje & Recuerdo
-              </h4>
-
-              <div class="checklist-group" style="margin-bottom: 0;">
-                <div class="checklist-item" id="trip-checklist-item" style="padding: 12px 14px; margin: 0; width: 100%;">
-                  <input type="checkbox" id="check-sara-trip" style="width: 18px; height: 18px; margin-right: 10px;" onchange="onSaraTripCheckChange()">
-                  <div class="checklist-item-text">
-                    <span style="font-weight: 700; color: #fff; font-size: 0.95rem;">Viaje de Fin de Año Realizado ✈️</span>
-                    <p style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 2px;">Completar el objetivo del viaje juntos.</p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+            <!-- Actions & Checklist (Left) -->
+            <div class="gym-item" style="display: flex; flex-direction: column; justify-content: space-between; gap: 16px; padding: 20px;">
+              <div>
+                <h4 style="font-size: 0.95rem; margin-bottom: 12px; font-family: var(--font-title); letter-spacing: 0.05em; color: var(--color-gold);">Planificación de Viajes</h4>
+                <div class="checklist-group">
+                  <div class="checklist-item" id="trip-checklist-item" style="padding: 10px 14px; margin: 0; width: 100%;">
+                    <input type="checkbox" id="check-sara-trip">
+                    <span style="font-size: 0.85rem; font-weight: 600; color: #fff;">Viaje de Fin de Año Realizado <img src="https://emojicdn.elk.sh/✈️" class="apple-emoji-sm" alt="✈️"></span>
                   </div>
                 </div>
               </div>
-
-              <!-- Form for Video Link & Trip Details -->
-              <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 4px;">
-                <div style="display: flex; flex-direction: column; gap: 4px;">
-                  <label for="input-sara-destination" style="font-size: 0.78rem; color: var(--color-text-muted); font-weight: 600;">Destino del Viaje:</label>
-                  <input type="text" id="input-sara-destination" placeholder="ej: Bariloche, Brasil, Cancún..." style="width: 100%;">
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 4px;">
-                  <label for="input-sara-video-link" style="font-size: 0.78rem; color: var(--color-text-muted); font-weight: 600;">Link del Video (YouTube, Drive, Vimeo):</label>
-                  <input type="text" id="input-sara-video-link" placeholder="ej: https://youtu.be/... o Google Drive link" style="width: 100%;">
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 4px;">
-                  <label for="input-sara-video-file" style="font-size: 0.78rem; color: var(--color-text-muted); font-weight: 600;">O seleccionar video del Celular / PC:</label>
-                  <input type="file" id="input-sara-video-file" accept="video/*" style="font-size: 0.8rem; padding: 6px; background: #121213; border: 1px dashed var(--border-color); border-radius: 8px; color: var(--color-text-muted); cursor: pointer;" onchange="onSaraVideoFileSelected(event)">
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 4px;">
-                  <label for="input-sara-notes" style="font-size: 0.78rem; color: var(--color-text-muted); font-weight: 600;">Notas o Mensaje de Recuerdo ❤️:</label>
-                  <textarea id="input-sara-notes" rows="2" placeholder="Escribe unas palabras de lo que fue el viaje..." style="width: 100%; resize: none; height: 55px; font-family: var(--font-main); font-size: 0.85rem; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); background: #121213; color: #fff;"></textarea>
-                </div>
-
-                <button class="btn btn-pink" onclick="saveSaraTripDetails()" style="width: 100%; justify-content: center; padding: 10px; font-family: var(--font-title); font-weight: 700; font-size: 0.9rem; margin-top: 4px;">
-                  Guardar Recuerdo del Viaje 💾
+              
+              <div style="margin-top: auto;">
+                <p style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 12px; line-height: 1.3;">
+                  Registrá cada momento especial, salida, aniversario o recuerdo lindo del 2026.
+                </p>
+                <button class="btn btn-pink btn-sm" id="btn-add-moment" style="font-size: 0.9rem; padding: 10px 16px; width: 100%; justify-content: center; font-family: var(--font-title); font-weight: 600;">
+                  <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 6px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Registrar Momento
                 </button>
               </div>
             </div>
 
-            <!-- Right Side: Video Player Embed & Memories Display -->
-            <div class="gym-item" style="padding: 20px; display: flex; flex-direction: column; gap: 12px;">
-              <h4 style="font-size: 0.95rem; font-family: var(--font-title); letter-spacing: 0.05em; color: var(--color-gold);">
-                🎬 Video & Recuerdo del Viaje
-              </h4>
-              
-              <!-- Embedded Player Box -->
-              <div id="sara-video-player-box" style="width: 100%; border-radius: 12px; overflow: hidden; background: #000; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; min-height: 200px;">
-                <p style="color: var(--color-text-muted); font-size: 0.85rem; text-align: center; padding: 30px 16px;">
-                  Aún no has guardado un video del viaje. ¡Agrega el link de YouTube o Drive para guardarlo aquí de recuerdo! ✈️🎥
-                </p>
-              </div>
-
-              <!-- Notes Display Box -->
-              <div id="sara-notes-display-box" style="display: none; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px;">
-                <h5 id="sara-display-dest" style="font-size: 0.9rem; color: var(--color-gold); margin-bottom: 4px;"></h5>
-                <p id="sara-display-notes" style="font-size: 0.82rem; color: var(--color-text-muted); line-height: 1.4; font-style: italic;"></p>
+            <!-- Moments Diary List (Right) -->
+            <div class="gym-item" style="padding: 20px;">
+              <h4 style="font-size: 0.95rem; margin-bottom: 12px; font-family: var(--font-title); letter-spacing: 0.05em; color: var(--color-gold);">Bitácora de Recuerdos</h4>
+              <div class="diary-list" id="moments-list" style="max-height: 250px;">
+                <!-- Rendered via JS -->
               </div>
             </div>
           </div>
@@ -783,14 +796,14 @@
               <div class="card-icon"><img src="https://emojicdn.elk.sh/💵" class="apple-emoji" alt="💵"></div>
               <div>
                 <h3>Fondo de Ahorro 2026</h3>
-                <p>Meta: Juntar $2.000.000 para el 31 de Diciembre</p>
+                <p>Meta: Juntar $1.300.000 para el 31 de Diciembre</p>
               </div>
             </div>
-            <span class="progress-value" id="finance-badge">$800.000 / $2.000.000</span>
+            <span class="progress-value" id="finance-badge">$0 / $1.300.000</span>
           </div>
 
           <div class="progress-container">
-            <div class="progress-track" style="height: 12px; margin-bottom: 24px;"><div class="progress-fill bg-success" id="finance-progress-fill" style="width: 40%;"></div></div>
+            <div class="progress-track" style="height: 12px; margin-bottom: 24px;"><div class="progress-fill bg-success" id="finance-progress-fill"></div></div>
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
@@ -1111,76 +1124,6 @@
     </div>
   </div>
 
-  <!-- MODAL: SEGURIDAD (PIN) -->
-  <div class="modal-overlay" id="modal-security">
-    <div class="modal-card" style="max-width: 450px;">
-      <button class="modal-close" onclick="closeModal('modal-security')">&times;</button>
-      
-      <div style="display: flex; flex-direction: column; gap: 20px;">
-        <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 14px;">
-          <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(197, 160, 89, 0.15); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(197, 160, 89, 0.3);">
-            <img src="https://emojicdn.elk.sh/🔒" class="apple-emoji" alt="🔒">
-          </div>
-          <div>
-            <h3 style="font-family: var(--font-title); font-size: 1.3rem; color: #fff; margin-bottom: 2px;">Seguridad</h3>
-            <p style="font-size: 0.8rem; color: var(--color-text-muted);">Protege tu panel de control con un PIN.</p>
-          </div>
-        </div>
-
-        <div>
-          <p style="font-size: 0.78rem; color: var(--color-text-muted); margin-bottom: 12px;">
-            Protege el acceso a tu dashboard con un PIN de 4 dígitos al ingresar desde cualquier dispositivo.
-          </p>
-          
-          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 12px;">
-            <div class="form-group" style="margin: 0; flex: 1;">
-              <label style="font-size: 0.75rem; color: var(--color-text-muted);">PIN Actual / Nuevo (4 dígitos):</label>
-              <input type="password" id="input-security-pin" maxlength="4" placeholder="Ej: 1234" style="background: rgba(255,255,255,0.03); border: 1px solid #282828; color: #fff; font-size: 1rem; text-align: center; letter-spacing: 4px; padding: 6px 12px; border-radius: 8px; width: 100%;">
-            </div>
-            
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-              <label style="font-size: 0.75rem; color: var(--color-text-muted);">Estado:</label>
-              <button id="btn-toggle-pin" class="btn btn-sm" onclick="togglePinSecurity()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);">
-                Desactivado 🔓
-              </button>
-            </div>
-          </div>
-
-          <div style="display: flex; gap: 10px;">
-            <button class="btn btn-sm" onclick="savePinSettings()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #fff; flex: 1; justify-content: center;">
-              Guardar Cambios de PIN
-            </button>
-            <button class="btn btn-sm" onclick="lockAppNow()" style="background: rgba(197, 160, 89, 0.15); border: 1px solid rgba(197, 160, 89, 0.3); color: var(--color-gold);">
-              Bloquear Ahora 🔒
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- FULLSCREEN OVERLAY: PIN LOCK SCREEN -->
-  <div id="pin-lock-overlay" style="display: none;">
-    <div style="max-width: 360px; width: 100%; display: flex; flex-direction: column; align-items: center;">
-      <img src="brian_tracy_nobg.png" alt="Brian Tracy" style="width: 72px; height: 72px; object-fit: contain; margin-bottom: 16px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6));">
-      <h2 style="font-family: var(--font-title); font-size: 1.5rem; color: #fff; margin-bottom: 6px;">Objetivos 2026</h2>
-      <p style="color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 24px;">Ingresa tu PIN de 4 dígitos para desbloquear</p>
-      
-      <div class="pin-input-container">
-        <input type="password" maxlength="1" class="pin-digit-box" id="pin-digit-1" onkeyup="handlePinDigitInput(event, 1)">
-        <input type="password" maxlength="1" class="pin-digit-box" id="pin-digit-2" onkeyup="handlePinDigitInput(event, 2)">
-        <input type="password" maxlength="1" class="pin-digit-box" id="pin-digit-3" onkeyup="handlePinDigitInput(event, 3)">
-        <input type="password" maxlength="1" class="pin-digit-box" id="pin-digit-4" onkeyup="handlePinDigitInput(event, 4)">
-      </div>
-
-      <p id="pin-error-msg" style="color: #ef4444; font-size: 0.8rem; height: 20px; opacity: 0; transition: opacity 0.2s ease;">PIN incorrecto. Intenta de nuevo.</p>
-
-      <button class="btn btn-violet btn-sm" onclick="submitPinUnlock()" style="width: 100%; justify-content: center; margin-top: 12px; padding: 10px;">
-        Desbloquear 🔓
-      </button>
-    </div>
-  </div>
-
-  <script src="app.js?v=31.1"></script>
+  <script src="app.js?v=1.6"></script>
 </body>
 </html>
