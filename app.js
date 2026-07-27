@@ -2538,16 +2538,14 @@ function renderWeeklySuggestions() {
 
     // Mezclar de forma determinista usando el largo de la lista como semilla (estable entre guardados)
     const seed = covers.length;
-    priorityList.sort((a, b) => {
-      const hashA = (a.title || "").split("").reduce((acc, char) => acc + char.charCodeAt(0), seed);
-      const hashB = (b.title || "").split("").reduce((acc, char) => acc + char.charCodeAt(0), seed);
-      return (hashA % 100) - (hashB % 100);
-    });
-    otherList.sort((a, b) => {
-      const hashA = (a.title || "").split("").reduce((acc, char) => acc + char.charCodeAt(0), seed);
-      const hashB = (b.title || "").split("").reduce((acc, char) => acc + char.charCodeAt(0), seed);
-      return (hashA % 100) - (hashB % 100);
-    });
+    const pseudoRandom = (str) => {
+      let h = seed;
+      for (let i = 0; i < str.length; i++) h = Math.imul(31, h) + str.charCodeAt(i) | 0;
+      return Math.abs(Math.sin(h)) * 1000;
+    };
+    
+    priorityList.sort((a, b) => pseudoRandom(a.title || "") - pseudoRandom(b.title || ""));
+    otherList.sort((a, b) => pseudoRandom(a.title || "") - pseudoRandom(b.title || ""));
 
     // Seleccionar 3 sugerencias: al menos 1 o 2 del estilo preferido si hay disponibles, y el resto de otras categorías
     const finalSuggestions = [];
