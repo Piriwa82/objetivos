@@ -5,55 +5,311 @@ const ICON_SAVE = `<svg viewBox="0 0 24 24" width="13" height="13" stroke="curre
 const ICON_CHECK = `<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
 const ICON_PLUS = `<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
 
+const DEFAULT_BOOKS = [
+  {
+    "coverUrl": "https://images.cdn3.buscalibre.com/fit-in/660x660/63/e1/63e1efee60fb3a0d4097acdd5021e408.jpg",
+    "readPages": 247,
+    "title": "Cuál es tu sueño",
+    "totalPages": 247
+  },
+  {
+    "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Publication211/v4/24/4a/5d/244a5d8c-ee7e-1b3b-10c4-c7c926e642f3/9789500752978.jpg/400x600bb.jpg",
+    "readPages": 309,
+    "title": "Cerati biografía",
+    "totalPages": 309
+  },
+  {
+    "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/01/9e/8b/019e8ba2-2819-4e3e-ee84-352a92842e30/9786073171175.jpg/400x600bb.jpg",
+    "readPages": 230,
+    "title": "Releo Si lo crees lo creas",
+    "totalPages": 230
+  },
+  {
+    "coverUrl": "como_ganar_amigos_celeste.jpg",
+    "readPages": 303,
+    "title": "Cómo hacer amigos e influir en las personas",
+    "totalPages": 303
+  },
+  {
+    "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/3e/67/dc/3e67dc9b-fb5b-8df3-fa92-9e810a118bfc/9789500773263.jpg/400x600bb.jpg",
+    "readPages": 136,
+    "title": "Oasis: vivir para siempre",
+    "totalPages": 320
+  },
+  {
+    "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Publication116/v4/50/2e/30/502e3077-1476-3e4a-f32b-6844a3539947/9788403052970.jpg/400x600bb.jpg",
+    "readPages": 0,
+    "title": "El camino del artista",
+    "totalPages": 250
+  }
+];
+
 const STATIC_COVERS = {
-  "Cuál es tu sueño": "simon_squibb_yellow_cover.jpg",
-  "Cerati biografía": "https://is1-ssl.mzstatic.com/image/thumb/Publication211/v4/24/4a/5d/244a5d8c-ee7e-1b3b-10c4-c7c926e642f3/9789500752978.jpg/400x600bb.jpg",
-  "Releo Si lo crees lo creas": "https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/01/9e/8b/019e8ba2-2819-4e3e-ee84-352a92842e30/9786073171175.jpg/400x600bb.jpg",
-  "Cómo hacer amigos e influir en las personas": "como_ganar_amigos_celeste.jpg",
-  "Oasis: vivir para siempre": "https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/3e/67/dc/3e67dc9b-fb5b-8df3-fa92-9e810a118bfc/9789500773263.jpg/400x600bb.jpg",
-  "El camino del artista": "https://is1-ssl.mzstatic.com/image/thumb/Publication116/v4/50/2e/30/502e3077-1476-3e4a-f32b-6844a3539947/9788403052970.jpg/400x600bb.jpg",
-  "Generación dopamina": "https://is1-ssl.mzstatic.com/image/thumb/Podcasts211/v4/b3/6a/6c/b36a6c46-7276-d846-a10a-6bf4f6b438ae/mza_2802746189753098939.jpg/300x300bb.jpg"
+  "Cuál es tu sueño": "https://books.google.com/books/content?id=5lq7DwAAQBAJ&printsec=frontcover&img=1&zoom=1",
+  "Cerati biografía": "https://books.google.com/books/content?id=c_pCCAAAQBAJ&printsec=frontcover&img=1&zoom=1",
+  "Releo Si lo crees lo creas": "https://books.google.com/books/content?id=K641DwAAQBAJ&printsec=frontcover&img=1&zoom=1",
+  "Cómo hacer amigos e influir en las personas": "https://books.google.com/books/content?id=1-yWDwAAQBAJ&printsec=frontcover&img=1&zoom=1",
+  "Oasis: vivir para siempre": "https://books.google.com/books/content?id=V7PBDwAAQBAJ&printsec=frontcover&img=1&zoom=1",
+  "El camino del artista": "https://books.google.com/books/content?id=N9D5DwAAQBAJ&printsec=frontcover&img=1&zoom=1",
+  "Generación dopamina": "https://books.google.com/books/content?id=E1VVEAAAQBAJ&printsec=frontcover&img=1&zoom=1"
 };
 
-const DEFAULT_BOOKS = [
-  { title: "Cuál es tu sueño", totalPages: 247, readPages: 247, coverUrl: STATIC_COVERS["Cuál es tu sueño"] },
-  { title: "Cerati biografía", totalPages: 309, readPages: 309, coverUrl: STATIC_COVERS["Cerati biografía"] },
-  { title: "Releo Si lo crees lo creas", totalPages: 230, readPages: 230, coverUrl: STATIC_COVERS["Releo Si lo crees lo creas"] },
-  { title: "Cómo hacer amigos e influir en las personas", totalPages: 303, readPages: 303, coverUrl: STATIC_COVERS["Cómo hacer amigos e influir en las personas"] },
-  { title: "Oasis: vivir para siempre", totalPages: 320, readPages: 136, coverUrl: STATIC_COVERS["Oasis: vivir para siempre"] },
-  { title: "El camino del artista", totalPages: 250, readPages: 0, coverUrl: STATIC_COVERS["El camino del artista"] },
+const DEFAULT_COVERS = [
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/9d/6e/47/9d6e4712-bc1f-fbe3-4aff-935e6806ca00/00602517690813.rgb.jpg/300x300bb.jpg",
+    "date": "2026-01-11",
+    "id": "_cov1",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Como eran las cosas - Babasónicos"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/f8/e9/46/f8e94670-f365-9680-afba-be48258958bc/196626626011.jpg/300x300bb.jpg",
+    "date": "2026-01-20",
+    "id": "_cov2",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Arrancármelo - Wos"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f3/3d/d5/f33dd5c7-bbb8-c2b3-e5e8-0d2a4dd7f1a7/828768164426.jpg/300x300bb.jpg",
+    "date": "2026-01-25",
+    "id": "_cov3",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Me Quedo Aquí - Gustavo Cerati"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/3d/47/5d/3d475de0-c669-bedc-2c21-db24917ed303/197190511628.jpg/300x300bb.jpg",
+    "date": "2026-02-01",
+    "id": "_cov4",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Nunca lo olvides - Airbag"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/cd/78/a2/cd78a2a4-7e3d-ccec-b204-dda064f065a3/5051083000406.jpg/300x300bb.jpg",
+    "date": "2026-02-08",
+    "id": "_cov5",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Stop Crying Your Heart Out - Oasis"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/fa/5b/89/fa5b898d-bad6-e053-4195-260e5c74f2bb/00602567725466.rgb.jpg/300x300bb.jpg",
+    "date": "2026-02-14",
+    "id": "_cov6",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Blackbird - The Beatles"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/9f/e7/ea/9fe7eac2-87dc-c1df-3333-dc30b82bdd74/5051961006100.jpg/300x300bb.jpg",
+    "date": "2026-02-21",
+    "id": "_cov7",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Live Forever - Oasis"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/aa/e0/ab/aae0ab6a-d906-a189-81bf-70b56aa43f7a/886445635843.jpg/300x300bb.jpg",
+    "date": "2026-02-27",
+    "id": "_cov8",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Wish You Were Here - Pink Floyd"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/de/4b/65/de4b659f-cf95-04c5-6d01-a39a40ff094c/743211739122.jpg/300x300bb.jpg",
+    "date": "2026-03-06",
+    "id": "_cov9",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Lisa - Gustavo Cerati"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/f0/1e/df/f01edf85-25f1-c245-1c18-bb0f1165740d/mzi.qaxmucxr.jpg/300x300bb.jpg",
+    "date": "2026-03-13",
+    "id": "_cov10",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "En la ciudad de la furia - Soda Stereo"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/2c/80/06/2c8006cc-cebb-7ec6-bbe5-11dd55a3c37d/191773511289.jpg/300x300bb.jpg",
+    "date": "2026-03-22",
+    "id": "_cov11",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Semen Up - Patricio Rey"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/04/92/e0/0492e08b-cbcc-9969-9ad6-8f5a0888068c/5051961007107.jpg/300x300bb.jpg",
+    "date": "2026-03-27",
+    "id": "_cov12",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Wonderwall - Oasis"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/45/65/ba/4565bafb-580d-92f5-0a44-6ac7a944500e/00602527728643.rgb.jpg/300x300bb.jpg",
+    "date": "2026-04-02",
+    "id": "_cov13",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "En Privado - Babasónicos"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/07/87/66/078766a8-41b3-3e62-53ef-c30cf8f03e50/093624932130.jpg/300x300bb.jpg",
+    "date": "2026-04-10",
+    "id": "_cov14",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Californication - Red Hot Chili Peppers"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/46/24/33/462433f9-ee74-2d60-4538-859826a7bed7/00720642472729.rgb.jpg/300x300bb.jpg",
+    "date": "2026-04-18",
+    "id": "_cov15",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "The Man Who Sold the World - Nirvana"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f3/3d/d5/f33dd5c7-bbb8-c2b3-e5e8-0d2a4dd7f1a7/828768164426.jpg/300x300bb.jpg",
+    "date": "2026-04-24",
+    "id": "_cov16",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Adiós - Gustavo Cerati"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/4c/86/1d/4c861dab-5428-f3b7-8068-82bb69db5e89/093624932130.jpg/300x300bb.jpg",
+    "date": "2026-05-01",
+    "id": "_cov17",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Scar Tissue - Red Hot Chili Peppers"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/1e/5c/ad/1e5cadeb-6f0c-86a0-9e85-6487a848d866/093624917168.jpg/300x300bb.jpg",
+    "date": "2026-05-08",
+    "id": "_cov18",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Congratulations - Mac Miller"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/e4/9a/c9/e49ac9c1-5a9b-cb67-a5a0-5594feae15ad/018736893674_cover.jpg/300x300bb.jpg",
+    "date": "2026-05-15",
+    "id": "_cov19",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Chau - No Te Va Gustar"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/05/e3/65/05e365e6-c318-e16d-0a27-1d896ba231f2/mzi.hvktyhmz.jpg/300x300bb.jpg",
+    "date": "2026-05-22",
+    "id": "_cov20",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Persiana Americana - Soda Stereo"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f3/3d/d5/f33dd5c7-bbb8-c2b3-e5e8-0d2a4dd7f1a7/828768164426.jpg/300x300bb.jpg",
+    "date": "2026-05-28",
+    "id": "_cov21",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Crimen - Gustavo Cerati"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music6/v4/55/e3/69/55e3697b-4d34-72e0-2111-57facda544a4/00077779824359.jpg/300x300bb.jpg",
+    "date": "2026-06-06",
+    "id": "_cov22",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Seguir viviendo sin tu amor - Luis Alberto Spinetta"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/db/a2/7a/dba27a46-3685-508d-d32e-a0e73cc82251/00602567713296.rgb.jpg/300x300bb.jpg",
+    "date": "2026-06-12",
+    "id": "_cov23",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "And I Love Her - The Beatles"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/3a/7a/04/3a7a04c2-8bec-3e0b-89e1-3da93f4afa44/mzi.lfxlmais.jpg/300x300bb.jpg",
+    "date": "2026-06-19",
+    "id": "_cov24",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Vivo - Gustavo Cerati"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/cd/52/6d/cd526dc6-daaa-e990-7019-47c828efdd1b/mzi.xpwcramk.jpg/300x300bb.jpg",
+    "date": "2026-06-26",
+    "id": "_cov25",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Flaca - Andrés Calamaro"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/c8/50/23/c85023c0-d7e7-7462-2574-a7efe528f7da/mzi.uuvufkwr.jpg/300x300bb.jpg",
+    "date": "2026-07-04",
+    "id": "_cov26",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Rezo por vos - Charly García & Spinetta"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/a0/db/6b/a0db6b97-4463-ba87-7046-77c66da5eef5/mzi.mfnjoagm.jpg/300x300bb.jpg",
+    "date": "2026-07-11",
+    "id": "_cov27",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Trátame Suavemente - Soda Stereo"
+  },
+  {
+    "artUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/9d/97/a2/9d97a228-eaec-2997-4191-a6c3377ecb18/mzi.mrfogssv.jpg/300x300bb.jpg",
+    "date": "2026-07-20",
+    "id": "_cov28",
+    "improvement": "",
+    "link": "",
+    "published": true,
+    "title": "Paloma - Andrés Calamaro"
+  }
 ];
 
-const DEFAULT_COVERS = [
-  { id: "_cov1", title: "Como eran las cosas - Babasónicos", date: "2026-01-11", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/9d/6e/47/9d6e4712-bc1f-fbe3-4aff-935e6806ca00/00602517690813.rgb.jpg/300x300bb.jpg" },
-  { id: "_cov2", title: "Arrancármelo - Wos", date: "2026-01-20", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/f8/e9/46/f8e94670-f365-9680-afba-be48258958bc/196626626011.jpg/300x300bb.jpg" },
-  { id: "_cov3", title: "Me Quedo Aquí - Gustavo Cerati", date: "2026-01-25", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f3/3d/d5/f33dd5c7-bbb8-c2b3-e5e8-0d2a4dd7f1a7/828768164426.jpg/300x300bb.jpg" },
-  { id: "_cov4", title: "Nunca lo olvides - Airbag", date: "2026-02-01", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/3d/47/5d/3d475de0-c669-bedc-2c21-db24917ed303/197190511628.jpg/300x300bb.jpg" },
-  { id: "_cov5", title: "Stop Crying Your Heart Out - Oasis", date: "2026-02-08", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/cd/78/a2/cd78a2a4-7e3d-ccec-b204-dda064f065a3/5051083000406.jpg/300x300bb.jpg" },
-  { id: "_cov6", title: "Blackbird - The Beatles", date: "2026-02-14", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/fa/5b/89/fa5b898d-bad6-e053-4195-260e5c74f2bb/00602567725466.rgb.jpg/300x300bb.jpg" },
-  { id: "_cov7", title: "Live Forever - Oasis", date: "2026-02-21", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/9f/e7/ea/9fe7eac2-87dc-c1df-3333-dc30b82bdd74/5051961006100.jpg/300x300bb.jpg" },
-  { id: "_cov8", title: "Wish You Were Here - Pink Floyd", date: "2026-02-27", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/aa/e0/ab/aae0ab6a-d906-a189-81bf-70b56aa43f7a/886445635843.jpg/300x300bb.jpg" },
-  { id: "_cov9", title: "Lisa - Gustavo Cerati", date: "2026-03-06", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/de/4b/65/de4b659f-cf95-04c5-6d01-a39a40ff094c/743211739122.jpg/300x300bb.jpg" },
-  { id: "_cov10", title: "En la ciudad de la furia - Soda Stereo", date: "2026-03-13", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/f0/1e/df/f01edf85-25f1-c245-1c18-bb0f1165740d/mzi.qaxmucxr.jpg/300x300bb.jpg" },
-  { id: "_cov11", title: "Semen Up - Patricio Rey", date: "2026-03-22", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/2c/80/06/2c8006cc-cebb-7ec6-bbe5-11dd55a3c37d/191773511289.jpg/300x300bb.jpg" },
-  { id: "_cov12", title: "Wonderwall - Oasis", date: "2026-03-27", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/04/92/e0/0492e08b-cbcc-9969-9ad6-8f5a0888068c/5051961007107.jpg/300x300bb.jpg" },
-  { id: "_cov13", title: "En Privado - Babasónicos", date: "2026-04-02", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/45/65/ba/4565bafb-580d-92f5-0a44-6ac7a944500e/00602527728643.rgb.jpg/300x300bb.jpg" },
-  { id: "_cov14", title: "Californication - Red Hot Chili Peppers", date: "2026-04-10", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/07/87/66/078766a8-41b3-3e62-53ef-c30cf8f03e50/093624932130.jpg/300x300bb.jpg" },
-  { id: "_cov15", title: "The Man Who Sold the World - Nirvana", date: "2026-04-18", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/46/24/33/462433f9-ee74-2d60-4538-859826a7bed7/00720642472729.rgb.jpg/300x300bb.jpg" },
-  { id: "_cov16", title: "Adiós - Gustavo Cerati", date: "2026-04-24", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f3/3d/d5/f33dd5c7-bbb8-c2b3-e5e8-0d2a4dd7f1a7/828768164426.jpg/300x300bb.jpg" },
-  { id: "_cov17", title: "Scar Tissue - Red Hot Chili Peppers", date: "2026-05-01", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/4c/86/1d/4c861dab-5428-f3b7-8068-82bb69db5e89/093624932130.jpg/300x300bb.jpg" },
-  { id: "_cov18", title: "Congratulations - Mac Miller", date: "2026-05-08", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/1e/5c/ad/1e5cadeb-6f0c-86a0-9e85-6487a848d866/093624917168.jpg/300x300bb.jpg" },
-  { id: "_cov19", title: "Chau - No Te Va Gustar", date: "2026-05-15", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/e4/9a/c9/e49ac9c1-5a9b-cb67-a5a0-5594feae15ad/018736893674_cover.jpg/300x300bb.jpg" },
-  { id: "_cov20", title: "Persiana Americana - Soda Stereo", date: "2026-05-22", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/05/e3/65/05e365e6-c318-e16d-0a27-1d896ba231f2/mzi.hvktyhmz.jpg/300x300bb.jpg" },
-  { id: "_cov21", title: "Crimen - Gustavo Cerati", date: "2026-05-28", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f3/3d/d5/f33dd5c7-bbb8-c2b3-e5e8-0d2a4dd7f1a7/828768164426.jpg/300x300bb.jpg" },
-  { id: "_cov22", title: "Seguir viviendo sin tu amor - Luis Alberto Spinetta", date: "2026-06-06", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music6/v4/55/e3/69/55e3697b-4d34-72e0-2111-57facda544a4/00077779824359.jpg/300x300bb.jpg" },
-  { id: "_cov23", title: "And I Love Her - The Beatles", date: "2026-06-12", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/db/a2/7a/dba27a46-3685-508d-d32e-a0e73cc82251/00602567713296.rgb.jpg/300x300bb.jpg" },
-  { id: "_cov24", title: "Vivo - Gustavo Cerati", date: "2026-06-19", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/3a/7a/04/3a7a04c2-8bec-3e0b-89e1-3da93f4afa44/mzi.lfxlmais.jpg/300x300bb.jpg" },
-  { id: "_cov25", title: "Flaca - Andrés Calamaro", date: "2026-06-26", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/cd/52/6d/cd526dc6-daaa-e990-7019-47c828efdd1b/mzi.xpwcramk.jpg/300x300bb.jpg" },
-  { id: "_cov26", title: "Rezo por vos - Charly García & Spinetta", date: "2026-07-04", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/c8/50/23/c85023c0-d7e7-7462-2574-a7efe528f7da/mzi.uuvufkwr.jpg/300x300bb.jpg" },
-  { id: "_cov27", title: "Trátame Suavemente - Soda Stereo", date: "2026-07-11", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/a0/db/6b/a0db6b97-4463-ba87-7046-77c66da5eef5/mzi.mfnjoagm.jpg/300x300bb.jpg" },
-  { id: "_cov28", title: "Paloma - Andrés Calamaro", date: "2026-07-20", link: "", published: true, improvement: "", artUrl: "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/9d/97/a2/9d97a228-eaec-2997-4191-a6c3377ecb18/mzi.mrfogssv.jpg/300x300bb.jpg" }
-];
+
 
 const AFFIRMATIONS = [
   "Mejorar notablemente mi autoestima, sentirme sumamente contento con mi relación conmigo mismo y amarme mucho. 🧠",
@@ -68,169 +324,6 @@ const AFFIRMATIONS = [
   "El sueño reparador de +80 me da la energía necesaria para conquistar mis días. 😴"
 ];
 
-const DEFAULT_SUBJECTS = [
-  { id: "_5qtgkn409", name: "Analisis de Sistemas de Informacion", passed: false },
-  { id: "_0899dh13a", name: "Comunicacion de Datos", passed: false },
-  { id: "_gssvkucqv", name: "Economia", passed: true },
-  { id: "_ytvhws9h1", name: "Legislacion", passed: false },
-  { id: "_qr0v14alt", name: "Analisis Numerico", passed: true },
-  { id: "_plrcvhop7", name: "Backend de Aplicaciones", passed: false }
-];
-
-const DEFAULT_FINANCE = [
-  { id: "_il0d6t9mj", date: "2026-07-25", amount: 800000, type: "ahorro", desc: "Ahorro NaranjaX", link: "" }
-];
-
-let state = {
-  gym: { pb: 90, ht: 120, sq: 80 },
-  screenTime: Array(24).fill(null),
-  guitar: { hours: 331, log: [{ id: "_o5d1wqrrd", date: "2026-07-25", hours: 331 }] },
-  covers: [...DEFAULT_COVERS],
-  followers: 214,
-  bar: { completed: false, name: "", review: "" },
-  books: [...DEFAULT_BOOKS],
-  subjects: [...DEFAULT_SUBJECTS],
-  sara: { tripCompleted: false, moments: [] },
-  mind: { thoughts: [], sessions: [] },
-  finance: { log: [...DEFAULT_FINANCE] },
-  tiktok: { connected: false, username: "@thoma_guitar", likes: 0 },
-  security: { pinEnabled: false, pin: "" }
-};
-
-function ensureStateIntegrity() {
-  if (!state || typeof state !== 'object') state = {};
-  if (!state.lastUpdated) state.lastUpdated = Date.now();
-
-  if (!state.gym || typeof state.gym !== 'object') state.gym = { pb: 90, ht: 120, sq: 80 };
-  if (state.gym.pb === undefined || state.gym.pb === null) state.gym.pb = 90;
-  if (state.gym.ht === undefined || state.gym.ht === null) state.gym.ht = 120;
-  if (state.gym.sq === undefined || state.gym.sq === null) state.gym.sq = 80;
-
-  if (!state.guitar || typeof state.guitar !== 'object') state.guitar = { hours: 331, log: [{ id: "_o5d1wqrrd", date: "2026-07-25", hours: 331 }] };
-  if (state.guitar.hours === undefined || state.guitar.hours === null) state.guitar.hours = 331;
-  if (!Array.isArray(state.guitar.log)) {
-    state.guitar.log = [{ id: "_o5d1wqrrd", date: "2026-07-25", hours: 331 }];
-  }
-
-  if (state.followers === undefined || state.followers === null) state.followers = 214;
-
-  if (!Array.isArray(state.covers) || state.covers.length === 0) {
-    state.covers = [...DEFAULT_COVERS];
-  } else {
-    DEFAULT_COVERS.forEach(defCover => {
-      const exists = state.covers.some(c => c && (c.id === defCover.id || (c.title && defCover.title && c.title.toLowerCase() === defCover.title.toLowerCase())));
-      if (!exists) {
-        state.covers.push(defCover);
-      }
-    });
-  }
-
-  if (!Array.isArray(state.books) || state.books.length === 0) {
-    state.books = [...DEFAULT_BOOKS];
-  } else {
-    DEFAULT_BOOKS.forEach(defBook => {
-      const b = state.books.find(bk => bk && bk.title === defBook.title);
-      if (!b) {
-        state.books.push(defBook);
-      }
-    });
-  }
-
-  if (!Array.isArray(state.subjects) || state.subjects.length === 0) {
-    state.subjects = [...DEFAULT_SUBJECTS];
-  } else {
-    DEFAULT_SUBJECTS.forEach(defSub => {
-      const s = state.subjects.find(sub => sub && sub.name === defSub.name);
-      if (!s) {
-        state.subjects.push(defSub);
-      }
-    });
-  }
-
-  if (!state.bar || typeof state.bar !== 'object') state.bar = { completed: false, name: "", review: "" };
-  if (state.bar.completed === undefined) state.bar.completed = false;
-  if (!state.bar.name) state.bar.name = "";
-  if (!state.bar.review) state.bar.review = "";
-
-  if (!state.sara || typeof state.sara !== 'object') state.sara = { tripCompleted: false, destination: "", videoLink: "", notes: "" };
-  if (state.sara.tripCompleted === undefined) state.sara.tripCompleted = false;
-  if (!state.sara.destination) state.sara.destination = "";
-  if (!state.sara.videoLink) state.sara.videoLink = "";
-  if (!state.sara.notes) state.sara.notes = "";
-
-  if (!state.mind || typeof state.mind !== 'object') state.mind = { thoughts: [], sessions: [] };
-  if (!Array.isArray(state.mind.thoughts)) state.mind.thoughts = [];
-  if (!Array.isArray(state.mind.sessions)) state.mind.sessions = [];
-
-  if (!state.finance || typeof state.finance !== 'object') state.finance = { log: [...DEFAULT_FINANCE] };
-  if (!Array.isArray(state.finance.log) || state.finance.log.length === 0) state.finance.log = [...DEFAULT_FINANCE];
-
-  if (!state.screenTime || !Array.isArray(state.screenTime) || state.screenTime.length !== 24) {
-    state.screenTime = Array(24).fill(null);
-  }
-
-  if (!state.tiktok || typeof state.tiktok !== 'object') state.tiktok = { connected: false, username: "@thoma_guitar", likes: 0 };
-  if (!state.security || typeof state.security !== 'object') state.security = { pinEnabled: false, pin: "" };
-
-  if (Array.isArray(state.books)) {
-    state.books.forEach(b => {
-      if (!b) return;
-      if (b.title === "Cuál es tu sueño") {
-        b.coverUrl = STATIC_COVERS["Cuál es tu sueño"];
-      } else if (b.title && b.title.includes("amigos")) {
-        b.coverUrl = STATIC_COVERS["Cómo hacer amigos e influir en las personas"];
-      }
-    });
-  }
-
-  // Filtro agresivo de datos corruptos (null o no-objetos) en los arreglos para prevenir errores JS que bloquean el renderizado
-  if (Array.isArray(state.guitar.log)) state.guitar.log = state.guitar.log.filter(x => x && typeof x === 'object' && x.date);
-  if (Array.isArray(state.covers)) state.covers = state.covers.filter(x => x && typeof x === 'object' && x.title);
-  if (Array.isArray(state.books)) state.books = state.books.filter(x => x && typeof x === 'object' && x.title);
-  if (Array.isArray(state.subjects)) state.subjects = state.subjects.filter(x => x && typeof x === 'object' && x.name);
-  if (Array.isArray(state.finance.log)) state.finance.log = state.finance.log.filter(x => x && typeof x === 'object' && x.date);
-  if (state.mind && Array.isArray(state.mind.thoughts)) state.mind.thoughts = state.mind.thoughts.filter(x => x && typeof x === 'object' && x.date);
-  if (state.mind && Array.isArray(state.mind.sessions)) state.mind.sessions = state.mind.sessions.filter(x => x && typeof x === 'object' && x.date);
-}
-
-function resetAllDataToFullDefault(silent = false) {
-  state = {
-    gym: { pb: 90, ht: 120, sq: 80 },
-    screenTime: Array(24).fill(null),
-    guitar: { hours: 331, log: [{ id: "_o5d1wqrrd", date: "2026-07-25", hours: 331 }] },
-    covers: [...DEFAULT_COVERS],
-    followers: 214,
-    bar: { completed: false, name: "", review: "" },
-    books: [...DEFAULT_BOOKS],
-    subjects: [...DEFAULT_SUBJECTS],
-    sara: { tripCompleted: false, destination: "", videoLink: "", notes: "" },
-    mind: { thoughts: [], sessions: [] },
-    finance: { log: [...DEFAULT_FINANCE] },
-    tiktok: { connected: false, username: "@thoma_guitar", likes: 0 },
-    security: { pinEnabled: false, pin: "" }
-  };
-  
-  saveState();
-  updateUI();
-  if (!silent) {
-    alert("¡Tu progreso completo (Gym, Guitarra, Libros, Finanzas, Covers) fue reseteado con éxito en este dispositivo! 🚀✨");
-  }
-}
-window.resetAllDataToFullDefault = resetAllDataToFullDefault;
-
-let selectedScreenWeekIdx = 0;
-let selectedScreenMonthIdx = 0;
-
-const SCREEN_MONTHS = [
-  { name: "Jul / Ago", start: 0, end: 3 },
-  { name: "Ago / Sep", start: 4, end: 7 },
-  { name: "Sep / Oct", start: 8, end: 11 },
-  { name: "Oct / Nov", start: 12, end: 15 },
-  { name: "Nov / Dic", start: 16, end: 19 },
-  { name: "Dic", start: 20, end: 23 }
-];
-
-// --- Weekly Suggestions Catalog & Engine ---
 const SUGGESTION_POOL = [
   // Solos de Guitarra
   { title: "Under the Bridge - Red Hot Chili Peppers", style: "Solo", desc: "El solo intermedio es excelente para bends expresivos y vibrato." },
@@ -255,122 +348,42 @@ const SUGGESTION_POOL = [
   { title: "De música ligera - Soda Stereo", style: "Acústico", desc: "Versión acústica rítmica ideal para levantar energía en videos cortos de TikTok." },
 ];
 
-// Carga inicial de datos
-function mergeStateData(local, remote) {
-  if (!remote || typeof remote !== 'object') return local;
-  if (!local || typeof local !== 'object') return remote;
+let state = {
+  gym: { pb: 90, ht: 120, sq: 80 },
+  screenTime: Array(24).fill(null),
+  guitar: { hours: 331, log: [{"id": "_o5d1wqrrd", "date": "2026-07-25", "hours": 331}] },
+  covers: [...DEFAULT_COVERS],
+  followers: 214,
+  bar: { completed: false, name: "", review: "" },
+  books: [...DEFAULT_BOOKS],
+  subjects: [...(typeof DEFAULT_SUBJECTS !== 'undefined' ? DEFAULT_SUBJECTS : [{"id":"_5qtgkn409","name":"Analisis de Sistemas de Informacion","passed":false},{"id":"_0899dh13a","name":"Comunicacion de Datos","passed":false},{"id":"_gssvkucqv","name":"Economia","passed":true},{"id":"_ytvhws9h1","name":"Legislacion","passed":false},{"id":"_qr0v14alt","name":"Analisis Numerico","passed":true},{"id":"_plrcvhop7","name":"Backend de Aplicaciones","passed":false}])],
+  sara: { tripCompleted: false, moments: [] },
+  mind: { thoughts: [], sessions: [] },
+  finance: { log: [{"id": "_il0d6t9mj", "date": "2026-07-25", "amount": 800000, "type": "ahorro", "desc": "Ahorro NaranjaX", "link": ""}] },
+  tiktok: { connected: false, username: "@thoma_guitar", likes: 0 },
+  security: { pinEnabled: false, pin: "" }
+};
 
-  const localTime = Number(local.lastUpdated) || 0;
-  const remoteTime = Number(remote.lastUpdated) || 0;
+let selectedScreenWeekIdx = 0;
+let selectedScreenMonthIdx = 0;
 
-  const primary = localTime >= remoteTime ? { ...local } : { ...remote };
-  const secondary = localTime >= remoteTime ? { ...remote } : { ...local };
-
-  const merged = { ...primary };
-
-  // 1. Gym
-  merged.gym = merged.gym || primary.gym || secondary.gym || { pb: 90, ht: 120, sq: 80 };
-
-  // 2. Guitar
-  merged.guitar = merged.guitar || { hours: 331, log: [] };
-  if (secondary.guitar && Array.isArray(secondary.guitar.log)) {
-    const primaryLog = Array.isArray(primary.guitar && primary.guitar.log) ? primary.guitar.log : [];
-    const logMap = new Map();
-    [...secondary.guitar.log, ...primaryLog].forEach(item => {
-      if (item && item.id) logMap.set(item.id, item);
-    });
-    merged.guitar.log = Array.from(logMap.values());
-  }
-
-  // 3. Followers: Priorizar el valor más reciente del objeto primario
-  if (primary.followers !== undefined) {
-    merged.followers = Number(primary.followers);
-  } else if (secondary.followers !== undefined) {
-    merged.followers = Number(secondary.followers);
-  } else {
-    merged.followers = 214;
-  }
-
-  // 4. Books
-  merged.books = Array.isArray(primary.books) ? [...primary.books] : [];
-  if (Array.isArray(secondary.books)) {
-    secondary.books.forEach(sb => {
-      if (!sb) return;
-      const pb = merged.books.find(b => b && (b.id === sb.id || b.title === sb.title));
-      if (!pb) {
-        merged.books.push(sb);
-      }
-    });
-  }
-
-  // 5. Subjects
-  merged.subjects = Array.isArray(primary.subjects) ? [...primary.subjects] : [];
-  if (Array.isArray(secondary.subjects)) {
-    secondary.subjects.forEach(ss => {
-      if (!ss) return;
-      const ps = merged.subjects.find(s => s && (s.id === ss.id || s.name === ss.name));
-      if (!ps) {
-        merged.subjects.push(ss);
-      }
-    });
-  }
-
-  // 5b. Covers
-  merged.covers = Array.isArray(primary.covers) ? [...primary.covers] : [];
-  if (Array.isArray(secondary.covers)) {
-    secondary.covers.forEach(sc => {
-      if (!sc) return;
-      const pc = merged.covers.find(c => c && (c.id === sc.id || c.title === sc.title));
-      if (!pc) {
-        merged.covers.push(sc);
-      }
-    });
-  }
-
-  // 6. Sara / Viaje
-  if (secondary.sara) {
-    merged.sara = merged.sara || {};
-    merged.sara.tripCompleted = primary.sara && primary.sara.tripCompleted !== undefined ? primary.sara.tripCompleted : secondary.sara.tripCompleted;
-    merged.sara.destination = primary.sara && primary.sara.destination ? primary.sara.destination : (secondary.sara.destination || "");
-    merged.sara.videoLink = primary.sara && primary.sara.videoLink ? primary.sara.videoLink : (secondary.sara.videoLink || "");
-    merged.sara.notes = primary.sara && primary.sara.notes ? primary.sara.notes : (secondary.sara.notes || "");
-  }
-
-  // 7. Finance: merge log
-  if (secondary.finance && Array.isArray(secondary.finance.log)) {
-    merged.finance = merged.finance || { log: [] };
-    const primaryFin = Array.isArray(primary.finance && primary.finance.log) ? primary.finance.log : [];
-    const finMap = new Map();
-    [...secondary.finance.log, ...primaryFin].forEach(item => {
-      if (item && item.id) finMap.set(item.id, item);
-    });
-    merged.finance.log = Array.from(finMap.values());
-  }
-
-  // 8. Screen time: non-null values take priority or latest
-  if (Array.isArray(secondary.screenTime) && secondary.screenTime.length === 24) {
-    if (!Array.isArray(merged.screenTime)) merged.screenTime = Array(24).fill(null);
-    for (let i = 0; i < 24; i++) {
-      if (merged.screenTime[i] === null && secondary.screenTime[i] !== null) {
-        merged.screenTime[i] = secondary.screenTime[i];
-      }
-    }
-  }
-
-  merged.lastUpdated = Math.max(localTime, remoteTime);
-  return merged;
-}
+const SCREEN_MONTHS = [
+  { name: "Jul / Ago", start: 0, end: 3 },
+  { name: "Ago / Sep", start: 4, end: 7 },
+  { name: "Sep / Oct", start: 8, end: 11 },
+  { name: "Oct / Nov", start: 12, end: 15 },
+  { name: "Nov / Dic", start: 16, end: 19 },
+  { name: "Dic", start: 20, end: 23 }
+];
 
 // Carga inicial de datos
 function loadState() {
-  const saved = localStorage.getItem('goals_2026_state') || localStorage.getItem('goals_2026_backup_state');
+  const saved = localStorage.getItem('goals_2026_state');
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
-      if (parsed && typeof parsed === 'object') {
-        state = parsed;
-      }
-      ensureStateIntegrity();
+      // Fusión con valores por defecto por si agregamos campos nuevos
+      state = { ...state, ...parsed };
       let migrated = false;
       if (!state.covers || state.covers.length === 0) {
         state.covers = [...DEFAULT_COVERS];
@@ -395,33 +408,31 @@ function loadState() {
         return c;
       });
 
-      // Actualización automática de portadas de canciones con arte oficial
+      // Forzar actualización de portadas específicas solicitadas por el usuario
       state.covers = state.covers.map(c => {
-        const titleLower = c.title ? c.title.toLowerCase() : "";
-        if (titleLower.includes("rezo por vos")) {
-          const charlyArt = "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/c8/50/23/c85023c0-d7e7-7462-2574-a7efe528f7da/mzi.uuvufkwr.jpg/300x300bb.jpg";
-          if (c.artUrl !== charlyArt) { c.artUrl = charlyArt; migrated = true; }
-        } else if (titleLower.includes("crimen")) {
-          const ahiVamosArt = "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f3/3d/d5/f33dd5c7-bbb8-c2b3-e5e8-0d2a4dd7f1a7/828768164426.jpg/300x300bb.jpg";
-          if (c.artUrl !== ahiVamosArt) { c.artUrl = ahiVamosArt; migrated = true; }
-        } else if (titleLower.includes("en la ciudad de la furia")) {
-          const dobleVidaArt = "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/f0/1e/df/f01edf85-25f1-c245-1c18-bb0f1165740d/mzi.qaxmucxr.jpg/300x300bb.jpg";
-          if (c.artUrl !== dobleVidaArt) { c.artUrl = dobleVidaArt; migrated = true; }
-        } else if (titleLower.includes("paloma")) {
-          const palomaArt = "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/9d/97/a2/9d97a228-eaec-2997-4191-a6c3377ecb18/mzi.mrfogssv.jpg/300x300bb.jpg";
-          if (c.artUrl !== palomaArt) { c.artUrl = palomaArt; migrated = true; }
-        } else {
-          const defaultMatch = DEFAULT_COVERS.find(dc => dc.id === c.id || (dc.title && c.title && dc.title.toLowerCase() === c.title.toLowerCase()));
-          if (defaultMatch && defaultMatch.artUrl) {
-            if (!c.artUrl || c.artUrl !== defaultMatch.artUrl) {
-              c.artUrl = defaultMatch.artUrl;
-              migrated = true;
-            }
+        if (c.title.toLowerCase().includes("rezo por vos")) {
+          const charlyArt = "https://cdn-images.dzcdn.net/images/cover/af904edd6d5b4852f6f81f2cec19f79f/250x250-000000-80-0-0.jpg";
+          if (c.artUrl !== charlyArt) {
+            c.artUrl = charlyArt;
+            migrated = true;
+          }
+        }
+        if (c.title.toLowerCase().includes("crimen")) {
+          const ahiVamosArt = "https://cdn-images.dzcdn.net/images/cover/cbde419f831a11ce8e84330550ce30fe/250x250-000000-80-0-0.jpg";
+          if (c.artUrl !== ahiVamosArt) {
+            c.artUrl = ahiVamosArt;
+            migrated = true;
+          }
+        }
+        if (c.title.toLowerCase().includes("en la ciudad de la furia")) {
+          const dobleVidaArt = "https://cdn-images.dzcdn.net/images/cover/35d98d067adff09863835209a3e7a9d6/250x250-000000-80-0-0.jpg";
+          if (c.artUrl !== dobleVidaArt) {
+            c.artUrl = dobleVidaArt;
+            migrated = true;
           }
         }
         return c;
       });
-
       if (!state.bar) {
         state.bar = { completed: false, name: "", review: "" };
       } else {
@@ -440,44 +451,27 @@ function loadState() {
         state.books = [...DEFAULT_BOOKS];
       }
       
-      // Actualización automática de portadas de libros con imágenes de alta resolución
+      // Migración forzosa inmediata de portadas predeterminadas
       state.books.forEach((book, idx) => {
         if (STATIC_COVERS[book.title]) {
-          if (!book.coverUrl || book.coverUrl !== STATIC_COVERS[book.title]) {
+          if (!book.coverUrl || book.coverUrl.includes('unsplash.com') || book.coverUrl.includes('openlibrary.org')) {
             state.books[idx].coverUrl = STATIC_COVERS[book.title];
             migrated = true;
           }
         }
       });
-      // Guardar estado migrado de vuelta a localStorage
-      const jsonStr = JSON.stringify(state);
-      localStorage.setItem('goals_2026_state', jsonStr);
-      localStorage.setItem('goals_2026_backup_state', jsonStr);
+      if (migrated) {
+        localStorage.setItem('goals_2026_state', JSON.stringify(state));
+      }
     } catch (e) {
       console.error("Error cargando state de localStorage", e);
     }
-  } else {
-    resetAllDataToFullDefault(true);
   }
 }
 
 function saveState() {
-  state.lastUpdated = Date.now();
-  ensureStateIntegrity();
-
-  try {
-    const jsonStr = JSON.stringify(state);
-    localStorage.setItem('goals_2026_state', jsonStr);
-    localStorage.setItem('goals_2026_backup_state', jsonStr);
-  } catch (e) {
-    console.error("Error guardando en localStorage:", e);
-  }
-
-  try {
-    updateUI();
-  } catch (e) {
-    console.error("Error al actualizar la UI:", e);
-  }
+  localStorage.setItem('goals_2026_state', JSON.stringify(state));
+  updateUI();
 }
 
 // --- Navigation Tabs ---
@@ -498,9 +492,6 @@ document.querySelectorAll('[data-target-tab]').forEach(card => {
 });
 
 function switchTab(tabName, smoothScroll = true) {
-  const validTabs = ['dashboard', 'fisico', 'musica', 'lectura', 'bienestar', 'finanzas'];
-  if (!validTabs.includes(tabName)) tabName = 'dashboard';
-
   // Desactivar todos los botones y secciones
   document.querySelectorAll('[data-tab]').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -512,50 +503,23 @@ function switchTab(tabName, smoothScroll = true) {
     targetElement.classList.add('active');
   }
 
-  // Guardar pestaña en localStorage y hash de URL para que F5 vuelva siempre a la misma pestaña
-  try {
-    localStorage.setItem('active_tab', tabName);
-    if (window.history && window.history.replaceState) {
-      window.history.replaceState(null, null, `#${tabName}`);
-    }
-  } catch (e) {}
+  // Guardar pestaña en localStorage para que persista al recargar
+  localStorage.setItem('active_tab', tabName);
 
   // Scroll to top si es interacción del usuario
   if (smoothScroll) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Forzar el renderizado inmediato de la pestaña activa para asegurar que todos los datos se vean al instante
+  // Desplazar automáticamente al fondo de los covers para ver los últimos
   if (tabName === 'musica') {
-    if (typeof renderGuitarLog === 'function') renderGuitarLog();
-    if (typeof renderCoversList === 'function') renderCoversList();
-    if (typeof renderWeeklySuggestions === 'function') renderWeeklySuggestions();
     setTimeout(() => {
       const coversList = document.getElementById('covers-list');
-      if (coversList) coversList.scrollTop = coversList.scrollHeight;
+      if (coversList) {
+        coversList.scrollTop = coversList.scrollHeight;
+      }
     }, 150);
-  } else if (tabName === 'lectura') {
-    if (typeof renderBooksGrid === 'function') renderBooksGrid();
-    if (typeof renderSubjects === 'function') renderSubjects();
-  } else if (tabName === 'fisico') {
-    if (typeof renderScreenTimeGrid === 'function') renderScreenTimeGrid();
-  } else if (tabName === 'finanzas') {
-    if (typeof renderFinanceLog === 'function') renderFinanceLog();
-  } else if (tabName === 'bienestar') {
-    if (typeof renderSaraTab === 'function') renderSaraTab();
   }
-}
-
-function restoreActiveTabOnStart() {
-  let savedTab = location.hash ? location.hash.replace('#', '') : localStorage.getItem('active_tab');
-  if (savedTab && savedTab.startsWith('tab-')) {
-    savedTab = savedTab.replace('tab-', '');
-  }
-  const validTabs = ['dashboard', 'fisico', 'musica', 'lectura', 'bienestar', 'finanzas'];
-  if (!savedTab || !validTabs.includes(savedTab)) {
-    savedTab = 'dashboard';
-  }
-  switchTab(savedTab, false);
 }
 
 // --- Modals Management ---
@@ -563,12 +527,6 @@ function restoreActiveTabOnStart() {
 function openModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) {
-    if (modalId === 'modal-cloud-sync') {
-      const input = document.getElementById('input-firebase-config');
-      if (input) {
-        input.value = localStorage.getItem('goals_2026_firebase_config') || "https://objetivos2026-393a7-default-rtdb.firebaseio.com/";
-      }
-    }
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('active'), 10);
   }
@@ -627,13 +585,10 @@ function calculateGoalsProgress() {
   // 6. Seguidores Red Social (Meta: 1000)
   progressList.push(Math.min(state.followers / 1000, 1.0));
 
-  // 7. Sara: Viaje de Fin de Año
-  let saraVal = 0;
-  if (state.sara) {
-    if (state.sara.tripCompleted) saraVal = 1.0;
-    else if (state.sara.videoLink || state.sara.destination) saraVal = 0.5;
-  }
-  progressList.push(saraVal);
+  // 7. Sara: Moments + Trip
+  const momentsVal = state.sara.moments.length > 0 ? 0.5 : 0;
+  const tripVal = state.sara.tripCompleted ? 0.5 : 0;
+  progressList.push(momentsVal + tripVal);
 
   // 8. Materias Promocionadas
   if (state.subjects.length > 0) {
@@ -664,9 +619,9 @@ function calculateGoalsProgress() {
   // 12. Tocar en Bar
   progressList.push(state.bar.completed ? 1.0 : 0.0);
 
-  // 13. Ahorro $2.000.000
+  // 13. Ahorro $1.300.000
   const totalSavings = calculateTotalSavings();
-  progressList.push(Math.min(Math.max(totalSavings, 0) / 2000000, 1.0));
+  progressList.push(Math.min(Math.max(totalSavings, 0) / 1300000, 1.0));
 
   // Calcular cantidad de objetivos 100% completados
   const completedCount = progressList.filter(p => p >= 0.999).length;
@@ -689,38 +644,6 @@ function calculateTotalSavings() {
       return acc - item.amount;
     }
   }, 0);
-}
-
-function updateGlobalProgressDOM() {
-  const stats = calculateGoalsProgress();
-
-  const percentEl = document.getElementById('global-progress-percent');
-  if (percentEl) percentEl.innerText = `${stats.overallPercent}%`;
-
-  const summaryEl = document.getElementById('global-progress-summary');
-  if (summaryEl) summaryEl.innerText = `${stats.completedCount} / ${stats.totalGoals} Objetivos`;
-
-  const circleEl = document.getElementById('global-progress-circle');
-  if (circleEl) {
-    const strokeDasharray = 188.4;
-    const dashoffset = strokeDasharray - (strokeDasharray * stats.overallPercent) / 100;
-    circleEl.style.strokeDashoffset = dashoffset;
-  }
-
-  // Countdown de días restantes en 2026
-  const end = new Date('2026-12-31T23:59:59');
-  const today = new Date();
-  const diff = end - today;
-  const days = Math.max(Math.ceil(diff / (1000 * 60 * 60 * 24)), 1);
-
-  const daysCountdown = document.getElementById('days-countdown');
-  if (daysCountdown) {
-    if (diff > 0) {
-      daysCountdown.innerText = `Quedan ${days} días en 2026`;
-    } else {
-      daysCountdown.innerText = "¡Año 2026 finalizado!";
-    }
-  }
 }
 
 function updateUI() {
@@ -830,23 +753,13 @@ function updateUI() {
 
   // 11. Fondo de Ahorro
   setValueText('sum-val-finance', `$${totalSavings.toLocaleString('es-AR')}`);
-  setProgressBarWidth('sum-progress-finance', Math.min((totalSavings / 2000000) * 100, 100));
+  setProgressBarWidth('sum-progress-finance', Math.min((totalSavings / 1300000) * 100, 100));
 
-  // 12. Viaje con Sara
+  // 12. Momento con Sara
+  setValueText('sum-val-relationship', `${state.sara.moments.length} reg.`);
   let saraProgress = 0;
-  if (state.sara) {
-    if (state.sara.tripCompleted) {
-      saraProgress = 100;
-      setValueText('sum-val-relationship', "¡Realizado! ✈️");
-    } else if (state.sara.destination || state.sara.videoLink) {
-      saraProgress = 50;
-      setValueText('sum-val-relationship', "Planeando ✈️");
-    } else {
-      setValueText('sum-val-relationship', "Pendiente ⏳");
-    }
-  } else {
-    setValueText('sum-val-relationship', "Pendiente ⏳");
-  }
+  if (state.sara.moments.length > 0) saraProgress += 50;
+  if (state.sara.tripCompleted) saraProgress += 50;
   setProgressBarWidth('sum-progress-relationship', saraProgress);
 
   // --- Render Físico & Salud Tab ---
@@ -925,14 +838,23 @@ function updateUI() {
   setValueText('college-badge', `${state.subjects.filter(s => s.passed).length} / ${state.subjects.length}`);
   renderSubjects();
 
-  // --- Render Bienestar Tab (Viaje con Sara) ---
-  renderSaraTab();
+  // --- Render Bienestar Tab ---
+  setValueText('relationship-badge', `${state.sara.moments.length} Momentos`);
+  const saraTripCheck = document.getElementById('check-sara-trip');
+  if (saraTripCheck) {
+    saraTripCheck.checked = state.sara.tripCompleted;
+    const tripItem = document.getElementById('trip-checklist-item');
+    if (tripItem) {
+      if (state.sara.tripCompleted) tripItem.classList.add('checked');
+      else tripItem.classList.remove('checked');
+    }
+  }
+  renderMomentsList();
 
   // --- Render Finanzas Tab ---
-  setValueText('finance-badge', `$${totalSavings.toLocaleString('es-AR')} / $2.000.000`);
-  setProgressBarWidth('finance-progress-fill', Math.min((Math.max(totalSavings, 0) / 2000000) * 100, 100));
+  setValueText('finance-badge', `$${totalSavings.toLocaleString('es-AR')} / $1.300.000`);
+  setProgressBarWidth('finance-progress-fill', Math.min((Math.max(totalSavings, 0) / 1300000) * 100, 100));
   renderFinanceLog();
-
 }
 
 // Helpers de ayuda para actualizar el DOM
@@ -1102,11 +1024,6 @@ window.onScreenTimeInputChange = function() {
 };
 
 function renderGuitarLog() {
-  const dateInput = document.getElementById('input-guitar-date');
-  if (dateInput && !dateInput.value) {
-    dateInput.value = new Date().toISOString().split('T')[0];
-  }
-
   const container = document.getElementById('guitar-log-list');
   if (!container) return;
 
@@ -1153,26 +1070,14 @@ function renderCoversList() {
     const hasVideo = !!videoId;
 
     // Obtener imagen del cover
-    let albumArtUrl = cover.artUrl;
-    if (!albumArtUrl) {
-      const defMatch = DEFAULT_COVERS.find(dc => dc.id === cover.id || (dc.title && cover.title && dc.title.toLowerCase() === cover.title.toLowerCase()));
-      if (defMatch && defMatch.artUrl) {
-        albumArtUrl = defMatch.artUrl;
-        cover.artUrl = albumArtUrl;
-      }
-    }
+    let albumArtUrl = cover.artUrl || "";
     const lookupTitle = cover.title.trim();
 
-    // Fallback si no hay URL guardada aún
+    // Fallback temporal si no hay URL guardada
     if (!albumArtUrl) {
-      if (lookupTitle.toLowerCase().includes("paloma")) {
-        albumArtUrl = "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/9d/97/a2/9d97a228-eaec-2997-4191-a6c3377ecb18/mzi.mrfogssv.jpg/300x300bb.jpg";
-        cover.artUrl = albumArtUrl;
-      } else {
-        albumArtUrl = "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/cd/52/6d/cd526dc6-daaa-e990-7019-47c828efdd1b/mzi.xpwcramk.jpg/300x300bb.jpg";
-      }
+      albumArtUrl = "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=120&auto=format&fit=crop";
       
-      // Buscar en iTunes Search API
+      // Buscar asincrónicamente en iTunes Search API
       let query = lookupTitle;
       if (lookupTitle.includes('-')) {
         const parts = lookupTitle.split('-');
@@ -1183,11 +1088,13 @@ function renderCoversList() {
         .then(res => res.json())
         .then(data => {
           if (data.results && data.results.length > 0) {
-            const highResArt = data.results[0].artworkUrl100.replace('100x100bb', '300x300bb');
+            const highResArt = data.results[0].artworkUrl100.replace('100x100bb', '250x250bb');
             
+            // Actualizar en el DOM
             const imgEl = document.getElementById(`cover-img-${cover.id}`);
             if (imgEl) imgEl.src = highResArt;
             
+            // Guardar en state y localStorage sin re-renderizar para evitar loops infinitos
             cover.artUrl = highResArt;
             localStorage.setItem('goals_2026_state', JSON.stringify(state));
           }
@@ -1197,7 +1104,7 @@ function renderCoversList() {
 
     el.innerHTML = `
       <div style="display: flex; gap: 12px; align-items: flex-start; width: 100%;">
-        <img id="cover-img-${cover.id}" class="cover-thumbnail" src="${albumArtUrl}" alt="Portada" onerror="this.src='https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/cd/52/6d/cd526dc6-daaa-e990-7019-47c828efdd1b/mzi.xpwcramk.jpg/300x300bb.jpg'">
+        <img id="cover-img-${cover.id}" class="cover-thumbnail" src="${albumArtUrl}" alt="Portada" onerror="this.src='https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=120&auto=format&fit=crop'">
         <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0;">
           <div class="cover-header" style="margin-bottom: 0; align-items: center;">
             <span class="cover-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100%; font-size: 0.9rem;" title="${cover.title}">${cover.title}</span>
@@ -1237,19 +1144,11 @@ function renderBooksGrid() {
     
     const percent = Math.round((book.readPages / book.totalPages) * 100);
     
-    // Portada del libro con forzado directo para Simon Squibb y Dale Carnegie
-    let coverImg = book.coverUrl;
-    if (book.title === "Cuál es tu sueño" || (book.title && book.title.includes("sueño"))) {
-      coverImg = "simon_squibb_yellow_cover.jpg";
-    } else if (book.title && (book.title.includes("amigos") || book.title.includes("Carnegie"))) {
-      coverImg = "como_ganar_amigos_celeste.jpg";
-    }
-    if (!coverImg) {
-      coverImg = STATIC_COVERS[book.title] || 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/58/c6/41/58c641d4-64ff-4c39-3976-629eaf781bfe/9786073855488.jpg/300x300bb.jpg';
-    }
+    // Portada del libro o fallback si no está cargada aún
+    const coverImg = book.coverUrl || 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop';
 
     itemEl.innerHTML = `
-      <img class="book-cover" src="${coverImg}" alt="Portada de ${book.title}" onerror="this.src='https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/58/c6/41/58c641d4-64ff-4c39-3976-629eaf781bfe/9786073855488.jpg/300x300bb.jpg'">
+      <img class="book-cover" src="${coverImg}" alt="Portada de ${book.title}" onerror="this.src='https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=120&auto=format&fit=crop'">
       <div class="book-details">
         <div class="book-title-row">
           <span class="book-title">${book.title}</span>
@@ -1302,133 +1201,30 @@ function renderSubjects() {
   });
 }
 
-function renderSaraTab() {
-  if (!state.sara) state.sara = {};
+function renderMomentsList() {
+  const container = document.getElementById('moments-list');
+  if (!container) return;
 
-  const badgeEl = document.getElementById('sara-trip-badge');
-  if (badgeEl) {
-    if (state.sara.tripCompleted) {
-      badgeEl.innerText = "¡Viaje Realizado! 🎉";
-      badgeEl.style.color = "var(--color-success)";
-    } else {
-      badgeEl.innerText = "Pendiente ⏳";
-      badgeEl.style.color = "var(--color-gold)";
-    }
-  }
-
-  const checkEl = document.getElementById('check-sara-trip');
-  const tripItem = document.getElementById('trip-checklist-item');
-  if (checkEl) {
-    checkEl.checked = !!state.sara.tripCompleted;
-    if (tripItem) {
-      if (state.sara.tripCompleted) tripItem.classList.add('checked');
-      else tripItem.classList.remove('checked');
-    }
-  }
-
-  const destInput = document.getElementById('input-sara-destination');
-  const videoInput = document.getElementById('input-sara-video-link');
-  const notesInput = document.getElementById('input-sara-notes');
-
-  if (destInput && destInput !== document.activeElement) destInput.value = state.sara.destination || "";
-  if (videoInput && videoInput !== document.activeElement) videoInput.value = state.sara.videoLink || "";
-  if (notesInput && notesInput !== document.activeElement) notesInput.value = state.sara.notes || "";
-
-  // Render Video Player Embed
-  renderSaraVideoPlayer(state.sara.videoLink);
-
-  // Render Notes Display Box
-  const notesBox = document.getElementById('sara-notes-display-box');
-  const destDisplay = document.getElementById('sara-display-dest');
-  const notesDisplay = document.getElementById('sara-display-notes');
-
-  if (notesBox && (state.sara.destination || state.sara.notes)) {
-    notesBox.style.display = "block";
-    if (destDisplay) destDisplay.innerText = state.sara.destination ? `📍 Destino: ${state.sara.destination}` : "";
-    if (notesDisplay) notesDisplay.innerText = state.sara.notes ? `"${state.sara.notes}"` : "";
-  } else if (notesBox) {
-    notesBox.style.display = "none";
-  }
-}
-
-function renderSaraVideoPlayer(url) {
-  const box = document.getElementById('sara-video-player-box');
-  if (!box) return;
-
-  if (!url || !url.trim()) {
-    box.innerHTML = `<p style="color: var(--color-text-muted); font-size: 0.85rem; text-align: center; padding: 30px 16px;">Aún no has guardado un video del viaje. ¡Agrega el link de YouTube o Drive para guardarlo aquí de recuerdo! ✈️🎥</p>`;
+  container.innerHTML = "";
+  if (state.sara.moments.length === 0) {
+    container.innerHTML = `<p style="color: var(--color-text-muted); font-size: 0.85rem; text-align: center; padding: 20px 0;">No hay recuerdos registrados todavía. ¡Planifica una salida!</p>`;
     return;
   }
 
-  const cleanUrl = url.trim();
-  let embedHtml = "";
-
-  if (cleanUrl.includes('youtube.com') || cleanUrl.includes('youtu.be')) {
-    let videoId = "";
-    if (cleanUrl.includes('youtu.be/')) {
-      videoId = cleanUrl.split('youtu.be/')[1].split('?')[0].split('&')[0];
-    } else if (cleanUrl.includes('v=')) {
-      videoId = cleanUrl.split('v=')[1].split('&')[0];
-    }
-    if (videoId) {
-      embedHtml = `<iframe width="100%" height="220" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 8px;"></iframe>`;
-    } else {
-      embedHtml = `<div style="padding: 20px; text-align: center;"><a href="${cleanUrl}" target="_blank" class="btn btn-pink btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">🎬 Ver Video del Viaje en YouTube</a></div>`;
-    }
-  } else if (cleanUrl.includes('drive.google.com')) {
-    const driveEmbed = cleanUrl.replace('/view', '/preview');
-    embedHtml = `<iframe src="${driveEmbed}" width="100%" height="220" allow="autoplay" style="border-radius: 8px; border: none;"></iframe>`;
-  } else if (cleanUrl.includes('vimeo.com')) {
-    const vimeoId = cleanUrl.split('vimeo.com/')[1].split('?')[0];
-    embedHtml = `<iframe src="https://player.vimeo.com/video/${vimeoId}" width="100%" height="220" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="border-radius: 8px;"></iframe>`;
-  } else if (cleanUrl.startsWith('blob:') || cleanUrl.endsWith('.mp4') || cleanUrl.endsWith('.webm') || cleanUrl.endsWith('.mov')) {
-    embedHtml = `<video controls src="${cleanUrl}" style="width: 100%; max-height: 240px; border-radius: 8px; background: #000;"></video>`;
-  } else {
-    embedHtml = `<div style="padding: 20px; text-align: center;"><a href="${cleanUrl}" target="_blank" class="btn btn-pink btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">🎬 Abrir Video del Viaje</a></div>`;
-  }
-
-  box.innerHTML = embedHtml;
+  const sorted = [...state.sara.moments].sort((a, b) => new Date(b.date) - new Date(a.date));
+  sorted.forEach(m => {
+    const el = document.createElement('div');
+    el.className = 'diary-item';
+    el.innerHTML = `
+      <div class="diary-header">
+        <span class="diary-date">${formatDate(m.date)}</span>
+      </div>
+      <div class="diary-content">${m.desc}</div>
+      <button class="diary-delete-btn" onclick="deleteMoment('${m.id}')">${ICON_TRASH}</button>
+    `;
+    container.appendChild(el);
+  });
 }
-
-window.onSaraVideoFileSelected = function(event) {
-  const file = event.target.files && event.target.files[0];
-  if (!file) return;
-
-  const fileUrl = URL.createObjectURL(file);
-  if (!state.sara) state.sara = {};
-  state.sara.videoLink = fileUrl;
-  
-  const linkInput = document.getElementById('input-sara-video-link');
-  if (linkInput) linkInput.value = file.name;
-
-  saveState();
-  renderSaraVideoPlayer(fileUrl);
-};
-
-window.saveSaraTripDetails = function() {
-  ensureStateIntegrity();
-  const destInput = document.getElementById('input-sara-destination');
-  const videoInput = document.getElementById('input-sara-video-link');
-  const notesInput = document.getElementById('input-sara-notes');
-  const checkInput = document.getElementById('check-sara-trip');
-
-  if (!state.sara) state.sara = {};
-
-  if (destInput) state.sara.destination = destInput.value.trim();
-  if (videoInput) state.sara.videoLink = videoInput.value.trim();
-  if (notesInput) state.sara.notes = notesInput.value.trim();
-  if (checkInput) state.sara.tripCompleted = checkInput.checked;
-
-  saveState();
-  alert("¡Recuerdo y video del viaje guardados con éxito! ✈️❤️🎥");
-};
-
-window.onSaraTripCheckChange = function() {
-  const checkInput = document.getElementById('check-sara-trip');
-  if (!state.sara) state.sara = {};
-  if (checkInput) state.sara.tripCompleted = checkInput.checked;
-  saveState();
-};
 
 function renderThoughtsList() {
   const container = document.getElementById('thoughts-list');
@@ -1545,24 +1341,15 @@ window.addGuitarHours = function(amount) {
 
 window.addGuitarHoursManual = function() {
   const input = document.getElementById('input-guitar-manual');
-  const dateInput = document.getElementById('input-guitar-date');
-
   const val = parseFloat(input.value);
-  if (isNaN(val) || val <= 0) {
-    alert("Por favor ingresa un número de horas válido.");
-    return;
-  }
-  
-  const todayStr = new Date().toISOString().split('T')[0];
-  const selectedDate = dateInput && dateInput.value ? dateInput.value : todayStr;
+  if (isNaN(val) || val <= 0) return;
   
   state.guitar.hours += val;
   state.guitar.log.push({
     id: generateId(),
-    date: selectedDate,
+    date: new Date().toISOString().split('T')[0],
     hours: val
   });
-  
   input.value = "";
   saveState();
 };
@@ -1675,21 +1462,22 @@ window.saveCoverEditChanges = function() {
 };
 
 // Followers
-window.saveFollowersCount = function() {
-  ensureStateIntegrity();
+window.updateFollowersDirectly = function() {
   const el = document.getElementById('input-followers');
   if (!el) return;
-  const val = parseInt(el.value, 10);
-  if (isNaN(val) || val < 0) {
-    alert("Por favor ingresa un número de seguidores válido.");
-    return;
-  }
+  const val = parseInt(el.value) || 0;
   state.followers = val;
-  saveState();
-  alert(`¡Seguidores de TikTok (${val.toLocaleString()}) guardados con éxito! 📱🎉`);
+  
+  localStorage.setItem('goals_2026_state', JSON.stringify(state));
+  
+  const badge = document.getElementById('followers-badge');
+  if (badge) badge.innerText = `${val} / 1000 seg.`;
+  
+  const fill = document.getElementById('followers-progress-fill');
+  if (fill) fill.style.width = `${Math.min((val / 1000) * 100, 100)}%`;
+  
+  updateGlobalProgressDOM();
 };
-window.updateFollowersDirectly = window.saveFollowersCount;
-window.updateFollowers = window.saveFollowersCount;
 
 // Bar Performance Check
 const checkBar = document.getElementById('check-bar-performance');
@@ -1752,10 +1540,7 @@ document.getElementById('btn-save-book-modal').addEventListener('click', () => {
 });
 
 window.updateBookPages = function(idx) {
-  ensureStateIntegrity();
-  const input = document.getElementById(`book-${idx}-input`);
-  if (!input || !state.books[idx]) return;
-  const val = parseInt(input.value, 10);
+  const val = parseInt(document.getElementById(`book-${idx}-input`).value);
   if (isNaN(val) || val < 0) return;
   
   const book = state.books[idx];
@@ -1769,20 +1554,14 @@ window.updateBookPages = function(idx) {
 };
 
 window.addBookPages = function(idx, amount) {
-  ensureStateIntegrity();
-  if (state.books[idx]) {
-    const curr = state.books[idx].readPages || 0;
-    state.books[idx].readPages = Math.min(curr + amount, state.books[idx].totalPages);
-    saveState();
-  }
+  const book = state.books[idx];
+  book.readPages = Math.min(book.readPages + amount, book.totalPages);
+  saveState();
 };
 
 window.markBookAsRead = function(idx) {
-  ensureStateIntegrity();
-  if (state.books[idx]) {
-    state.books[idx].readPages = state.books[idx].totalPages;
-    saveState();
-  }
+  state.books[idx].readPages = state.books[idx].totalPages;
+  saveState();
 };
 
 window.deleteBook = function(idx) {
@@ -2335,9 +2114,49 @@ window.saveBookChanges = function() {
   closeModal('modal-edit-book');
 };
 
+function fetchDefaultBookCovers() {
+  let updated = false;
+  const promises = state.books.map((book, idx) => {
+    // Si la portada está vacía o es una vieja portada genérica/de Open Library, la actualizamos
+    if (!book.coverUrl || book.coverUrl.includes('unsplash.com') || book.coverUrl.includes('openlibrary.org')) {
+      const searchQuery = book.title;
+      return fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchQuery)}&maxResults=1`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.items && data.items[0] && data.items[0].volumeInfo.imageLinks) {
+            const thumb = data.items[0].volumeInfo.imageLinks.thumbnail || data.items[0].volumeInfo.imageLinks.smallThumbnail;
+            if (thumb) {
+              state.books[idx].coverUrl = thumb.replace('http://', 'https://');
+              updated = true;
+            }
+          }
+        })
+        .catch(err => console.error("Error buscando portada Google para: " + book.title, err));
+    }
+    return Promise.resolve();
+  });
+
+  Promise.all(promises).then(() => {
+    if (updated) {
+      saveState();
+      renderBooksGrid();
+    }
+  });
+}
+
 // --- Initialize App ---
-// NOTA v30.0: Todo el arranque se ejecuta ÚNICAMENTE desde initApp() al final del archivo.
-// No hay llamadas top-level sueltas para evitar doble ejecución.
+
+loadState();
+updateUI();
+syncScreenTimeInputs();
+fetchDefaultBookCovers();
+
+// Cargar la pestaña activa persistida o usar 'dashboard' por defecto
+const activeTab = localStorage.getItem('active_tab') || 'dashboard';
+switchTab(activeTab, false);
+
+// Configurar frase inicial de afirmación
+document.getElementById('affirmation-display').innerText = `"${AFFIRMATIONS[currentAffirmationIdx]}"`;
 
 // --- AI Cover Reviewer Logic ---
 window.handleAiVideoUpload = function(event) {
@@ -2812,175 +2631,48 @@ window.importDataJSON = function(event) {
   reader.readAsText(file);
 };
 
-// --- PIN Security Module ---
 
-window.authorizeTikTokConnection = function() {
-  const input = document.getElementById('input-tiktok-login-user');
-  const user = input ? input.value.trim() : "@thoma_guitar";
-  state.tiktok = state.tiktok || {};
-  state.tiktok.connected = true;
-  state.tiktok.username = user || "@thoma_guitar";
-  saveState();
-  closeModal('modal-tiktok-login');
-  alert(`¡Cuenta ${state.tiktok.username} vinculada con éxito! 📱✨`);
-};
-
-// --- PIN Security ---
-
-function checkPinLockOnStart() {
-  if (state.security && state.security.pinEnabled && state.security.pin) {
-    const overlay = document.getElementById('pin-lock-overlay');
-    if (overlay) overlay.style.display = 'flex';
-  }
-}
-
-window.handlePinDigitInput = function(e, index) {
-  const input = e.target;
-  if (input.value.length === 1 && index < 4) {
-    const next = document.getElementById(`pin-digit-${index + 1}`);
-    if (next) next.focus();
-  }
-  if (e.key === 'Backspace' && index > 1 && !input.value) {
-    const prev = document.getElementById(`pin-digit-${index - 1}`);
-    if (prev) prev.focus();
-  }
-  if (index === 4 && input.value.length === 1) {
-    submitPinUnlock();
-  }
-};
-
-window.submitPinUnlock = function() {
-  const d1 = document.getElementById('pin-digit-1')?.value || "";
-  const d2 = document.getElementById('pin-digit-2')?.value || "";
-  const d3 = document.getElementById('pin-digit-3')?.value || "";
-  const d4 = document.getElementById('pin-digit-4')?.value || "";
-  const enteredPin = d1 + d2 + d3 + d4;
-
-  const errorMsg = document.getElementById('pin-error-msg');
-
-  if (state.security && state.security.pin && enteredPin === state.security.pin) {
-    document.getElementById('pin-lock-overlay').style.display = 'none';
-    if (errorMsg) errorMsg.style.opacity = '0';
-    [1, 2, 3, 4].forEach(i => {
-      const el = document.getElementById(`pin-digit-${i}`);
-      if (el) el.value = '';
-    });
-  } else {
-    if (errorMsg) {
-      errorMsg.style.opacity = '1';
-      setTimeout(() => { errorMsg.style.opacity = '0'; }, 3000);
-    }
-    [1, 2, 3, 4].forEach(i => {
-      const el = document.getElementById(`pin-digit-${i}`);
-      if (el) el.value = '';
-    });
-    document.getElementById('pin-digit-1')?.focus();
-  }
-};
-
-window.lockAppNow = function() {
-  if (!state.security || !state.security.pin) {
-    alert("Primero establece un PIN de 4 dígitos para poder bloquear la app.");
+window.exportDataJSON = function() {
+  const dataStr = localStorage.getItem('goals_2026_state');
+  if (!dataStr) {
+    alert("No hay datos para exportar aún.");
     return;
   }
-  state.security.pinEnabled = true;
-  saveState();
-  closeModal('modal-security');
-  checkPinLockOnStart();
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `backup_app_${new Date().toISOString().split('T')[0]}.json`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 };
 
-window.togglePinSecurity = function() {
-  state.security = state.security || { pinEnabled: false, pin: "" };
-  state.security.pinEnabled = !state.security.pinEnabled;
-  updatePinUI();
+window.triggerImportJSON = function() {
+  document.getElementById('import-json-file').click();
 };
 
-window.savePinSettings = function() {
-  const pinInput = document.getElementById('input-security-pin');
-  if (!pinInput) return;
-  const newPin = pinInput.value.trim();
+window.importDataJSON = function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
 
-  state.security = state.security || { pinEnabled: false, pin: "" };
-  if (newPin.length > 0 && newPin.length !== 4) {
-    alert("El PIN debe ser exactamente de 4 dígitos.");
-    return;
-  }
-
-  if (newPin.length === 4) {
-    state.security.pin = newPin;
-    state.security.pinEnabled = true;
-    saveState();
-    updatePinUI();
-    alert("¡PIN de 4 dígitos guardado y activado! 🔒");
-  } else {
-    state.security.pinEnabled = false;
-    saveState();
-    updatePinUI();
-    alert("Protección por PIN desactivada.");
-  }
-};
-
-function updatePinUI() {
-  const btnToggle = document.getElementById('btn-toggle-pin');
-  const pinInput = document.getElementById('input-security-pin');
-  if (!state.security) state.security = { pinEnabled: false, pin: "" };
-
-  if (btnToggle) {
-    if (state.security.pinEnabled) {
-      btnToggle.innerText = 'Activado 🔒';
-      btnToggle.style.background = 'rgba(197, 160, 89, 0.2)';
-      btnToggle.style.borderColor = 'var(--color-gold)';
-      btnToggle.style.color = 'var(--color-gold)';
-    } else {
-      btnToggle.innerText = 'Desactivado 🔓';
-      btnToggle.style.background = 'rgba(255,255,255,0.05)';
-      btnToggle.style.borderColor = 'rgba(255,255,255,0.15)';
-      btnToggle.style.color = '#fff';
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (parsed && typeof parsed === 'object') {
+        localStorage.setItem('goals_2026_state', JSON.stringify(parsed));
+        loadState();
+        updateUI();
+        alert("¡Datos importados con éxito! 🎉");
+      } else {
+        alert("Archivo JSON inválido.");
+      }
+    } catch (err) {
+      alert("Error al leer el archivo de backup.");
+      console.error(err);
     }
-  }
-  if (pinInput && state.security.pin) {
-    pinInput.value = state.security.pin;
-  }
-}
-
-let isAppInitialized = false;
-
-function initApp() {
-  if (isAppInitialized) return;
-  isAppInitialized = true;
-
-  // PASO 1: Hidratar estado desde localStorage (única vez)
-  loadState();
-
-  // PASO 2: Renderizar UI con datos locales (única vez)
-  updateUI();
-  syncScreenTimeInputs();
-
-  // PASO 3: Activar pestaña correcta (usar __initialTab del script del head, o recalcular)
-  const targetTab = window.__initialTab || (() => {
-    const hash = location.hash ? location.hash.replace('#', '').replace('tab-', '') : null;
-    const stored = localStorage.getItem('active_tab');
-    const valid = ['dashboard', 'fisico', 'musica', 'lectura', 'bienestar', 'finanzas'];
-    return (hash && valid.includes(hash)) ? hash : ((stored && valid.includes(stored)) ? stored : 'dashboard');
-  })();
-  switchTab(targetTab, false);
-
-  // PASO 3b: Limpiar CSS inyectado por el script del head (ya no se necesita)
-  const earlyCSS = document.getElementById('early-tab-css');
-  if (earlyCSS) earlyCSS.remove();
-
-  // PASO 4: Afirmación
-  const affEl = document.getElementById('affirmation-display');
-  if (affEl) affEl.innerText = `"${AFFIRMATIONS[currentAffirmationIdx]}"`;
-
-  // PASO 5: PIN
-  checkPinLockOnStart();
-  updatePinUI();
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initApp);
-} else {
-  initApp();
-}
-
+  };
+  reader.readAsText(file);
+};
