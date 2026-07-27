@@ -1383,6 +1383,7 @@ window.deleteGuitarLog = function(id) {
     state.guitar.hours = Math.max(state.guitar.hours - item.hours, 0);
     state.guitar.log = state.guitar.log.filter(l => l.id !== id);
     saveState();
+    updateUI();
   }
 };
 
@@ -2488,8 +2489,7 @@ function renderWeeklySuggestions() {
     // Si no hay sugerencias disponibles, mostrar un mensaje de felicitaciones
     if (availableSuggestions.length === 0) {
       container.innerHTML = `
-        <h4 style="font-size: 0.9rem; font-family: var(--font-title); letter-spacing: 0.05em; color: #fff; margin-bottom: 8px;"><img src="https://emojicdn.elk.sh/💡" class="apple-emoji-sm" alt="💡"> Sugerencias Semanales</h4>
-        <p style="font-size: 0.75rem; color: var(--color-text-muted);">¡Has planificado o tocado todas las canciones recomendadas! Escribe tus propias ideas arriba. <img src="https://emojicdn.elk.sh/🎉" class="apple-emoji-sm" alt="🎉"></p>
+        <p style="font-size: 0.85rem; color: var(--color-text-muted); text-align: center; padding: 20px;">¡Has planificado o tocado todas las canciones recomendadas! Escribe tus propias ideas arriba. <img src="https://emojicdn.elk.sh/🎉" class="apple-emoji-sm" alt="🎉"></p>
       `;
       return;
     }
@@ -2559,8 +2559,7 @@ function renderWeeklySuggestions() {
 
     // Generar el HTML para las 3 sugerencias seleccionadas
     container.innerHTML = `
-      <h4 style="font-size: 0.9rem; font-family: var(--font-title); letter-spacing: 0.05em; color: #fff; margin-bottom: 2px;"><img src="https://emojicdn.elk.sh/💡" class="apple-emoji-sm" alt="💡"> Sugerencias Semanales de Covers</h4>
-      <p style="font-size: 0.72rem; color: var(--color-text-muted); margin-bottom: 12px;">Analizando tu historial de estilo (Prioridad actual: <strong style="color: var(--color-gold);">${preferredStyle}</strong>)</p>
+      <p style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 12px;">Analizando tu historial de estilo (Prioridad actual: <strong style="color: var(--color-gold);">${preferredStyle}</strong>)</p>
       <div style="display: flex; flex-direction: column; gap: 8px;">
         ${finalSuggestions.filter(Boolean).map(item => {
           let styleBg = "rgba(138, 43, 226, 0.15)";
