@@ -45,10 +45,10 @@ const DEFAULT_BOOKS = [
 ];
 
 const STATIC_COVERS = {
-  "Cuál es tu sueño": "https://books.google.com/books/content?id=5lq7DwAAQBAJ&printsec=frontcover&img=1&zoom=1",
+  "Cuál es tu sueño": "simon_squibb_yellow_cover.jpg",
   "Cerati biografía": "https://books.google.com/books/content?id=c_pCCAAAQBAJ&printsec=frontcover&img=1&zoom=1",
   "Releo Si lo crees lo creas": "https://books.google.com/books/content?id=K641DwAAQBAJ&printsec=frontcover&img=1&zoom=1",
-  "Cómo hacer amigos e influir en las personas": "https://books.google.com/books/content?id=1-yWDwAAQBAJ&printsec=frontcover&img=1&zoom=1",
+  "Cómo hacer amigos e influir en las personas": "como_ganar_amigos_celeste.jpg",
   "Oasis: vivir para siempre": "https://books.google.com/books/content?id=V7PBDwAAQBAJ&printsec=frontcover&img=1&zoom=1",
   "El camino del artista": "https://books.google.com/books/content?id=N9D5DwAAQBAJ&printsec=frontcover&img=1&zoom=1",
   "Generación dopamina": "https://books.google.com/books/content?id=E1VVEAAAQBAJ&printsec=frontcover&img=1&zoom=1"
@@ -454,7 +454,7 @@ function loadState() {
       // Migración forzosa inmediata de portadas predeterminadas
       state.books.forEach((book, idx) => {
         if (STATIC_COVERS[book.title]) {
-          if (!book.coverUrl || book.coverUrl.includes('unsplash.com') || book.coverUrl.includes('openlibrary.org')) {
+          if (!book.coverUrl || book.coverUrl.includes('unsplash.com') || book.coverUrl.includes('openlibrary.org') || book.coverUrl.includes('google.com')) {
             state.books[idx].coverUrl = STATIC_COVERS[book.title];
             migrated = true;
           }
