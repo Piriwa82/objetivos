@@ -6,7 +6,7 @@
   <title>Mis Objetivos 2026 - Control de Progreso</title>
   <meta name="description" content="Dashboard premium e interactivo para visualizar y registrar metas de gimnasio, guitarra, lectura, finanzas, bienestar y amor propio para fin de 2026.">
   <link rel="icon" href="brian_tracy.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=1.7">
+  <link rel="stylesheet" href="style.css?v=1.8">
   <script>
     // v30.2: Script síncrono que inyecta CSS para activar la pestaña correcta ANTES del primer paint.
     // No manipula DOM (aún no existe), solo inyecta reglas CSS.
@@ -512,7 +512,7 @@
 
     <!-- TAB: GUITARRA & TIKTOK -->
     <section class="tab-content" id="tab-musica">
-      <div class="grid-dashboard">
+      <div class="masonry-grid">
         <!-- Guitar Card -->
         <div class="card card-pink">
           <div class="card-header">
@@ -531,11 +531,10 @@
             <p id="guitar-daily-rate" style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 12px; font-style: italic;"></p>
           </div>
 
-          <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
-            <button class="btn btn-pink btn-sm" onclick="addGuitarHours(1)">+1 Hora</button>
-            <button class="btn btn-pink btn-sm" onclick="addGuitarHours(0.5)">+30 Min</button>
-            <div style="display: flex; align-items: center; gap: 6px; margin-left: auto;">
-              <input type="number" id="input-guitar-manual" class="input-sm" placeholder="Valor" min="0" step="0.1" style="padding: 6px 10px;">
+          <div style="display: flex; gap: 12px; margin-bottom: 20px; justify-content: flex-end; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <input type="date" id="input-guitar-date" class="input-sm" style="padding: 6px 10px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;">
+              <input type="number" id="input-guitar-manual" class="input-sm" placeholder="Horas" min="0" step="0.1" style="padding: 6px 10px; width: 80px;">
               <button class="btn btn-pink btn-sm" onclick="addGuitarHoursManual()">Registrar</button>
             </div>
           </div>
@@ -637,38 +636,6 @@
           </div>
         </div>
 
-        <!-- AI Cover Reviewer Card -->
-        <div class="card card-violet grid-double" style="margin-top: 12px;">
-          <div class="card-header">
-            <div class="card-title-group">
-              <div class="card-icon" style="background: linear-gradient(135deg, #8a2be2, #4a0e4e); width: 28px; height: 28px;"><img src="https://emojicdn.elk.sh/🤖" class="apple-emoji" style="width: 18px; height: 18px;" alt="🤖"></div>
-              <div>
-                <h3 style="font-size: 1rem; line-height: 1.2;">Reseñador Profesional de Covers</h3>
-                <p style="font-size: 0.75rem;">IA de análisis de viralidad y hooks optimizado para TikTok</p>
-              </div>
-            </div>
-          </div>
-
-          <div style="background: rgba(255, 255, 255, 0.01); border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s;" id="ai-dropzone">
-            <svg viewBox="0 0 24 24" width="30" height="30" stroke="var(--color-gold)" stroke-width="1.5" fill="none" style="margin-bottom: 8px; opacity: 0.8;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-            <p style="font-size: 0.85rem; font-weight: 600; color: #fff; margin: 0;">Sube tu video editado para TikTok</p>
-            <p style="font-size: 0.7rem; color: var(--color-text-muted); margin-top: 3px;">Arrastra un archivo de video o haz clic para buscar</p>
-          </div>
-          <input type="file" id="ai-file-input" accept="video/*" style="display: none;" onchange="handleAiVideoUpload(event)">
-
-          <!-- Thinking Box -->
-          <div id="ai-thinking-box" style="display: none; background: rgba(0,0,0,0.4); border: 1px solid rgba(138, 43, 226, 0.2); border-radius: 12px; padding: 16px; margin-top: 12px;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
-              <span class="spinner" style="width: 14px; height: 14px; border: 2px solid var(--color-gold); border-top-color: transparent; border-radius: 50%; display: inline-block; animation: spin 1s linear infinite;"></span>
-              <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-gold); font-family: var(--font-title); letter-spacing: 0.05em;">PENSANDO PROFUNDAMENTE...</span>
-            </div>
-            <div id="ai-thinking-steps" style="font-family: monospace; font-size: 0.72rem; color: #a5a5a8; line-height: 1.5; white-space: pre-line;"></div>
-          </div>
-
-          <!-- Result Box -->
-          <div id="ai-result-box" style="display: none; margin-top: 16px; animation: fadeIn 0.4s ease;">
-            <!-- Rendered via JS -->
-          </div>
         </div>
       </div>
     </section>
@@ -1124,6 +1091,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=1.7"></script>
+  <script src="app.js?v=1.8"></script>
 </body>
 </html>
