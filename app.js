@@ -2676,3 +2676,11 @@ window.importDataJSON = function(event) {
   };
   reader.readAsText(file);
 };
+
+// Fade in UI after init
+setTimeout(() => {
+  const earlyCSS = document.getElementById('early-tab-css');
+  if (earlyCSS) earlyCSS.remove();
+  const container = document.querySelector('.app-container');
+  if (container) container.style.opacity = '1';
+}, 50);
