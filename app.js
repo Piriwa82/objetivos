@@ -1339,9 +1339,25 @@ window.addGuitarHours = function(amount) {
   saveState();
 };
 
-window.addGuitarHoursManual = function() { const val = parseFloat(document.getElementById('input-guitar-manual').value); const dateInput = document.getElementById('input-guitar-date').value; if (!isNaN(val) && val > 0) { const targetDate = dateInput ? new Date(dateInput + 'T00:00:00').toLocaleDateString('es-ES', {day: 'numeric', month: 'short', year: 'numeric'}) : getTodayString(); state.guitar.hours += val; const existingEntry = state.guitar.log.find(entry => entry.date === targetDate); if (existingEntry) { existingEntry.hours += val; } else { state.guitar.log.unshift({ date: targetDate, hours: val, timestamp: dateInput ? new Date(dateInput).getTime() : Date.now() }); } state.guitar.log.sort((a,b) => b.timestamp - a.timestamp); saveState(); updateUI(); document.getElementById('input-guitar-manual').value = ''; document.getElementById('input-guitar-date').value = ''; createFloatingParticle('🎸', event || document.body); } });
-  input.value = "";
-  saveState();
+window.addGuitarHoursManual = function() {
+  const val = parseFloat(document.getElementById('input-guitar-manual').value);
+  const dateInput = document.getElementById('input-guitar-date').value;
+  if (!isNaN(val) && val > 0) {
+    const targetDate = dateInput ? new Date(dateInput + 'T00:00:00').toLocaleDateString('es-ES', {day: 'numeric', month: 'short', year: 'numeric'}) : getTodayString();
+    state.guitar.hours += val;
+    const existingEntry = state.guitar.log.find(entry => entry.date === targetDate);
+    if (existingEntry) {
+      existingEntry.hours += val;
+    } else {
+      state.guitar.log.unshift({ date: targetDate, hours: val, timestamp: dateInput ? new Date(dateInput).getTime() : Date.now() });
+    }
+    state.guitar.log.sort((a,b) => b.timestamp - a.timestamp);
+    saveState();
+    updateUI();
+    document.getElementById('input-guitar-manual').value = '';
+    document.getElementById('input-guitar-date').value = '';
+    createFloatingParticle('🎸', event || document.body);
+  }
 };
 
 window.deleteGuitarLog = function(id) {
