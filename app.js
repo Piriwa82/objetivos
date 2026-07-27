@@ -460,6 +460,20 @@ function loadState() {
           }
         }
       });
+      // Sanitize guitar log
+      if (state.guitar && state.guitar.log) {
+        state.guitar.log.forEach(entry => {
+          if (!entry.id) {
+            entry.id = generateId();
+            migrated = true;
+          }
+          if (entry.date && (entry.date.includes(' ') || entry.date.indexOf('-') !== 4)) {
+            entry.date = new Date().toISOString().split('T')[0]; 
+            migrated = true;
+          }
+        });
+      }
+
       if (migrated) {
         localStorage.setItem('goals_2026_state', JSON.stringify(state));
       }
@@ -1349,15 +1363,14 @@ window.addGuitarHoursManual = function() {
     if (dateInput) {
       const parts = dateInput.split('-');
       if (parts.length === 3) {
-        const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-        targetDateStr = d.toLocaleDateString('es-ES', {day: 'numeric', month: 'short', year: 'numeric'});
-        timestamp = d.getTime();
+        targetDateStr = dateInput; // YYYY-MM-DD
+        timestamp = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2])).getTime();
       } else {
-        targetDateStr = getTodayString();
+        targetDateStr = new Date().toISOString().split('T')[0];
         timestamp = Date.now();
       }
     } else {
-      targetDateStr = getTodayString();
+      targetDateStr = new Date().toISOString().split('T')[0];
       timestamp = Date.now();
     }
     
