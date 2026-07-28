@@ -585,9 +585,8 @@ function calculateGoalsProgress() {
   const ht_1RM = calculate1RM(state.gym.ht, 8);
   progressList.push(Math.min(ht_1RM / 173.83, 1.0));
 
-  // 3. Sentadilla (Meta: 100kg x 8 -> 124.16kg 1RM)
-  const sq_1RM = calculate1RM(state.gym.sq, 8);
-  progressList.push(Math.min(sq_1RM / 124.16, 1.0));
+  // 3. Dominadas (Meta: 20 reps)
+  progressList.push(Math.min(state.gym.sq / 20, 1.0));
 
   // 4. Horas de Guitarra (Meta: 600h)
   progressList.push(Math.min(state.guitar.hours / 600, 1.0));
@@ -717,7 +716,7 @@ function updateUI() {
   const screenAvgHoursStr = screenAvgMins > 0 ? `${Math.floor(screenAvgMins / 60)}h ${screenAvgMins % 60}m` : "--";
   const publishedCoversCount = state.covers.filter(c => c.published).length;
   const subjectsPercent = state.subjects.length > 0 ? Math.round((state.subjects.filter(s => s.passed).length / state.subjects.length) * 100) : 0;
-  const gymPercent = Math.round(((Math.min(state.gym.pb / 100, 1.0) + Math.min(state.gym.ht / 140, 1.0) + Math.min(state.gym.sq / 100, 1.0)) / 3) * 100);
+  const gymPercent = Math.round(((Math.min(state.gym.pb / 100, 1.0) + Math.min(state.gym.ht / 140, 1.0) + Math.min(state.gym.sq / 20, 1.0)) / 3) * 100);
 
   // 1. Gym PB
   setValueText('sum-val-pb', `${state.gym.pb} / 100 kg`);
@@ -728,10 +727,9 @@ function updateUI() {
   setValueText('sum-val-ht', `${ht_1RM} / 174 kg`);
   setProgressBarWidth('sum-progress-ht', Math.min((ht_1RM / 173.83) * 100, 100));
 
-  // 3. Gym SQ
-  const sq_1RM = Math.round(calculate1RM(state.gym.sq, 8));
-  setValueText('sum-val-sq', `${sq_1RM} / 124 kg`);
-  setProgressBarWidth('sum-progress-sq', Math.min((sq_1RM / 124.16) * 100, 100));
+  // 3. Gym SQ (Dominadas)
+  setValueText('sum-val-sq', `${state.gym.sq} / 20 reps`);
+  setProgressBarWidth('sum-progress-sq', Math.min((state.gym.sq / 20) * 100, 100));
 
   // 4. Tiempo de Celular
   setValueText('sum-val-screentime', screenAvgHoursStr);
@@ -786,8 +784,8 @@ function updateUI() {
   setProgressBarWidth('gym-ht-progress', Math.min((ht_1RM / 174) * 100, 100));
   setInputValue('input-gym-ht', state.gym.ht);
 
-  setValueText('gym-sq-val', `${sq_1RM} / 124 kg (1RM)`);
-  setProgressBarWidth('gym-sq-progress', Math.min((sq_1RM / 124) * 100, 100));
+  setValueText('gym-sq-val', `${state.gym.sq} / 20 reps`);
+  setProgressBarWidth('gym-sq-progress', Math.min((state.gym.sq / 20) * 100, 100));
   setInputValue('input-gym-sq', state.gym.sq);
 
   // Screen Time grid
@@ -1915,7 +1913,7 @@ window.calculateGym1RM = function(type) {
 };
 
 window.applyGym1RM = function(type) {
-  // Para Press de Banca (pb), aplicamos el 1RM. Para Hip Thrust (ht) y Sentadilla (sq), aplicamos el Peso de Trabajo.
+  // Para Press de Banca (pb), aplicamos el 1RM. Para Hip Thrust (ht) aplicamos el Peso de Trabajo.
   const val = (type === 'pb') ? window[`lastCalculated1RM_${type}`] : window[`lastCalculatedWeight_${type}`];
   if (val && val > 0) {
     state.gym[type] = val;
