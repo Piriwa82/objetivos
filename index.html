@@ -146,17 +146,17 @@
           </div>
         </div>
 
-        <!-- 3. Sentadilla -->
+        <!-- 3. Dominadas -->
         <div class="summary-card" data-target-tab="fisico">
           <div class="summary-top">
             <div style="display: flex; align-items: center; gap: 12px;">
-              <div class="summary-icon" style="background: rgba(197, 160, 89, 0.08);"><img src="https://emojicdn.elk.sh/🏋️‍♂️" class="apple-emoji" alt="🏋️‍♂️"></div>
+              <div class="summary-icon" style="background: rgba(197, 160, 89, 0.08);"><img src="https://emojicdn.elk.sh/🦍" class="apple-emoji" alt="🦍"></div>
               <div class="summary-info">
-                <h4>Sentadilla</h4>
-                <p>Meta: 124.2 kg (1RM)</p>
+                <h4>Dominadas</h4>
+                <p>Meta: 20 reps</p>
               </div>
             </div>
-            <div class="summary-val" id="sum-val-sq">0 kg</div>
+            <div class="summary-val" id="sum-val-sq">0 reps</div>
           </div>
           <div class="summary-progress-container" style="width: 100%;">
             <div class="progress-track" style="height: 6px; margin: 0; background: rgba(255,255,255,0.05); border-radius: 3px; position: relative;">
@@ -434,29 +434,19 @@
               </div>
             </div>
 
-            <!-- Sentadilla -->
+            <!-- Dominadas -->
             <div class="gym-item">
               <div class="gym-meta">
-                <span class="gym-name">Sentadilla</span>
-                <span class="progress-value" id="gym-sq-val">0 / 100 kg (x8)</span>
+                <span class="gym-name">Dominadas</span>
+                <span class="progress-value" id="gym-sq-val">0 / 20 reps</span>
               </div>
               <div class="progress-track"><div class="progress-fill bg-violet" id="gym-sq-progress"></div></div>
               <div class="gym-input-row">
-                <label for="input-gym-sq" style="font-size: 0.8rem; color: var(--color-text-muted); flex-grow: 1;">Peso Actual (x8 reps):</label>
-                <input type="number" id="input-gym-sq" class="input-sm" value="0" min="0" max="250" style="padding: 4px 8px;">
-                <button class="btn btn-sm btn-icon-only" onclick="updateGymWeight('sq')" title="Guardar Peso Actual">
+                <label for="input-gym-sq" style="font-size: 0.8rem; color: var(--color-text-muted); flex-grow: 1;">Reps Actuales:</label>
+                <input type="number" id="input-gym-sq" class="input-sm" value="0" min="0" max="100" style="padding: 4px 8px;">
+                <button class="btn btn-sm btn-icon-only" onclick="updateGymWeight('sq')" title="Guardar Repeticiones">
                   <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                 </button>
-              </div>
-              <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-                <label for="input-sq-1rm" style="font-size: 0.75rem; color: var(--color-text-muted);">Estimar 1RM (ej: 80x8):</label>
-                <input type="text" id="input-sq-1rm" placeholder="80x8" style="padding: 4px 8px; width: 75px; text-align: center;" oninput="calculateGym1RM('sq')">
-                <div style="display: flex; align-items: center; gap: 6px;">
-                  <span id="sq-1rm-result" style="font-size: 0.85rem; font-weight: 600; color: var(--color-gold);">-- kg (1RM: -- kg)</span>
-                  <button class="btn btn-sm btn-icon-only" onclick="applyGym1RM('sq')" title="Usar como Peso Actual" style="width: 22px; height: 22px; border-radius: 4px; padding: 0;">
-                    <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  </button>
-                </div>
               </div>
             </div>
           </div>
@@ -1103,6 +1093,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=2.8"></script>
+  <script src="app.js?v=2.9"></script>
 </body>
 </html>
